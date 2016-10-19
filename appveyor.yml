@@ -3,7 +3,7 @@ os: Windows Server 2012
 install:
   - cmd: choco install maven -y -f
 build_script:
-  - mvn install -DskipTests=true -B -V
+  - mvn clean install -DskipTests=true -B -V
 test_script:
   - mvn test
 cache:
