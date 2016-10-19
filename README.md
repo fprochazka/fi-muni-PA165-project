@@ -8,6 +8,10 @@
 * [Mühlpachr, Libor](https://github.com/396507) (396507)
 * [Šmíd, Tomáš](https://github.com/TomasSmid) (410135)
 
+## Important links
+
+* [Project wiki](https://github.com/fprochazka/fi-muni-PA165-project/wiki)
+
 ## Assignment
 
 Create an information system, which will help its users to keep track of soccer match results. This system should be able to keep track of soccer teams and their players.
