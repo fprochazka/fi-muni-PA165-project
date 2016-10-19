@@ -1,6 +1,7 @@
 # PA165 project: Soccer records
 
 [![Build Status](https://travis-ci.org/fprochazka/fi-muni-PA165-project.svg?branch=master)](https://travis-ci.org/fprochazka/fi-muni-PA165-project)
+[![Build status](https://ci.appveyor.com/api/projects/status/br4anlv4k6c8cmbp/branch/master?svg=true)](https://ci.appveyor.com/project/fprochazka/fi-muni-pa165-project/branch/master)
 
 * **Vedoucí:** [Procházka, Filip](https://github.com/fprochazka) (433457)
 * [Galajda, Denis](https://github.com/ATP93) (461458)
