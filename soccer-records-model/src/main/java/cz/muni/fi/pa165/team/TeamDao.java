@@ -2,10 +2,8 @@ package cz.muni.fi.pa165.team;
 
 import java.util.Collection;
 import java.util.UUID;
-import javax.persistence.EntityManager;
 
 /**
- *
  * @author Denis Galajda
  */
 public interface TeamDao
