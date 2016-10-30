@@ -50,7 +50,7 @@ public class TeamPlayerDaoImpl implements TeamPlayerDao
     public TeamPlayer findPlayerByFirstname(String firstname)
     {
         if (firstname == null || firstname.isEmpty()) {
-            throw new IllegalArgumentException("Cannot search for null name");
+            throw new IllegalArgumentException("Cannot search for null firstname");
         }
 
         try {

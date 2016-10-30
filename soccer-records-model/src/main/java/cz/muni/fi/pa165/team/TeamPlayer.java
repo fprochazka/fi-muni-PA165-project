@@ -2,12 +2,8 @@ package cz.muni.fi.pa165.team;
 
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -20,7 +16,7 @@ public class TeamPlayer
 {
 
     @Id
-    @Column(nullable = false, length = 36)
+    @Column(nullable = false, length = 36))
     @Type(type = "uuid-char")
     @NotNull
     private UUID id;
