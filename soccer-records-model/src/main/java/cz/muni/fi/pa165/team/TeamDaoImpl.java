@@ -2,10 +2,7 @@ package cz.muni.fi.pa165.team;
 
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -27,7 +24,7 @@ public class TeamDaoImpl implements TeamDao
 
         try {
             return em
-                .createQuery("SELECT t FROM Team t WHERE name = :name", Team.class)
+                .createQuery("SELECT t FROM Team t WHERE t.name = :name", Team.class)
                 .setParameter("name", name)
                 .getSingleResult();
 
@@ -37,7 +34,7 @@ public class TeamDaoImpl implements TeamDao
     }
 
     @Override
-    public Team findById(UUID id)
+    public Team findTeamById(UUID id)
     {
         return em.find(Team.class, id);
     }
@@ -51,8 +48,8 @@ public class TeamDaoImpl implements TeamDao
 
         try {
             return em
-                .createQuery("SELECT t FROM Team t LEFT JOIN TeamPlayer tp WHERE tp.id = :tpid", Team.class)
-                .setParameter("tpid", tp.getId())
+                .createQuery("SELECT t FROM Team t WHERE t IN (SELECT tp.team FROM TeamPlayer tp WHERE tp.team = :tpid)", Team.class)
+                .setParameter("tpid", tp)
                 .getSingleResult();
 
         } catch (NoResultException e) {
@@ -67,14 +64,28 @@ public class TeamDaoImpl implements TeamDao
     }
 
     @Override
-    public void update(Team t)
+    public void updateTeam(Team t)
     {
         em.merge(t);
     }
 
     @Override
-    public void delete(Team t)
+    public void deleteTeam(Team t)
     {
+        Query query = em.createQuery("DELETE FROM TeamMatchGoal tmg WHERE tmg.match IN " +
+            "(SELECT tm FROM TeamMatch tm WHERE tm.awayTeam = :tid OR tm.homeTeam = :tid)")
+            .setParameter("tid", t);
+        query.executeUpdate();
+
+        query = em.createQuery("DELETE FROM TeamMatch tm WHERE tm.awayTeam = :tid OR " +
+            "tm.homeTeam = :tid")
+            .setParameter("tid", t);
+        query.executeUpdate();
+
+        query = em.createQuery("DELETE FROM TeamPlayer tp WHERE tp.team = :tid")
+            .setParameter("tid", t);
+        query.executeUpdate();
+
         em.remove(t);
     }
 
@@ -86,7 +97,7 @@ public class TeamDaoImpl implements TeamDao
     }
 
     @Override
-    public void create(Team t)
+    public void createTeam(Team t)
     {
         em.persist(t);
     }

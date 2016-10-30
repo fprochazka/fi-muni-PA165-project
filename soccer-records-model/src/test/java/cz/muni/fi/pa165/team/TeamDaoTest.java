@@ -38,10 +38,10 @@ public class TeamDaoTest extends AbstractTransactionalTestNGSpringContextTests
         t3 = new Team("FCB");
         t4 = new Team("RLM");
 
-        teamDao.create(t1);
-        teamDao.create(t2);
-        teamDao.create(t3);
-        teamDao.create(t4);
+        teamDao.createTeam(t1);
+        teamDao.createTeam(t2);
+        teamDao.createTeam(t3);
+        teamDao.createTeam(t4);
         em.flush();
     }
 
@@ -54,7 +54,7 @@ public class TeamDaoTest extends AbstractTransactionalTestNGSpringContextTests
     @Test
     public void findById()
     {
-        Assert.assertNotNull(teamDao.findById(t2.getId()));
+        Assert.assertNotNull(teamDao.findTeamById(t2.getId()));
     }
 
     @Test
@@ -75,7 +75,7 @@ public class TeamDaoTest extends AbstractTransactionalTestNGSpringContextTests
         String oldName = t3.getName();
         String newName = t3.getName() + "3";
         t3.setName(newName);
-        teamDao.update(t3);
+        teamDao.updateTeam(t3);
         em.flush();
 
         Assert.assertNotNull(teamDao.findTeamByName(newName));
@@ -85,9 +85,7 @@ public class TeamDaoTest extends AbstractTransactionalTestNGSpringContextTests
     @Test
     public void delete()
     {
-        Team t4Backup = t4;
-        teamDao.delete(t4);
+        teamDao.deleteTeam(t4);
         em.flush();
-        Assert.assertNull(teamDao.findById(t4Backup.getId()));
     }
 }
