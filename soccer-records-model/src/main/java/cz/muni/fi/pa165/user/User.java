@@ -44,7 +44,7 @@ public class User
     /**
      * @deprecated Hibernate internal
      */
-    public User()
+    protected User()
     {
     }
 
