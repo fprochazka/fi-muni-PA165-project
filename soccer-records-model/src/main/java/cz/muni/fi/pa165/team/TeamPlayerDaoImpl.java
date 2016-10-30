@@ -2,13 +2,12 @@ package cz.muni.fi.pa165.team;
 
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
+import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.Collection;
-import java.util.UUID;
-
 
 /**
  * @author Libor Mühlpachr <libor.muhl@seznam.cz>
@@ -43,6 +42,22 @@ public class TeamPlayerDaoImpl implements TeamPlayerDao
             TypedQuery<TeamPlayer> query = em.createQuery("SELECT tp FROM TeamPlayer tp WHERE tp.surname = :surname", TeamPlayer.class)
                 .setParameter("surname", surname);
             return query.getResultList();
+=======
+
+    private EntityManager em;
+
+    @Override
+    public TeamPlayer findPlayerByFirstname(String firstname)
+    {
+        if (firstname == null || firstname.isEmpty()) {
+            throw new IllegalArgumentException("Cannot search for null name");
+        }
+
+        try {
+            return em
+                    .createQuery("SELECT tp FROM TeamPlayer tp WHERE firstname = :firstname", TeamPlayer.class)
+                    .setParameter("firstname", firstname)
+                    .getSingleResult();
 
         } catch (NoResultException e) {
             return null;
