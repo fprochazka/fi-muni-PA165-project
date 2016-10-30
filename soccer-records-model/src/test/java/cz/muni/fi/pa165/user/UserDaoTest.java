@@ -1,7 +1,6 @@
 package cz.muni.fi.pa165.user;
 
 import cz.muni.fi.pa165.config.ApplicationConfig;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
@@ -39,7 +38,7 @@ public class UserDaoTest extends AbstractTransactionalTestNGSpringContextTests
         userDao.create(user1);
         userDao.create(user2);
 
-        List<User> categories  = userDao.findAll();
+        List<User> categories = userDao.findAll();
         assertEquals(categories.size(), 2);
 
         assertTrue(categories.stream().filter(u -> u.getEmail().equals("filip+1@prochazka.su")).count() == 1);

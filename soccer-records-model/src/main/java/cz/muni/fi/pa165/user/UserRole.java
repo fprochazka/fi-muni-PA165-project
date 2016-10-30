@@ -11,7 +11,7 @@ public enum UserRole
 
     private final String text;
 
-    private UserRole(final String text)
+    UserRole(final String text)
     {
         this.text = text;
     }

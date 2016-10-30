@@ -8,9 +8,25 @@ import java.util.UUID;
  */
 public interface UserDao
 {
-    public void create(User u);
-    public User findById(UUID id);
-    public User findUserByEmail(String email);
-    public List<User> findAll();
+
+    /**
+     * Persists the given user
+     */
+    void create(User u);
+
+    /**
+     * Finds user by his id
+     */
+    User findById(UUID id);
+
+    /**
+     * Finds user by his email
+     */
+    User findUserByEmail(String email);
+
+    /**
+     * Finds all users
+     */
+    List<User> findAll();
 
 }

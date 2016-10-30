@@ -19,6 +19,8 @@ import javax.sql.DataSource;
 
 
 /**
+ * Config of application persistence context.
+ *
  * @author Filip Prochazka <filip@prochazka.su>
  */
 @Configuration
@@ -27,12 +29,18 @@ import javax.sql.DataSource;
 public class PersistenceApplicationContext
 {
 
+    /**
+     * Translates native resource exceptions to Spring's DataAccessException hierarchy.
+     */
     @Bean
     public PersistenceExceptionTranslationPostProcessor postProcessor()
     {
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
+    /**
+     * Binds a JPA EntityManager from the specified factory to the thread, potentially allowing for one thread-bound EntityManager per factory.
+     */
     @Autowired
     @Bean
     public JpaTransactionManager transactionManager(final EntityManagerFactory entityManagerFactory)
@@ -40,6 +48,9 @@ public class PersistenceApplicationContext
         return new JpaTransactionManager(entityManagerFactory);
     }
 
+    /**
+     * FactoryBean that creates a JPA EntityManagerFactory according to JPA's standard container bootstrap contract.
+     */
     @Autowired
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
@@ -54,16 +65,22 @@ public class PersistenceApplicationContext
         return jpaFactoryBean;
     }
 
+    /**
+     * Defines the contract for adding one or more ClassFileTransformers to a ClassLoader.
+     */
     @Bean
     public LoadTimeWeaver instrumentationLoadTimeWeaver()
     {
         return new InstrumentationLoadTimeWeaver();
     }
 
+    /**
+     * A factory for connections to the physical data source that this DataSource object represents.
+     */
     @Bean
     public DataSource dataSource()
     {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-        return builder.setType(EmbeddedDatabaseType.DERBY).build();
+        return builder.setType(EmbeddedDatabaseType.HSQL).build();
     }
 }

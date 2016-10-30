@@ -15,9 +15,13 @@ public class UserService
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Creates a user with hashed password.
+     */
     public User createUser(String email, String password)
     {
         String passwordHash = passwordEncoder.encode(password);
         return new User(email, passwordHash);
     }
+
 }

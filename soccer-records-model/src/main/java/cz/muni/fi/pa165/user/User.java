@@ -16,7 +16,7 @@ public class User
 
     @Id
     @Column(nullable = false)
-    @Type(type="uuid-char")
+    @Type(type = "uuid-char")
     @NotNull
     private UUID id;
 
@@ -44,7 +44,7 @@ public class User
     /**
      * @deprecated Hibernate internal
      */
-    public User()
+    protected User()
     {
     }
 
@@ -68,4 +68,25 @@ public class User
         return passwordHash;
     }
 
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof User)) {
+            return false;
+        }
+
+        User user = (User) o;
+
+        return getId().equals(user.getId());
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return getId().hashCode();
+    }
 }

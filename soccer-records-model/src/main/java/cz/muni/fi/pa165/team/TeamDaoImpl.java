@@ -2,20 +2,20 @@ package cz.muni.fi.pa165.team;
 
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
-import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.Collection;
+import java.util.UUID;
 
 /**
- *
  * @author Denis Galajda
  */
 @Repository
 public class TeamDaoImpl implements TeamDao
 {
+
     private EntityManager em;
 
     @Override
@@ -61,7 +61,7 @@ public class TeamDaoImpl implements TeamDao
     }
 
     @Override
-    public Collection findAll()
+    public Collection<Team> findAll()
     {
         TypedQuery<Team> query = em.createQuery("SELECT t FROM Team t", Team.class);
         return query.getResultList();
@@ -70,7 +70,7 @@ public class TeamDaoImpl implements TeamDao
     @Override
     public void create(Team t)
     {
-         em.persist(t);
+        em.persist(t);
     }
 
 }
