@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import java.util.List;
+import java.util.Collection;
 
 import static org.testng.Assert.*;
 
@@ -35,10 +35,10 @@ public class UserDaoTest extends AbstractTransactionalTestNGSpringContextTests
         User user1 = userService.createUser("filip+1@prochazka.su", "secret");
         User user2 = userService.createUser("filip+2@prochazka.su", "secret");
 
-        userDao.create(user1);
-        userDao.create(user2);
+        userDao.createUser(user1);
+        userDao.createUser(user2);
 
-        List<User> categories = userDao.findAll();
+        Collection<User> categories = userDao.findAllUsers();
         assertEquals(categories.size(), 2);
 
         assertTrue(categories.stream().filter(u -> u.getEmail().equals("filip+1@prochazka.su")).count() == 1);
@@ -50,9 +50,9 @@ public class UserDaoTest extends AbstractTransactionalTestNGSpringContextTests
     {
         User user1 = userService.createUser("filip+1@prochazka.su", "secret");
 
-        userDao.create(user1);
+        userDao.createUser(user1);
 
-        User foundUser = userDao.findById(user1.getId());
+        User foundUser = userDao.findUserById(user1.getId());
         assertEquals("filip+1@prochazka.su", foundUser.getEmail());
     }
 
@@ -62,8 +62,8 @@ public class UserDaoTest extends AbstractTransactionalTestNGSpringContextTests
         User user1 = userService.createUser("filip+1@prochazka.su", "secret");
         User user2 = userService.createUser("filip+2@prochazka.su", "secret");
 
-        userDao.create(user1);
-        userDao.create(user2);
+        userDao.createUser(user1);
+        userDao.createUser(user2);
 
         User foundUser = userDao.findUserByEmail("filip+1@prochazka.su");
         assertEquals("filip+1@prochazka.su", foundUser.getEmail());
