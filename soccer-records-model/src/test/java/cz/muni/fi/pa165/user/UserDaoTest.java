@@ -30,43 +30,94 @@ public class UserDaoTest extends AbstractTransactionalTestNGSpringContextTests
     public EntityManager em;
 
     @Test
+    public void testDelete() throws Exception
+    {
+        User user1 = userService.createUser("libor.muhl+1@gmail.com", "secret");
+        userDao.createUser(user1);
+        em.flush();
+
+        userDao.deleteUser(user1);
+        em.flush();
+
+        assertNull(userDao.findUserById(user1.getId()));
+    }
+
+    @Test
     public void testFindAll() throws Exception
     {
-        User user1 = userService.createUser("filip+1@prochazka.su", "secret");
-        User user2 = userService.createUser("filip+2@prochazka.su", "secret");
+        Collection<User> noUsers = userDao.findAllUsers();
+        assertEquals(noUsers.size(), 0);
+
+        User user1 = userService.createUser("libor.muhl+1@gmail.com", "secret");
+        User user2 = userService.createUser("libor.muhl+2@gmail.com", "secret");
 
         userDao.createUser(user1);
         userDao.createUser(user2);
 
-        Collection<User> categories = userDao.findAllUsers();
-        assertEquals(categories.size(), 2);
+        em.flush();
 
-        assertTrue(categories.stream().filter(u -> u.getEmail().equals("filip+1@prochazka.su")).count() == 1);
-        assertTrue(categories.stream().filter(u -> u.getEmail().equals("filip+2@prochazka.su")).count() == 1);
+        Collection<User> allUsers = userDao.findAllUsers();
+        assertEquals(allUsers.size(), 2);
+
+        assertTrue(allUsers.stream().filter(u -> u.getEmail().equals("libor.muhl+1@gmail.com")).count() == 1);
+        assertTrue(allUsers.stream().filter(u -> u.getEmail().equals("libor.muhl+2@gmail.com")).count() == 1);
+    }
+
+    @Test
+    public void testFindUsersByRole() throws Exception
+    {
+        User user1 = userService.createUser("libor.muhl+1@gmail.com", "secret");
+        User user2 = userService.createUser("libor.muhl+2@gmail.com", "secret");
+        user2.promoteToAdmin();
+
+        userDao.createUser(user1);
+        userDao.createUser(user2);
+
+        em.flush();
+
+        Collection<User> regularUsers = userDao.findUsersByRole(UserRole.USER);
+        assertEquals(regularUsers.size(), 1);
+        assertTrue(regularUsers.stream().filter(u -> u.getEmail().equals("libor.muhl+1@gmail.com")).count() == 1);
+
+        Collection<User> adminUsers = userDao.findUsersByRole(UserRole.ADMIN);
+        assertEquals(adminUsers.size(), 1);
+        assertTrue(adminUsers.stream().filter(u -> u.getEmail().equals("libor.muhl+2@gmail.com")).count() == 1);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testFindUserByRoleRequiresRole() throws Exception
+    {
+        userDao.findUsersByRole(null);
     }
 
     @Test
     public void testFindById() throws Exception
     {
-        User user1 = userService.createUser("filip+1@prochazka.su", "secret");
+        User user1 = userService.createUser("libor.muhl+1@gmail.com", "secret");
 
         userDao.createUser(user1);
 
         User foundUser = userDao.findUserById(user1.getId());
-        assertEquals("filip+1@prochazka.su", foundUser.getEmail());
+        assertEquals("libor.muhl+1@gmail.com", foundUser.getEmail());
     }
 
     @Test
     public void testFindUserByEmail() throws Exception
     {
-        User user1 = userService.createUser("filip+1@prochazka.su", "secret");
-        User user2 = userService.createUser("filip+2@prochazka.su", "secret");
+        User user1 = userService.createUser("libor.muhl+1@gmail.com", "secret");
+        User user2 = userService.createUser("libor.muhl+2@gmail.com", "secret");
 
         userDao.createUser(user1);
         userDao.createUser(user2);
 
-        User foundUser = userDao.findUserByEmail("filip+1@prochazka.su");
-        assertEquals("filip+1@prochazka.su", foundUser.getEmail());
+        User foundUser = userDao.findUserByEmail("libor.muhl+1@gmail.com");
+        assertEquals("libor.muhl+1@gmail.com", foundUser.getEmail());
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testFindUserByEmailRequiresString() throws Exception
+    {
+        userDao.findUserByEmail(null);
     }
 
 }
