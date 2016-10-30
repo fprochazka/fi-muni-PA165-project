@@ -2,10 +2,7 @@ package cz.muni.fi.pa165.team;
 
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
@@ -13,12 +10,11 @@ import java.util.UUID;
  * @author Denis Galajda
  */
 @Entity
-@Table(name = "team")
 public class Team
 {
 
     @Id
-    @Column(nullable = false)
+    @Column(nullable = false, length = 36)
     @Type(type = "uuid-char")
     @NotNull
     private UUID id;
