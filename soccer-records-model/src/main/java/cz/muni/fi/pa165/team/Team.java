@@ -33,6 +33,12 @@ public class Team
         this.name = name;
     }
 
+    /**
+     * @deprecated Hibernate internal
+     */
+    protected Team()
+    {
+    }
 
     public UUID getId()
     {
@@ -42,6 +48,11 @@ public class Team
     public String getName()
     {
         return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
     }
 
     @Override

@@ -42,6 +42,24 @@ public class TeamDaoImpl implements TeamDao
         return em.find(Team.class, id);
     }
 
+    @Override
+    public Team findTeamByPlayer(TeamPlayer tp)
+    {
+        if (tp == null) {
+            throw new IllegalArgumentException("Cannot search for null name");
+        }
+
+        try {
+            return em
+                .createQuery("SELECT t FROM Team t LEFT JOIN TeamPlayer tp WHERE tp.id = :tpid", Team.class)
+                .setParameter("tpid", tp.getId())
+                .getSingleResult();
+
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
     @PersistenceContext
     public void setEntityManager(EntityManager em)
     {

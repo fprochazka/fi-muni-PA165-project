@@ -2,8 +2,10 @@ package cz.muni.fi.pa165.team;
 
 import java.util.Collection;
 import java.util.UUID;
+import javax.persistence.EntityManager;
 
 /**
+ *
  * @author Denis Galajda
  */
 public interface TeamDao
@@ -18,6 +20,11 @@ public interface TeamDao
      * Find team by it's name.
      */
     Team findTeamByName(String name);
+
+    /**
+     * Find team by it's name.
+     */
+    Team findTeamByPlayer(TeamPlayer tp);
 
     /**
      * Find all teams
