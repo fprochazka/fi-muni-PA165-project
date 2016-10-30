@@ -69,6 +69,11 @@ public class TeamPlayer
         return firstname;
     }
 
+    public void setFirstname(String firstname)
+    {
+        this.firstname = firstname;
+    }
+
     public String getSurname()
     {
         return surname;
