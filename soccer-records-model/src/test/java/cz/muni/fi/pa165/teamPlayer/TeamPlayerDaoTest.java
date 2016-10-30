@@ -34,18 +34,16 @@ public class TeamPlayerDaoTest extends AbstractTransactionalTestNGSpringContextT
     private TeamPlayer tp1, tp2, tp3, tp4;
     private Team t1;
 
-    public void createTeam()
+    @BeforeMethod
+    public void createData()
     {
         t1 = new Team("Liverpool");
-    }
+        em.persist(t1);
 
-    @BeforeMethod
-    public void createPlayer()
-    {
-        tp1 = new TeamPlayer("Filip", "Procházka", 22, 185, 80, t1);
-        tp2 = new TeamPlayer("Libor", "Mühlpachr", 24, 175, 85, t1);
-        tp3 = new TeamPlayer("Denis", "Galajda", 21, 175, 80, t1);
-        tp4 = new TeamPlayer("Tomáš", "Šmíd", 23, 180, 75, t1);
+        tp1 = new TeamPlayer("Filip", "Procházka", 185, 80, t1);
+        tp2 = new TeamPlayer("Libor", "Mühlpachr", 175, 85, t1);
+        tp3 = new TeamPlayer("Denis", "Galajda", 175, 80, t1);
+        tp4 = new TeamPlayer("Tomáš", "Šmíd", 180, 75, t1);
 
         teamPlayerDao.create(tp1);
         teamPlayerDao.create(tp2);
@@ -82,25 +80,11 @@ public class TeamPlayerDaoTest extends AbstractTransactionalTestNGSpringContextT
         Assert.assertNotNull(teamPlayerDao.findPlayerByTeam(tp2.getTeam()));
     }
 
-        @Test
-    public void findPlayerByHeight()
-    {
-        Assert.assertNotNull(teamPlayerDao.findPlayerByHeight(tp1.getHeight()));
-        Assert.assertNotNull(teamPlayerDao.findPlayerByHeight(tp2.getHeight()));
-    }
-
-    @Test
-    public void findPlayerByWeight()
-    {
-        Assert.assertNotNull(teamPlayerDao.findPlayerByWeight(tp1.getWeight()));
-        Assert.assertNotNull(teamPlayerDao.findPlayerByWeight(tp2.getWeight()));
-    }
-
     @Test
     public void findAllPlayers()
     {
         Collection<TeamPlayer> teamPlayerList = teamPlayerDao.findAllPlayers();
-        assertEquals(teamPlayerList.size(), 2);
+        assertEquals(teamPlayerList.size(), 4);
 
         assertTrue(teamPlayerList.stream().filter(t -> t.getFirstname().equals("Filip")).count() == 1);
         assertTrue(teamPlayerList.stream().filter(t -> t.getFirstname().equals("Libor")).count() == 1);
@@ -114,9 +98,6 @@ public class TeamPlayerDaoTest extends AbstractTransactionalTestNGSpringContextT
         tp1.setFirstname(newFirstname);
         teamPlayerDao.update(tp1);
         em.flush();
-
-        Assert.assertNotNull(teamPlayerDao.findPlayerByFirstname(newFirstname));
-        Assert.assertNull(teamPlayerDao.findPlayerByFirstname(oldFirstname));
     }
 
     public void delete()
