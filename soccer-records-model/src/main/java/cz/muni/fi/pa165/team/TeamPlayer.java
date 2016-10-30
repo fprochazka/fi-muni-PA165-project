@@ -7,9 +7,10 @@ import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 /**
- * @author Libor Mühlpachr
+ * @author Libor Mühlpachr <libor.muhl@seznam.cz>
  */
 @Entity
+@Table(name = "players")
 public class TeamPlayer
 {
 
@@ -27,14 +28,33 @@ public class TeamPlayer
     @NotNull
     private String surname;
 
-    public TeamPlayer(String firstname, String surname)
+    @Column(nullable = false)
+    @NotNull
+    private int height;
+
+    @Column(nullable = false)
+    @NotNull
+    private int weight;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Team team;
+
+    public TeamPlayer(String firstname, String surname, int height, int weight, Team team)
     {
         this.id = UUID.randomUUID();
         this.firstname = firstname;
         this.surname = surname;
+        this.height = height;
+        this.weight = weight;
+        this.team = team;
     }
 
-    public TeamPlayer()
+    /**
+     * @deprecated Hibernate internal
+     */
+    protected TeamPlayer()
     {
     }
 
@@ -51,6 +71,42 @@ public class TeamPlayer
     public String getSurname()
     {
         return surname;
+    }
+
+    public int getHeight()
+    {
+        return height;
+    }
+
+    public int getWeight()
+    {
+        return weight;
+    }
+
+    public Team getTeam()
+    {
+        return team;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof TeamPlayer)) {
+            return false;
+        }
+
+        TeamPlayer teamPlayer = (TeamPlayer) o;
+
+        return getId().equals(teamPlayer.getId());
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return getId().hashCode();
     }
 
 }
