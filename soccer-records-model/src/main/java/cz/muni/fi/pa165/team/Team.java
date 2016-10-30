@@ -10,7 +10,6 @@ import java.util.UUID;
  * @author Denis Galajda
  */
 @Entity
-@Table(name = "team")
 public class Team
 {
 

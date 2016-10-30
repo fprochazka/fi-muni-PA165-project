@@ -10,7 +10,6 @@ import java.util.UUID;
  * @author Filip Prochazka <filip@prochazka.su>
  */
 @Entity
-@Table(name = "users")
 public class User
 {
 
