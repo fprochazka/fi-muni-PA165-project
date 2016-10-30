@@ -4,7 +4,6 @@ import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver;
 import org.springframework.instrument.classloading.LoadTimeWeaver;
@@ -28,15 +27,6 @@ import javax.sql.DataSource;
 @EnableJpaRepositories
 public class PersistenceApplicationContext
 {
-
-    /**
-     * Translates native resource exceptions to Spring's DataAccessException hierarchy.
-     */
-    @Bean
-    public PersistenceExceptionTranslationPostProcessor postProcessor()
-    {
-        return new PersistenceExceptionTranslationPostProcessor();
-    }
 
     /**
      * Binds a JPA EntityManager from the specified factory to the thread, potentially allowing for one thread-bound EntityManager per factory.
