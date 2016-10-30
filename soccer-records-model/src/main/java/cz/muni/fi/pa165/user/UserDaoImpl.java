@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.List;
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -25,13 +25,19 @@ public class UserDaoImpl implements UserDao
     }
 
     @Override
-    public void create(User u)
+    public void createUser(User u)
     {
         em.persist(u);
     }
 
     @Override
-    public User findUserByEmail(String email)
+    public void deleteUser(User u)
+    {
+        em.remove(u);
+    }
+
+    @Override
+    public User findUserByEmail(final String email)
     {
         if (email == null || email.isEmpty()) {
             throw new IllegalArgumentException("Cannot search for null e-mail");
@@ -49,13 +55,26 @@ public class UserDaoImpl implements UserDao
     }
 
     @Override
-    public User findById(UUID id)
+    public User findUserById(UUID id)
     {
         return em.find(User.class, id);
     }
 
     @Override
-    public List<User> findAll()
+    public Collection<User> findUsersByRole(final UserRole role)
+    {
+        if (role == null) {
+            throw new IllegalArgumentException("Cannot search for a null role");
+        }
+
+        TypedQuery<User> query = em
+            .createQuery("SELECT u FROM User u WHERE u.role = :role", User.class)
+            .setParameter("role", role);
+        return query.getResultList();
+    }
+
+    @Override
+    public Collection<User> findAllUsers()
     {
         TypedQuery<User> query = em.createQuery("SELECT u FROM User u", User.class);
         return query.getResultList();

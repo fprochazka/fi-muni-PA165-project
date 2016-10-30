@@ -68,6 +68,22 @@ public class User
         return passwordHash;
     }
 
+    /**
+     * Change the user role to Admin
+     */
+    public void promoteToAdmin()
+    {
+        this.role = UserRole.ADMIN;
+    }
+
+    /**
+     * Change the user role to Moderator
+     */
+    public void promoteToModerator()
+    {
+        this.role = UserRole.MODERATOR;
+    }
+
     @Override
     public boolean equals(Object o)
     {

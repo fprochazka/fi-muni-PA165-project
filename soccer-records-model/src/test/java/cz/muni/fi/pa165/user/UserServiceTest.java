@@ -19,6 +19,7 @@ public class UserServiceTest
         User user = userService.createUser("filip@prochazka.su", "heslo");
         assertEquals("filip@prochazka.su", user.getEmail());
         assertNotEquals("heslo", user.getPasswordHash());
+        assertEquals(UserRole.USER, user.getRole());
     }
 
 }
