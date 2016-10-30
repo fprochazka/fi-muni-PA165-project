@@ -20,6 +20,11 @@ public interface TeamDao
     Team findTeamByName(String name);
 
     /**
+     * Find team by it's name.
+     */
+    Team findTeamByPlayer(TeamPlayer tp);
+
+    /**
      * Find all teams
      */
     Collection<Team> findAll();
