@@ -140,27 +140,27 @@ public class TeamPlayerDaoImpl implements TeamPlayerDao
     }
 
     @Override
-    public void create(TeamPlayer p)
+    public void create(TeamPlayer tp)
     {
-        em.persist(p);
+        em.persist(tp);
     }
 
     @Override
-    public void update(TeamPlayer p)
+    public void update(TeamPlayer tp)
     {
-        em.merge(p);
+        em.merge(tp);
     }
 
     @Override
-    public void delete(TeamPlayer p)
+    public void delete(TeamPlayer tp)
     {
-        em.remove(p);
+        em.remove(tp);
     }
 
     @Override
     public Collection findAll()
     {
-        TypedQuery<TeamPlayer> query = em.createQuery("SELECT p FROM TeamPlayer p", TeamPlayer.class);
+        TypedQuery<TeamPlayer> query = em.createQuery("SELECT tp FROM TeamPlayer tp", TeamPlayer.class);
         return query.getResultList();
     }
 }
