@@ -16,7 +16,7 @@ public class User
 
     @Id
     @Column(nullable = false)
-    @Type(type="uuid-char")
+    @Type(type = "uuid-char")
     @NotNull
     private UUID id;
 

@@ -1,12 +1,15 @@
 package cz.muni.fi.pa165.team;
 
-import java.util.UUID;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Type;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import java.util.UUID;
+
 /**
- *
  * @author Denis Galajda
  */
 @Entity
@@ -16,7 +19,7 @@ public class Team
 
     @Id
     @Column(nullable = false)
-    @Type(type="uuid-char")
+    @Type(type = "uuid-char")
     @NotNull
     private UUID id;
 
@@ -31,11 +34,13 @@ public class Team
     }
 
 
-    public UUID getId() {
+    public UUID getId()
+    {
         return id;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 

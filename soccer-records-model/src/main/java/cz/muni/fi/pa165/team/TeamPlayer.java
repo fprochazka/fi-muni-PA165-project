@@ -2,9 +2,11 @@ package cz.muni.fi.pa165.team;
 
 import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -13,7 +15,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "players")
-public class TeamPlayer {
+public class TeamPlayer
+{
 
     @Id
     @Column(nullable = false)
@@ -29,24 +32,29 @@ public class TeamPlayer {
     @NotNull
     private String surname;
 
-    public TeamPlayer(String firstname, String surname) {
+    public TeamPlayer(String firstname, String surname)
+    {
         this.id = UUID.randomUUID();
         this.firstname = firstname;
         this.surname = surname;
     }
 
-    public TeamPlayer() {
+    public TeamPlayer()
+    {
     }
 
-    public UUID getId() {
+    public UUID getId()
+    {
         return id;
     }
 
-    public String getFirstname() {
+    public String getFirstname()
+    {
         return firstname;
     }
 
-    public String getSurname() {
+    public String getSurname()
+    {
         return surname;
     }
 
