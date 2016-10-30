@@ -90,10 +90,7 @@ public class TeamPlayerDaoImpl implements TeamPlayerDao
     }
 
     @Override
-    public void create(TeamPlayer tp)
-    {
-        em.persist(tp);
-    }
+    public void create(TeamPlayer tp) { em.persist(tp); }
 
     @Override
     public void update(TeamPlayer tp)
