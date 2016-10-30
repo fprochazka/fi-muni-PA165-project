@@ -55,9 +55,9 @@ public class TeamPlayerDaoImpl implements TeamPlayerDao
 
         try {
             return em
-                    .createQuery("SELECT tp FROM TeamPlayer tp WHERE firstname = :firstname", TeamPlayer.class)
-                    .setParameter("firstname", firstname)
-                    .getSingleResult();
+                .createQuery("SELECT tp FROM TeamPlayer tp WHERE firstname = :firstname", TeamPlayer.class)
+                .setParameter("firstname", firstname)
+                .getSingleResult();
 
         } catch (NoResultException e) {
             return null;
@@ -74,7 +74,6 @@ public class TeamPlayerDaoImpl implements TeamPlayerDao
         TypedQuery<TeamPlayer> query = em.createQuery("SELECT tp FROM TeamPlayer tp WHERE tp.team = :tid", TeamPlayer.class)
                 .setParameter("tid", team.getId());
         return query.getResultList();
-
 
     }
 
