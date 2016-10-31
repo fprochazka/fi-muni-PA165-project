@@ -95,7 +95,7 @@ public class User
 
         User user = (User) o;
 
-        return getId().equals(user.getId());
+        return id.equals(user.id);
     }
 
     @Override

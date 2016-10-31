@@ -120,17 +120,18 @@ public class TeamMatch implements Comparable<TeamMatch>
     }
 
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(Object o)
     {
-        if (obj == this) {
+        if (this == o) {
             return true;
         }
-        if (!(obj instanceof TeamMatch)) {
+        if (!(o instanceof TeamMatch)) {
             return false;
         }
-        TeamMatch match = (TeamMatch) obj;
-        return ((this.id == match.id) ||
-            (this.id != null && this.id.equals(match.id)));
+
+        TeamMatch that = (TeamMatch) o;
+
+        return id.equals(that.id);
     }
 
     @Override

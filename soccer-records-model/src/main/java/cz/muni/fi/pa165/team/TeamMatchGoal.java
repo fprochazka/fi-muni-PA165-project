@@ -94,17 +94,18 @@ public class TeamMatchGoal implements Comparable<TeamMatchGoal>
     }
 
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(Object o)
     {
-        if (obj == this) {
+        if (this == o) {
             return true;
         }
-        if (!(obj instanceof TeamMatchGoal)) {
+        if (!(o instanceof TeamMatchGoal)) {
             return false;
         }
-        TeamMatchGoal goal = (TeamMatchGoal) obj;
-        return ((this.id == goal.id) ||
-            (this.id != null && this.id.equals(goal.id)));
+
+        TeamMatchGoal that = (TeamMatchGoal) o;
+
+        return id.equals(that.id);
     }
 
     @Override

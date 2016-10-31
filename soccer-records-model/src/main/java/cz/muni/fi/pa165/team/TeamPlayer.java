@@ -98,9 +98,9 @@ public class TeamPlayer
             return false;
         }
 
-        TeamPlayer teamPlayer = (TeamPlayer) o;
+        TeamPlayer that = (TeamPlayer) o;
 
-        return getId().equals(teamPlayer.getId());
+        return id.equals(that.id);
     }
 
     @Override

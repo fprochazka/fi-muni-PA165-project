@@ -72,10 +72,9 @@ public class Team
             return false;
         }
 
-        Team team = (Team) o;
+        Team that = (Team) o;
 
-        return id.equals(team.id);
-
+        return id.equals(that.id);
     }
 
     @Override
