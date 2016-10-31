@@ -99,9 +99,7 @@ public class TeamMatchGoal implements Comparable<TeamMatchGoal>
     @Override
     public int hashCode()
     {
-        int hash = 5;
-        hash = 37 * hash + Objects.hashCode(this.id);
-        return hash;
+        return id.hashCode();
     }
 
     @Override

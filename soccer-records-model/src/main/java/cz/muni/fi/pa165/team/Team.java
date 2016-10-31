@@ -70,6 +70,6 @@ public class Team
     @Override
     public int hashCode()
     {
-        return getId().hashCode();
+        return id.hashCode();
     }
 }
