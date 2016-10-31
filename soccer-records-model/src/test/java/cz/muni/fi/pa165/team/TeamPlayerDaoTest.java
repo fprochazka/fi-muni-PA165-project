@@ -1,9 +1,6 @@
 package cz.muni.fi.pa165.team;
 
 import cz.muni.fi.pa165.config.ApplicationConfig;
-import cz.muni.fi.pa165.team.Team;
-import cz.muni.fi.pa165.team.TeamPlayer;
-import cz.muni.fi.pa165.team.TeamPlayerDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
