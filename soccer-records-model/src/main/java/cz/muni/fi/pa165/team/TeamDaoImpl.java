@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.UUID;
 
 /**
+ * This class implements the TeamDAO interface.
+ *
  * @author Denis Galajda
  */
 @Repository
