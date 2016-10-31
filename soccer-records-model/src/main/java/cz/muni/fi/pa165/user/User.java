@@ -96,7 +96,6 @@ public class User
         User user = (User) o;
 
         return getId().equals(user.getId());
-
     }
 
     @Override
@@ -104,4 +103,5 @@ public class User
     {
         return id.hashCode();
     }
+
 }

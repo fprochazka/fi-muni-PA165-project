@@ -107,4 +107,5 @@ public class TeamMatchGoal implements Comparable<TeamMatchGoal>
     {
         return this.id.compareTo(teamMatchGoal.id);
     }
+
 }
