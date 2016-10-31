@@ -26,43 +26,40 @@ public class TeamPlayerDaoTest extends AbstractTransactionalTestNGSpringContextT
     @PersistenceContext
     public EntityManager em;
 
-    private TeamPlayer tp1, tp2, tp3, tp4;
-    private Team t1;
-
     @Test
     public void testCreatePlayer()
     {
-        t1 = new Team("Liverpool");
-        em.persist(t1);
+        Team team = new Team("Liverpool");
+        em.persist(team);
 
-        tp1 = new TeamPlayer("Filip", "Procházka", 185, 80, t1);
-        em.persist(tp1);
+        TeamPlayer player = new TeamPlayer("Filip", "Procházka", 185, 80, team);
+        em.persist(player);
 
-        TeamPlayer dbPlayer = em.find(TeamPlayer.class, tp1.getId());
+        TeamPlayer dbPlayer = em.find(TeamPlayer.class, player.getId());
         em.flush();
 
         assertNotNull(dbPlayer);
-        assertEquals(dbPlayer.getFirstname(), tp1.getFirstname());
-        assertEquals(dbPlayer.getSurname(), tp1.getSurname());
-        assertEquals(dbPlayer.getHeight(), tp1.getHeight());
-        assertEquals(dbPlayer.getWeight(), tp1.getWeight());
-        assertEquals(dbPlayer.getTeam(), tp1.getTeam());
+        assertEquals(dbPlayer.getFirstname(), player.getFirstname());
+        assertEquals(dbPlayer.getSurname(), player.getSurname());
+        assertEquals(dbPlayer.getHeight(), player.getHeight());
+        assertEquals(dbPlayer.getWeight(), player.getWeight());
+        assertEquals(dbPlayer.getTeam(), player.getTeam());
     }
 
     @Test
     public void testDeletePlayer()
     {
-        t1 = new Team("Liverpool");
-        em.persist(t1);
+        Team team = new Team("Liverpool");
+        em.persist(team);
 
-        tp1 = new TeamPlayer("Filip", "Procházka", 185, 80, t1);
-        em.persist(tp1);
+        TeamPlayer player = new TeamPlayer("Filip", "Procházka", 185, 80, team);
+        em.persist(player);
 
-        TeamPlayer dbPlayer = em.find(TeamPlayer.class, tp1.getId());
+        TeamPlayer dbPlayer = em.find(TeamPlayer.class, player.getId());
         assertNotNull(dbPlayer);
 
-        teamPlayerDao.deletePlayer(tp1);
-        dbPlayer = em.find(TeamPlayer.class, tp1.getId());
+        teamPlayerDao.deletePlayer(player);
+        dbPlayer = em.find(TeamPlayer.class, player.getId());
         em.flush();
 
         assertNull(dbPlayer);
@@ -71,27 +68,27 @@ public class TeamPlayerDaoTest extends AbstractTransactionalTestNGSpringContextT
     @Test
     public void testFindPlayerByFirstname()
     {
-        t1 = new Team("Liverpool");
-        em.persist(t1);
+        Team team = new Team("Liverpool");
+        em.persist(team);
 
-        tp1 = new TeamPlayer("Filip", "Procházka", 185, 80, t1);
-        tp2 = new TeamPlayer("Libor", "Mühlpachr", 175, 85, t1);
-        tp3 = new TeamPlayer("Libor", "Galajda", 175, 80, t1);
-        tp4 = new TeamPlayer("Tomáš", "Šmíd", 180, 75, t1);
-        em.persist(tp1);
-        em.persist(tp2);
-        em.persist(tp3);
-        em.persist(tp4);
+        TeamPlayer player1 = new TeamPlayer("Filip", "Procházka", 185, 80, team);
+        TeamPlayer player2 = new TeamPlayer("Libor", "Mühlpachr", 175, 85, team);
+        TeamPlayer player3 = new TeamPlayer("Libor", "Galajda", 175, 80, team);
+        TeamPlayer player4 = new TeamPlayer("Tomáš", "Šmíd", 180, 75, team);
+        em.persist(player1);
+        em.persist(player2);
+        em.persist(player3);
+        em.persist(player4);
 
-        Collection<TeamPlayer> dbPlayers = teamPlayerDao.findPlayerByFirstname(tp2.getFirstname());
+        Collection<TeamPlayer> dbPlayers = teamPlayerDao.findPlayerByFirstname(player2.getFirstname());
 
         em.flush();
 
         assertEquals(dbPlayers.size(), 2);
-        assertTrue(dbPlayers.contains(tp2));
-        assertTrue(dbPlayers.contains(tp3));
-        assertFalse(dbPlayers.contains(tp1));
-        assertFalse(dbPlayers.contains(tp4));
+        assertTrue(dbPlayers.contains(player2));
+        assertTrue(dbPlayers.contains(player3));
+        assertFalse(dbPlayers.contains(player1));
+        assertFalse(dbPlayers.contains(player4));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -111,17 +108,17 @@ public class TeamPlayerDaoTest extends AbstractTransactionalTestNGSpringContextT
     @Test
     public void testFindPlayerByFirstnameNonExistent()
     {
-        t1 = new Team("Liverpool");
-        em.persist(t1);
+        Team team = new Team("Liverpool");
+        em.persist(team);
 
-        tp1 = new TeamPlayer("Filip", "Procházka", 185, 80, t1);
-        tp2 = new TeamPlayer("Libor", "Mühlpachr", 175, 85, t1);
-        tp3 = new TeamPlayer("Libor", "Galajda", 175, 80, t1);
-        tp4 = new TeamPlayer("Tomáš", "Šmíd", 180, 75, t1);
-        em.persist(tp1);
-        em.persist(tp2);
-        em.persist(tp3);
-        em.persist(tp4);
+        TeamPlayer player1 = new TeamPlayer("Filip", "Procházka", 185, 80, team);
+        TeamPlayer player2 = new TeamPlayer("Libor", "Mühlpachr", 175, 85, team);
+        TeamPlayer player3 = new TeamPlayer("Libor", "Galajda", 175, 80, team);
+        TeamPlayer player4 = new TeamPlayer("Tomáš", "Šmíd", 180, 75, team);
+        em.persist(player1);
+        em.persist(player2);
+        em.persist(player3);
+        em.persist(player4);
 
         Collection<TeamPlayer> dbPlayers = teamPlayerDao.findPlayerByFirstname("Lukáš");
 
@@ -134,27 +131,27 @@ public class TeamPlayerDaoTest extends AbstractTransactionalTestNGSpringContextT
     @Test
     public void testFindPlayerBySurname()
     {
-        t1 = new Team("Liverpool");
-        em.persist(t1);
+        Team team = new Team("Liverpool");
+        em.persist(team);
 
-        tp1 = new TeamPlayer("Filip", "Procházka", 185, 80, t1);
-        tp2 = new TeamPlayer("Libor", "Mühlpachr", 175, 85, t1);
-        tp3 = new TeamPlayer("Denis", "Šmíd", 175, 80, t1);
-        tp4 = new TeamPlayer("Tomáš", "Šmíd", 180, 75, t1);
-        em.persist(tp1);
-        em.persist(tp2);
-        em.persist(tp3);
-        em.persist(tp4);
+        TeamPlayer player1 = new TeamPlayer("Filip", "Procházka", 185, 80, team);
+        TeamPlayer player2 = new TeamPlayer("Libor", "Mühlpachr", 175, 85, team);
+        TeamPlayer player3 = new TeamPlayer("Denis", "Šmíd", 175, 80, team);
+        TeamPlayer player4 = new TeamPlayer("Tomáš", "Šmíd", 180, 75, team);
+        em.persist(player1);
+        em.persist(player2);
+        em.persist(player3);
+        em.persist(player4);
 
-        Collection<TeamPlayer> dbPlayers = teamPlayerDao.findPlayerBySurname(tp3.getSurname());
+        Collection<TeamPlayer> dbPlayers = teamPlayerDao.findPlayerBySurname(player3.getSurname());
 
         em.flush();
 
         assertEquals(dbPlayers.size(), 2);
-        assertTrue(dbPlayers.contains(tp3));
-        assertTrue(dbPlayers.contains(tp4));
-        assertFalse(dbPlayers.contains(tp1));
-        assertFalse(dbPlayers.contains(tp2));
+        assertTrue(dbPlayers.contains(player3));
+        assertTrue(dbPlayers.contains(player4));
+        assertFalse(dbPlayers.contains(player1));
+        assertFalse(dbPlayers.contains(player2));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -174,17 +171,17 @@ public class TeamPlayerDaoTest extends AbstractTransactionalTestNGSpringContextT
     @Test
     public void testFindPlayerBySurnameNonExistent()
     {
-        t1 = new Team("Liverpool");
-        em.persist(t1);
+        Team team = new Team("Liverpool");
+        em.persist(team);
 
-        tp1 = new TeamPlayer("Filip", "Procházka", 185, 80, t1);
-        tp2 = new TeamPlayer("Libor", "Mühlpachr", 175, 85, t1);
-        tp3 = new TeamPlayer("Denis", "Galajda", 175, 80, t1);
-        tp4 = new TeamPlayer("Tomáš", "Šmíd", 180, 75, t1);
-        em.persist(tp1);
-        em.persist(tp2);
-        em.persist(tp3);
-        em.persist(tp4);
+        TeamPlayer player1 = new TeamPlayer("Filip", "Procházka", 185, 80, team);
+        TeamPlayer player2 = new TeamPlayer("Libor", "Mühlpachr", 175, 85, team);
+        TeamPlayer player3 = new TeamPlayer("Denis", "Galajda", 175, 80, team);
+        TeamPlayer player4 = new TeamPlayer("Tomáš", "Šmíd", 180, 75, team);
+        em.persist(player1);
+        em.persist(player2);
+        em.persist(player3);
+        em.persist(player4);
 
         Collection<TeamPlayer> dbPlayers = teamPlayerDao.findPlayerBySurname("Novák");
 
@@ -196,35 +193,35 @@ public class TeamPlayerDaoTest extends AbstractTransactionalTestNGSpringContextT
     @Test
     public void testFindPlayerById()
     {
-        t1 = new Team("Liverpool");
-        em.persist(t1);
+        Team team = new Team("Liverpool");
+        em.persist(team);
 
-        tp1 = new TeamPlayer("Filip", "Procházka", 185, 80, t1);
-        tp2 = new TeamPlayer("Libor", "Mühlpachr", 175, 85, t1);
-        em.persist(tp1);
-        em.persist(tp2);
+        TeamPlayer player1 = new TeamPlayer("Filip", "Procházka", 185, 80, team);
+        TeamPlayer player2 = new TeamPlayer("Libor", "Mühlpachr", 175, 85, team);
+        em.persist(player1);
+        em.persist(player2);
 
-        TeamPlayer dbPlayer = teamPlayerDao.findPlayerById(tp1.getId());
+        TeamPlayer dbPlayer = teamPlayerDao.findPlayerById(player1.getId());
         em.flush();
 
-        assertEquals(dbPlayer.getFirstname(), tp1.getFirstname());
-        assertEquals(dbPlayer.getSurname(), tp1.getSurname());
-        assertEquals(dbPlayer.getHeight(), tp1.getHeight());
-        assertEquals(dbPlayer.getWeight(), tp1.getWeight());
-        assertEquals(dbPlayer.getTeam(), tp1.getTeam());
+        assertEquals(dbPlayer.getFirstname(), player1.getFirstname());
+        assertEquals(dbPlayer.getSurname(), player1.getSurname());
+        assertEquals(dbPlayer.getHeight(), player1.getHeight());
+        assertEquals(dbPlayer.getWeight(), player1.getWeight());
+        assertEquals(dbPlayer.getTeam(), player1.getTeam());
     }
 
     @Test
     public void testFindPlayerByIdNonExistent()
     {
-        t1 = new Team("Liverpool");
-        em.persist(t1);
+        Team team = new Team("Liverpool");
+        em.persist(team);
 
-        tp1 = new TeamPlayer("Filip", "Procházka", 185, 80, t1);
-        em.persist(tp1);
+        TeamPlayer player = new TeamPlayer("Filip", "Procházka", 185, 80, team);
+        em.persist(player);
 
         UUID badId = UUID.randomUUID();
-        assertNotEquals(tp1.getId(), badId);
+        assertNotEquals(player.getId(), badId);
 
         TeamPlayer dbPlayer = teamPlayerDao.findPlayerById(badId);
         em.flush();
@@ -235,31 +232,31 @@ public class TeamPlayerDaoTest extends AbstractTransactionalTestNGSpringContextT
     @Test
     public void testFindPlayerByTeam()
     {
-        Team t1 = new Team("Liverpool");
-        Team t2 = new Team("Arsenal");
-        Team t3 = new Team("Manchester");
-        em.persist(t1);
-        em.persist(t2);
-        em.persist(t3);
+        Team team1 = new Team("Liverpool");
+        Team team2 = new Team("Arsenal");
+        Team team3 = new Team("Manchester");
+        em.persist(team1);
+        em.persist(team2);
+        em.persist(team3);
 
-        tp1 = new TeamPlayer("Filip", "Procházka", 185, 80, t3);
-        tp2 = new TeamPlayer("Libor", "Mühlpachr", 175, 85, t1);
-        tp3 = new TeamPlayer("Libor", "Galajda", 175, 80, t2);
-        tp4 = new TeamPlayer("Tomáš", "Šmíd", 180, 75, t3);
-        em.persist(tp1);
-        em.persist(tp2);
-        em.persist(tp3);
-        em.persist(tp4);
+        TeamPlayer player1 = new TeamPlayer("Filip", "Procházka", 185, 80, team3);
+        TeamPlayer player2 = new TeamPlayer("Libor", "Mühlpachr", 175, 85, team1);
+        TeamPlayer player3 = new TeamPlayer("Libor", "Galajda", 175, 80, team2);
+        TeamPlayer player4 = new TeamPlayer("Tomáš", "Šmíd", 180, 75, team3);
+        em.persist(player1);
+        em.persist(player2);
+        em.persist(player3);
+        em.persist(player4);
 
-        Collection<TeamPlayer> dbPlayers = teamPlayerDao.findPlayerByTeam(t3);
+        Collection<TeamPlayer> dbPlayers = teamPlayerDao.findPlayerByTeam(team3);
 
         em.flush();
 
         assertEquals(dbPlayers.size(), 2);
-        assertTrue(dbPlayers.contains(tp1));
-        assertTrue(dbPlayers.contains(tp4));
-        assertFalse(dbPlayers.contains(tp2));
-        assertFalse(dbPlayers.contains(tp3));
+        assertTrue(dbPlayers.contains(player1));
+        assertTrue(dbPlayers.contains(player4));
+        assertFalse(dbPlayers.contains(player2));
+        assertFalse(dbPlayers.contains(player3));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -273,17 +270,17 @@ public class TeamPlayerDaoTest extends AbstractTransactionalTestNGSpringContextT
     @Test
     public void testFindPlayerByTeamNonExistent()
     {
-        t1 = new Team("Liverpool");
-        em.persist(t1);
+        Team team = new Team("Liverpool");
+        em.persist(team);
 
-        tp1 = new TeamPlayer("Filip", "Procházka", 185, 80, t1);
-        tp2 = new TeamPlayer("Libor", "Mühlpachr", 175, 85, t1);
-        tp3 = new TeamPlayer("Libor", "Galajda", 175, 80, t1);
-        tp4 = new TeamPlayer("Tomáš", "Šmíd", 180, 75, t1);
-        em.persist(tp1);
-        em.persist(tp2);
-        em.persist(tp3);
-        em.persist(tp4);
+        TeamPlayer player1 = new TeamPlayer("Filip", "Procházka", 185, 80, team);
+        TeamPlayer player2 = new TeamPlayer("Libor", "Mühlpachr", 175, 85, team);
+        TeamPlayer player3 = new TeamPlayer("Libor", "Galajda", 175, 80, team);
+        TeamPlayer player4= new TeamPlayer("Tomáš", "Šmíd", 180, 75, team);
+        em.persist(player1);
+        em.persist(player2);
+        em.persist(player3);
+        em.persist(player4);
 
         Collection<TeamPlayer> dbPlayers = teamPlayerDao.findPlayerByTeam(new Team("Chelsea"));
 
@@ -296,31 +293,31 @@ public class TeamPlayerDaoTest extends AbstractTransactionalTestNGSpringContextT
     @Test
     public void testFindAllPlayers()
     {
-        Team t1 = new Team("Liverpool");
-        Team t2 = new Team("Arsenal");
-        Team t3 = new Team("Manchester");
-        em.persist(t1);
-        em.persist(t2);
-        em.persist(t3);
+        Team team1 = new Team("Liverpool");
+        Team team2 = new Team("Arsenal");
+        Team team3 = new Team("Manchester");
+        em.persist(team1);
+        em.persist(team2);
+        em.persist(team3);
 
-        tp1 = new TeamPlayer("Filip", "Procházka", 185, 80, t3);
-        tp2 = new TeamPlayer("Libor", "Mühlpachr", 175, 85, t1);
-        tp3 = new TeamPlayer("Libor", "Galajda", 175, 80, t2);
-        tp4 = new TeamPlayer("Tomáš", "Šmíd", 180, 75, t3);
-        em.persist(tp1);
-        em.persist(tp2);
-        em.persist(tp3);
-        em.persist(tp4);
+        TeamPlayer player1 = new TeamPlayer("Filip", "Procházka", 185, 80, team3);
+        TeamPlayer player2 = new TeamPlayer("Libor", "Mühlpachr", 175, 85, team1);
+        TeamPlayer player3 = new TeamPlayer("Libor", "Galajda", 175, 80, team2);
+        TeamPlayer player4 = new TeamPlayer("Tomáš", "Šmíd", 180, 75, team3);
+        em.persist(player1);
+        em.persist(player2);
+        em.persist(player3);
+        em.persist(player4);
 
         Collection<TeamPlayer> dbPlayers = teamPlayerDao.findAllPlayers();
 
         em.flush();
 
         assertEquals(dbPlayers.size(), 4);
-        assertTrue(dbPlayers.contains(tp1));
-        assertTrue(dbPlayers.contains(tp2));
-        assertTrue(dbPlayers.contains(tp3));
-        assertTrue(dbPlayers.contains(tp4));
+        assertTrue(dbPlayers.contains(player1));
+        assertTrue(dbPlayers.contains(player2));
+        assertTrue(dbPlayers.contains(player3));
+        assertTrue(dbPlayers.contains(player4));
     }
 
 }

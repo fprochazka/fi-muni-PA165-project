@@ -17,7 +17,7 @@ import java.util.UUID;
  * @author Tomas Smid <smid.thomas@gmail.com>
  */
 @Entity
-public class TeamMatch implements Comparable<TeamMatch>
+public class TeamMatch
 {
 
     @Id
@@ -40,7 +40,9 @@ public class TeamMatch implements Comparable<TeamMatch>
     @NotNull
     private Date startTime;
 
-    /** nullable=true is the default setting, could be missed, but mentioned for better overview */
+    /**
+     * nullable=true is the default setting, could be missed, but mentioned for better overview
+     */
     @Column(nullable = true)
     private Date endTime;
 
@@ -136,12 +138,6 @@ public class TeamMatch implements Comparable<TeamMatch>
     public int hashCode()
     {
         return id.hashCode();
-    }
-
-    @Override
-    public int compareTo(TeamMatch teamMatch)
-    {
-        return this.id.compareTo(teamMatch.id);
     }
 
 }

@@ -13,7 +13,7 @@ import java.util.UUID;
  * @author Tomas Smid <smid.thomas@gmail.com>
  */
 @Entity
-public class TeamMatchGoal implements Comparable<TeamMatchGoal>
+public class TeamMatchGoal
 {
 
     @Id
@@ -112,12 +112,6 @@ public class TeamMatchGoal implements Comparable<TeamMatchGoal>
     public int hashCode()
     {
         return id.hashCode();
-    }
-
-    @Override
-    public int compareTo(TeamMatchGoal teamMatchGoal)
-    {
-        return this.id.compareTo(teamMatchGoal.id);
     }
 
 }
