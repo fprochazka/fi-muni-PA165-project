@@ -12,7 +12,7 @@ public interface TeamDao
     /**
      * Find Team by it's id.
      */
-    Team findById(UUID id);
+    Team findTeamById(UUID id);
 
     /**
      * Find team by it's name.
@@ -32,16 +32,16 @@ public interface TeamDao
     /**
      * Persists the given team
      */
-    void create(Team entity);
+    void createTeam(Team entity);
 
     /**
      * Update the given team
      */
-    void update(Team entity);
+    void updateTeam(Team entity);
 
     /**
      * Delete the given team
      */
-    void delete(Team entity);
+    void deleteTeam(Team entity);
 
 }
