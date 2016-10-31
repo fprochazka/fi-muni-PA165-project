@@ -11,12 +11,10 @@ import java.util.UUID;
  */
 
 @Entity
-@Table(name = "players")
 public class TeamPlayer
 {
-
     @Id
-    @Column(nullable = false, length = 36))
+    @Column(nullable = false, length = 36)
     @Type(type = "uuid-char")
     @NotNull
     private UUID id;
@@ -70,11 +68,6 @@ public class TeamPlayer
         return firstname;
     }
 
-    public void setFirstname(String firstname)
-    {
-        this.firstname = firstname;
-    }
-
     public String getSurname()
     {
         return surname;
@@ -105,9 +98,10 @@ public class TeamPlayer
             return false;
         }
 
-        TeamPlayer teamPlayer = (TeamPlayer) o;
+        TeamPlayer that = (TeamPlayer) o;
 
-        return getId().equals(teamPlayer.getId());
+        return id.equals(that.id);
+
     }
 
     @Override
@@ -115,5 +109,4 @@ public class TeamPlayer
     {
         return id.hashCode();
     }
-
 }

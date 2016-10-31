@@ -18,6 +18,12 @@ public class TeamPlayerDaoImpl implements TeamPlayerDao
 {
     private EntityManager em;
 
+    @PersistenceContext
+    public void setEntityManager(EntityManager entityManager)
+    {
+        this.em = entityManager;
+    }
+
     @Override
     public Collection<TeamPlayer> findPlayerByFirstname(String firstname)
     {
@@ -37,31 +43,9 @@ public class TeamPlayerDaoImpl implements TeamPlayerDao
         if (surname == null || surname.isEmpty()) {
             throw new IllegalArgumentException("Cannot search for null surname");
         }
-
-        try {
-            TypedQuery<TeamPlayer> query = em.createQuery("SELECT tp FROM TeamPlayer tp WHERE tp.surname = :surname", TeamPlayer.class)
-                .setParameter("surname", surname);
-            return query.getResultList();
-=======
-
-    private EntityManager em;
-
-    @Override
-    public TeamPlayer findPlayerByFirstname(String firstname)
-    {
-        if (firstname == null || firstname.isEmpty()) {
-            throw new IllegalArgumentException("Cannot search for null firstname");
-        }
-
-        try {
-            return em
-                .createQuery("SELECT tp FROM TeamPlayer tp WHERE firstname = :firstname", TeamPlayer.class)
-                .setParameter("firstname", firstname)
-                .getSingleResult();
-
-        } catch (NoResultException e) {
-            return null;
-        }
+        TypedQuery<TeamPlayer> query = em.createQuery("SELECT tp FROM TeamPlayer tp WHERE tp.surname = :surname", TeamPlayer.class)
+            .setParameter("surname", surname);
+        return query.getResultList();
     }
 
     @Override
@@ -72,9 +56,8 @@ public class TeamPlayerDaoImpl implements TeamPlayerDao
         }
 
         TypedQuery<TeamPlayer> query = em.createQuery("SELECT tp FROM TeamPlayer tp WHERE tp.team = :tid", TeamPlayer.class)
-                .setParameter("tid", team.getId());
+                .setParameter("tid", team);
         return query.getResultList();
-
     }
 
     @Override
@@ -83,23 +66,17 @@ public class TeamPlayerDaoImpl implements TeamPlayerDao
         return em.find(TeamPlayer.class, id);
     }
 
-    @PersistenceContext
-    public void setEntityManager(EntityManager em)
-    {
-        this.em = em;
-    }
+    @Override
+    public void createPlayer(TeamPlayer tp) { em.persist(tp); }
 
     @Override
-    public void create(TeamPlayer tp) { em.persist(tp); }
-
-    @Override
-    public void update(TeamPlayer tp)
+    public void updatePlayer(TeamPlayer tp)
     {
         em.merge(tp);
     }
 
     @Override
-    public void delete(TeamPlayer tp)
+    public void deletePlayer(TeamPlayer tp)
     {
         em.remove(tp);
     }

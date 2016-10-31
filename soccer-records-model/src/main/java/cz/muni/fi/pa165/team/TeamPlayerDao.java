@@ -8,7 +8,6 @@ import java.util.UUID;
  */
 public interface TeamPlayerDao
 {
-
     /**
      * Find Player by his ID.
      */
@@ -27,7 +26,6 @@ public interface TeamPlayerDao
     /**
      * Find Player by his Team.
      */
-
      Collection<TeamPlayer> findPlayerByTeam(Team team);
 
     /**
@@ -38,16 +36,15 @@ public interface TeamPlayerDao
     /**
      * Create Player.
      */
-     void create(TeamPlayer entity);
+     void createPlayer(TeamPlayer entity);
 
     /**
      * Update Player.
      */
-     void update(TeamPlayer entity);
+     void updatePlayer(TeamPlayer entity);
 
     /**
      * Delete Player.
      */
-     void delete(TeamPlayer entity);
-
+     void deletePlayer(TeamPlayer entity);
 }
