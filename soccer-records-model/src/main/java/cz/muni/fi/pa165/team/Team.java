@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 /**
- * @author Denis Galajda
+ * @author Denis Galajda <galajda.denis@gmail.com>
  */
 @Entity
 public class Team
