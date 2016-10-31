@@ -9,7 +9,6 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.persistence.JoinColumn;
 import java.util.Date;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
