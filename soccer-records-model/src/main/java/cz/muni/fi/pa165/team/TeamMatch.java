@@ -52,7 +52,7 @@ public class TeamMatch implements Comparable<TeamMatch>
      * @param awayTeam  away team in the match
      * @param startTime start time of the match
      */
-    TeamMatch(Team homeTeam, Team awayTeam, Date startTime)
+    public TeamMatch(Team homeTeam, Team awayTeam, Date startTime)
     {
         this(homeTeam, awayTeam, startTime, null);
     }
@@ -65,7 +65,7 @@ public class TeamMatch implements Comparable<TeamMatch>
      * @param startTime start time of the match
      * @param endTime   end time of the match
      */
-    TeamMatch(Team homeTeam, Team awayTeam, Date startTime, Date endTime)
+    public TeamMatch(Team homeTeam, Team awayTeam, Date startTime, Date endTime)
     {
         this.id = UUID.randomUUID();
         this.homeTeam = homeTeam;
@@ -75,8 +75,6 @@ public class TeamMatch implements Comparable<TeamMatch>
     }
 
     /**
-     * Third constructor which does not take any parameters.
-     *
      * @deprecated Hibernate internal
      */
     protected TeamMatch()
@@ -89,32 +87,32 @@ public class TeamMatch implements Comparable<TeamMatch>
         return id;
     }
 
-    Team getHomeTeam()
+    public Team getHomeTeam()
     {
         return homeTeam;
     }
 
-    Team getAwayTeam()
+    public Team getAwayTeam()
     {
         return awayTeam;
     }
 
-    Date getStartTime()
+    public Date getStartTime()
     {
         return startTime == null ? null : new Date(startTime.getTime());
     }
 
-    void setStartTime(Date startTime)
+    public void setStartTime(Date startTime)
     {
         this.startTime = (startTime == null ? null : new Date(startTime.getTime()));
     }
 
-    Date getEndTime()
+    public Date getEndTime()
     {
         return endTime == null ? null : new Date(endTime.getTime());
     }
 
-    void setEndTime(Date endTime)
+    public void setEndTime(Date endTime)
     {
         this.endTime = (endTime == null ? null : new Date(endTime.getTime()));
     }

@@ -49,7 +49,7 @@ public class TeamMatchGoal implements Comparable<TeamMatchGoal>
      * @param match     match in which the goal was scored
      * @param matchTime time in which the goal was scored
      */
-    TeamMatchGoal(TeamPlayer scorer, TeamPlayer assistant, TeamMatch match, Date matchTime)
+    public TeamMatchGoal(TeamPlayer scorer, TeamPlayer assistant, TeamMatch match, Date matchTime)
     {
         this.id = UUID.randomUUID();
         this.scorer = scorer;
@@ -73,22 +73,22 @@ public class TeamMatchGoal implements Comparable<TeamMatchGoal>
         return id;
     }
 
-    TeamPlayer getScorer()
+    public TeamPlayer getScorer()
     {
         return scorer;
     }
 
-    TeamPlayer getAssistant()
+    public TeamPlayer getAssistant()
     {
         return assistant;
     }
 
-    TeamMatch getMatch()
+    public TeamMatch getMatch()
     {
         return match;
     }
 
-    Date getMatchTime()
+    public Date getMatchTime()
     {
         return matchTime == null ? null : new Date(matchTime.getTime());
     }
