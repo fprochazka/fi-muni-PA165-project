@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.UUID;
 
 /**
+ * This class implements the TeamDAO interface.
+ *
  * @author Denis Galajda
  */
 @Repository
@@ -48,8 +50,8 @@ public class TeamDaoImpl implements TeamDao
 
         try {
             return em
-                .createQuery("SELECT t FROM Team t WHERE t IN (SELECT tp.team FROM TeamPlayer tp WHERE tp.team = :tpid)", Team.class)
-                .setParameter("tpid", tp)
+                .createQuery("SELECT t FROM Team t WHERE t IN (SELECT tp.team FROM TeamPlayer tp WHERE tp.team = t.id AND tp.id = :tpid)", Team.class)
+                .setParameter("tpid", tp.getId())
                 .getSingleResult();
 
         } catch (NoResultException e) {
