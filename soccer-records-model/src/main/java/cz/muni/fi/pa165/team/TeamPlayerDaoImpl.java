@@ -9,6 +9,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 /**
+ * This class implements the TeamPlayerDao interface.
+ *
  * @author Libor Mühlpachr <libor.muhl@seznam.cz>
  */
 
@@ -34,7 +36,6 @@ public class TeamPlayerDaoImpl implements TeamPlayerDao
         TypedQuery<TeamPlayer> query = em.createQuery("SELECT tp FROM TeamPlayer tp WHERE tp.firstname = :firstname", TeamPlayer.class)
             .setParameter("firstname", firstname);
         return query.getResultList();
-
     }
 
     @Override

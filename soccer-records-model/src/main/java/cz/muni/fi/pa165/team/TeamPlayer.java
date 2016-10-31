@@ -7,12 +7,15 @@ import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 /**
+ * This entity class represents the Player entity.
+ *
  * @author Libor Mühlpachr <libor.muhl@seznam.cz>
  */
 
 @Entity
 public class TeamPlayer
 {
+
     @Id
     @Column(nullable = false, length = 36)
     @Type(type = "uuid-char")
@@ -40,6 +43,16 @@ public class TeamPlayer
     @JoinColumn(nullable = false)
     private Team team;
 
+    /**
+     * This constructor takes 5 parameters.
+     *
+     * @param firstname player's firstname
+     * @param surname   player's surname
+     * @param height    player's height
+     * @param weight    player's weight
+     * @param team      player's team
+     */
+
     public TeamPlayer(String firstname, String surname, int height, int weight, Team team)
     {
         this.id = UUID.randomUUID();
@@ -51,6 +64,8 @@ public class TeamPlayer
     }
 
     /**
+     * This constructor doesn't take any parameters.
+     *
      * @deprecated Hibernate internal
      */
     protected TeamPlayer()
@@ -101,7 +116,6 @@ public class TeamPlayer
         TeamPlayer that = (TeamPlayer) o;
 
         return id.equals(that.id);
-
     }
 
     @Override
