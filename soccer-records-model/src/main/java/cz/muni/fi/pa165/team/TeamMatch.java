@@ -2,13 +2,18 @@ package cz.muni.fi.pa165.team;
 
 import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+import javax.persistence.JoinColumn;
 import java.util.Date;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
+ * This entity class represents the match entity.
+ *
  * @author Tomas Smid <smid.thomas@gmail.com>
  */
 @Entity
@@ -23,6 +28,7 @@ public class TeamMatch implements Comparable<TeamMatch>
 
     @NotNull
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Team homeTeam;
 
     @NotNull
@@ -34,15 +40,32 @@ public class TeamMatch implements Comparable<TeamMatch>
     @NotNull
     private Date startTime;
 
-    @Column(nullable = true)//it is the default setting, could be missed, but mentioned for better overview
+    /** nullable=true is the default setting, could be missed, but mentioned for better overview */
+    @Column(nullable = true)
     private Date endTime;
 
-    public TeamMatch(Team homeTeam, Team awayTeam, Date startTime)
+    /**
+     * First constructor which takes 3 parameters for attributes set up and
+     * also sets the match end time to null.
+     *
+     * @param homeTeam  home team in the match
+     * @param awayTeam  away team in the match
+     * @param startTime start time of the match
+     */
+    TeamMatch(Team homeTeam, Team awayTeam, Date startTime)
     {
         this(homeTeam, awayTeam, startTime, null);
     }
 
-    public TeamMatch(Team homeTeam, Team awayTeam, Date startTime, Date endTime)
+    /**
+     * Second constructor which takes 4 parameters for attributes set up.
+     *
+     * @param homeTeam  home team in the match
+     * @param awayTeam  away team in the match
+     * @param startTime start time of the match
+     * @param endTime   end time of the match
+     */
+    TeamMatch(Team homeTeam, Team awayTeam, Date startTime, Date endTime)
     {
         this.id = UUID.randomUUID();
         this.homeTeam = homeTeam;
@@ -52,6 +75,8 @@ public class TeamMatch implements Comparable<TeamMatch>
     }
 
     /**
+     * Third constructor which does not take any parameters.
+     *
      * @deprecated Hibernate internal
      */
     protected TeamMatch()
@@ -64,32 +89,32 @@ public class TeamMatch implements Comparable<TeamMatch>
         return id;
     }
 
-    public Team getHomeTeam()
+    Team getHomeTeam()
     {
         return homeTeam;
     }
 
-    public Team getAwayTeam()
+    Team getAwayTeam()
     {
         return awayTeam;
     }
 
-    public Date getStartTime()
+    Date getStartTime()
     {
         return startTime == null ? null : new Date(startTime.getTime());
     }
 
-    public void setStartTime(Date startTime)
+    void setStartTime(Date startTime)
     {
         this.startTime = (startTime == null ? null : new Date(startTime.getTime()));
     }
 
-    public Date getEndTime()
+    Date getEndTime()
     {
         return endTime == null ? null : new Date(endTime.getTime());
     }
 
-    public void setEndTime(Date endTime)
+    void setEndTime(Date endTime)
     {
         this.endTime = (endTime == null ? null : new Date(endTime.getTime()));
     }
@@ -111,9 +136,7 @@ public class TeamMatch implements Comparable<TeamMatch>
     @Override
     public int hashCode()
     {
-        int hash = 5;
-        hash = 37 * hash + Objects.hashCode(this.id);
-        return hash;
+        return id.hashCode();
     }
 
     @Override
@@ -121,4 +144,5 @@ public class TeamMatch implements Comparable<TeamMatch>
     {
         return this.id.compareTo(teamMatch.id);
     }
+
 }

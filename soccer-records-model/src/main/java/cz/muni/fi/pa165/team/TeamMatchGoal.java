@@ -2,16 +2,14 @@ package cz.muni.fi.pa165.team;
 
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
+ * This entity class represents the goal entity.
+ *
  * @author Tomas Smid <smid.thomas@gmail.com>
  */
 @Entity
@@ -26,21 +24,32 @@ public class TeamMatchGoal implements Comparable<TeamMatchGoal>
 
     @ManyToOne
     @NotNull
+    @JoinColumn(nullable = false)
     private TeamPlayer scorer;
 
     @ManyToOne
     @NotNull
+    @JoinColumn(nullable = false)
     private TeamPlayer assistant;
 
     @ManyToOne
     @NotNull
+    @JoinColumn(nullable = false)
     private TeamMatch match;
 
     @Column(nullable = false)
     @NotNull
     private Date matchTime;
 
-    public TeamMatchGoal(TeamPlayer scorer, TeamPlayer assistant, TeamMatch match, Date matchTime)
+    /**
+     * First constructor which takes 4 parameters for attributes set up.
+     *
+     * @param scorer    scorer of the goal
+     * @param assistant assistant of the goal
+     * @param match     match in which the goal was scored
+     * @param matchTime time in which the goal was scored
+     */
+    TeamMatchGoal(TeamPlayer scorer, TeamPlayer assistant, TeamMatch match, Date matchTime)
     {
         this.id = UUID.randomUUID();
         this.scorer = scorer;
@@ -50,6 +59,8 @@ public class TeamMatchGoal implements Comparable<TeamMatchGoal>
     }
 
     /**
+     * Second constructor which does not take any parameter.
+     *
      * @deprecated Hibernate internal
      */
     protected TeamMatchGoal()
@@ -62,22 +73,22 @@ public class TeamMatchGoal implements Comparable<TeamMatchGoal>
         return id;
     }
 
-    public TeamPlayer getScorer()
+    TeamPlayer getScorer()
     {
         return scorer;
     }
 
-    public TeamPlayer getAssistant()
+    TeamPlayer getAssistant()
     {
         return assistant;
     }
 
-    public TeamMatch getMatch()
+    TeamMatch getMatch()
     {
         return match;
     }
 
-    public Date getMatchTime()
+    Date getMatchTime()
     {
         return matchTime == null ? null : new Date(matchTime.getTime());
     }
@@ -99,9 +110,7 @@ public class TeamMatchGoal implements Comparable<TeamMatchGoal>
     @Override
     public int hashCode()
     {
-        int hash = 5;
-        hash = 37 * hash + Objects.hashCode(this.id);
-        return hash;
+        return id.hashCode();
     }
 
     @Override
@@ -109,4 +118,5 @@ public class TeamMatchGoal implements Comparable<TeamMatchGoal>
     {
         return this.id.compareTo(teamMatchGoal.id);
     }
+
 }

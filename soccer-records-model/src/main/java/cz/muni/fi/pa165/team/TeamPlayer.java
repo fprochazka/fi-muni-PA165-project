@@ -106,7 +106,7 @@ public class TeamPlayer
     @Override
     public int hashCode()
     {
-        return getId().hashCode();
+        return id.hashCode();
     }
 
 }

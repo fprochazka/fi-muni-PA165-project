@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 /**
- * @author Denis Galajda
+ * @author Denis Galajda <galajda.denis@gmail.com>
  */
 @Entity
 public class Team
@@ -70,6 +70,7 @@ public class Team
     @Override
     public int hashCode()
     {
-        return getId().hashCode();
+        return id.hashCode();
     }
+
 }
