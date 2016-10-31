@@ -1,4 +1,4 @@
-package cz.muni.fi.pa165.teamPlayer;
+package cz.muni.fi.pa165.team;
 
 import cz.muni.fi.pa165.config.ApplicationConfig;
 import cz.muni.fi.pa165.team.Team;
@@ -7,8 +7,6 @@ import cz.muni.fi.pa165.team.TeamPlayerDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import javax.persistence.EntityManager;

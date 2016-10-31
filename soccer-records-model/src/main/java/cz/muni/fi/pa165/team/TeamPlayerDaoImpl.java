@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.UUID;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -16,6 +15,7 @@ import javax.persistence.TypedQuery;
 @Repository
 public class TeamPlayerDaoImpl implements TeamPlayerDao
 {
+
     private EntityManager em;
 
     @PersistenceContext
@@ -31,9 +31,9 @@ public class TeamPlayerDaoImpl implements TeamPlayerDao
             throw new IllegalArgumentException("Cannot search for null firstname");
         }
 
-            TypedQuery<TeamPlayer> query = em.createQuery("SELECT tp FROM TeamPlayer tp WHERE tp.firstname = :firstname", TeamPlayer.class)
-                            .setParameter("firstname", firstname);
-            return query.getResultList();
+        TypedQuery<TeamPlayer> query = em.createQuery("SELECT tp FROM TeamPlayer tp WHERE tp.firstname = :firstname", TeamPlayer.class)
+            .setParameter("firstname", firstname);
+        return query.getResultList();
 
     }
 
@@ -56,7 +56,7 @@ public class TeamPlayerDaoImpl implements TeamPlayerDao
         }
 
         TypedQuery<TeamPlayer> query = em.createQuery("SELECT tp FROM TeamPlayer tp WHERE tp.team = :tid", TeamPlayer.class)
-                .setParameter("tid", team);
+            .setParameter("tid", team);
         return query.getResultList();
     }
 
@@ -67,7 +67,10 @@ public class TeamPlayerDaoImpl implements TeamPlayerDao
     }
 
     @Override
-    public void createPlayer(TeamPlayer tp) { em.persist(tp); }
+    public void createPlayer(TeamPlayer tp)
+    {
+        em.persist(tp);
+    }
 
     @Override
     public void updatePlayer(TeamPlayer tp)
