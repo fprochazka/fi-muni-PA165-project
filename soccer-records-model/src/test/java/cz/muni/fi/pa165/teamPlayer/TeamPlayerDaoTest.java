@@ -52,19 +52,7 @@ public class TeamPlayerDaoTest extends AbstractTransactionalTestNGSpringContextT
         em.flush();
     }
 
-    @Test
-    public void findPlayerByFirstname()
-    {
-        Assert.assertNotNull(teamPlayerDao.findPlayerByFirstname(tp1.getFirstname()));
-        Assert.assertNotNull(teamPlayerDao.findPlayerByFirstname(tp2.getFirstname()));
-    }
 
-    @Test
-    public void findPlayerBySurname()
-    {
-        Assert.assertNotNull(teamPlayerDao.findPlayerBySurname(tp1.getSurname()));
-        Assert.assertNotNull(teamPlayerDao.findPlayerBySurname(tp2.getSurname()));
-    }
 
     @Test
     public void findPlayerById()
@@ -73,12 +61,6 @@ public class TeamPlayerDaoTest extends AbstractTransactionalTestNGSpringContextT
         Assert.assertNotNull(teamPlayerDao.findPlayerById(tp2.getId()));
     }
 
-    @Test
-    public void findPlayerByTeam()
-    {
-        Assert.assertNotNull(teamPlayerDao.findPlayerByTeam(tp1.getTeam()));
-        Assert.assertNotNull(teamPlayerDao.findPlayerByTeam(tp2.getTeam()));
-    }
 
     @Test
     public void findAllPlayers()

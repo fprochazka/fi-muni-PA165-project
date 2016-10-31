@@ -57,6 +57,7 @@ public class TeamPlayer
      */
     protected TeamPlayer()
     {
+
     }
 
     public UUID getId()
