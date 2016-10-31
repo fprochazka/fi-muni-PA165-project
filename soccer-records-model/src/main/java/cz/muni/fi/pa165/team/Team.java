@@ -9,6 +9,8 @@ import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 /**
+ * This entity class represents the team entity.
+ *
  * @author Denis Galajda <galajda.denis@gmail.com>
  */
 @Entity
@@ -25,6 +27,11 @@ public class Team
     @NotNull
     private String name;
 
+    /**
+     * Constructor which takes 1 parameter for attributes set up.
+     *
+     * @param name name of the team
+     */
     public Team(String name)
     {
         this.id = UUID.randomUUID();
@@ -32,6 +39,8 @@ public class Team
     }
 
     /**
+     * No-args constructor
+     *
      * @deprecated Hibernate internal
      */
     protected Team()
@@ -65,7 +74,7 @@ public class Team
 
         Team team = (Team) o;
 
-        return getId().equals(team.getId());
+        return id.equals(team.id);
 
     }
 
@@ -74,5 +83,4 @@ public class Team
     {
         return id.hashCode();
     }
-
 }
