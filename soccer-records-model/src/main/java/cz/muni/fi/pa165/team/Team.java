@@ -74,12 +74,13 @@ public class Team
 
         Team that = (Team) o;
 
-        return id.equals(that.id);
+        return getId().equals(that.getId());
+
     }
 
     @Override
     public int hashCode()
     {
-        return id.hashCode();
+        return getId().hashCode();
     }
 }
