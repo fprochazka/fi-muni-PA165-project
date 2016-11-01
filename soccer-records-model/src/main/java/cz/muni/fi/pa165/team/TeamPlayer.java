@@ -113,13 +113,12 @@ public class TeamPlayer
 
         TeamPlayer that = (TeamPlayer) o;
 
-        return getId().equals(that.getId());
-
+        return id.equals(that.getId());
     }
 
     @Override
     public int hashCode()
     {
-        return getId().hashCode();
+        return id.hashCode();
     }
 }
