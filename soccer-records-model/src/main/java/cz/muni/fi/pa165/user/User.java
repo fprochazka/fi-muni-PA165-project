@@ -93,15 +93,15 @@ public class User
             return false;
         }
 
-        User user = (User) o;
+        User that = (User) o;
 
-        return id.equals(user.id);
+        return getId().equals(that.getId());
+
     }
 
     @Override
     public int hashCode()
     {
-        return id.hashCode();
+        return getId().hashCode();
     }
-
 }
