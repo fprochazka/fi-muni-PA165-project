@@ -93,9 +93,9 @@ public class User
             return false;
         }
 
-        User user = (User) o;
+        User that = (User) o;
 
-        return id.equals(user.id);
+        return id.equals(that.getId());
     }
 
     @Override
@@ -103,5 +103,4 @@ public class User
     {
         return id.hashCode();
     }
-
 }

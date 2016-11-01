@@ -131,7 +131,7 @@ public class TeamMatch
 
         TeamMatch that = (TeamMatch) o;
 
-        return id.equals(that.id);
+        return id.equals(that.getId());
     }
 
     @Override
@@ -139,5 +139,4 @@ public class TeamMatch
     {
         return id.hashCode();
     }
-
 }

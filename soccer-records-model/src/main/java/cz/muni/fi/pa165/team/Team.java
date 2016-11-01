@@ -74,7 +74,7 @@ public class Team
 
         Team that = (Team) o;
 
-        return id.equals(that.id);
+        return id.equals(that.getId());
     }
 
     @Override

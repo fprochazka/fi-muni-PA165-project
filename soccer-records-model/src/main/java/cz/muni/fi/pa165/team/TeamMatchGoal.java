@@ -105,7 +105,7 @@ public class TeamMatchGoal
 
         TeamMatchGoal that = (TeamMatchGoal) o;
 
-        return id.equals(that.id);
+        return id.equals(that.getId());
     }
 
     @Override
@@ -113,5 +113,4 @@ public class TeamMatchGoal
     {
         return id.hashCode();
     }
-
 }

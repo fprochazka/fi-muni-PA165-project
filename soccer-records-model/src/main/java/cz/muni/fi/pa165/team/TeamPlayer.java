@@ -113,7 +113,7 @@ public class TeamPlayer
 
         TeamPlayer that = (TeamPlayer) o;
 
-        return id.equals(that.id);
+        return id.equals(that.getId());
     }
 
     @Override
