@@ -17,14 +17,14 @@ import java.util.UUID;
  * @author Denis Galajda <galajda.denis@gmail.com>
  */
 @ContextConfiguration(classes = ApplicationConfig.class)
-public class TeamMatchGoalDAOImplTest extends AbstractTransactionalTestNGSpringContextTests
+public class TeamMatchGoalDaoImplTest extends AbstractTransactionalTestNGSpringContextTests
 {
 
     @Autowired
-    public TeamMatchGoalDAO teamMatchGoalDAO;
+    public TeamMatchGoalDaoImpl teamMatchGoalDAO;
 
     @PersistenceContext
-    EntityManager em;
+    public EntityManager em;
 
     @Test
     public void testCreateGoal()

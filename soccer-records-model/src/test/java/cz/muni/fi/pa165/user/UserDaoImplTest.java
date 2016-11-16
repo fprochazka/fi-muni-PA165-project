@@ -17,11 +17,11 @@ import static org.testng.Assert.*;
  * @author Libor Muhlpachr <libor.muhl@seznam.cz>
  */
 @ContextConfiguration(classes=ApplicationConfig.class)
-public class UserDaoTest extends AbstractTransactionalTestNGSpringContextTests
+public class UserDaoImplTest extends AbstractTransactionalTestNGSpringContextTests
 {
 
     @Autowired
-    public UserDao userDao;
+    public UserDaoImpl userDao;
 
     @Autowired
     public UserService userService;

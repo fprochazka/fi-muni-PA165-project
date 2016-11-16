@@ -17,7 +17,7 @@ import java.util.UUID;
  * @author Tomas Smid <smid.thomas@gmail.com>
  */
 @Repository
-public class TeamMatchDAOImpl implements TeamMatchDAO
+public class TeamMatchDaoImpl implements TeamMatchDAO
 {
 
     private EntityManager em;
