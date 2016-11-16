@@ -20,11 +20,11 @@ import static org.testng.Assert.assertTrue;
  * @author Libor Mühlpachr <libor.muhl@seznam.cz>
  */
 @ContextConfiguration(classes = ApplicationConfig.class)
-public class TeamDaoTest extends AbstractTransactionalTestNGSpringContextTests
+public class TeamDaoImplTest extends AbstractTransactionalTestNGSpringContextTests
 {
 
     @Autowired
-    public TeamDao teamDao;
+    public TeamDaoImpl teamDao;
 
     @PersistenceContext
     public EntityManager em;

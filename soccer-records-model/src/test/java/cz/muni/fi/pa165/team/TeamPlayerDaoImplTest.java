@@ -17,11 +17,11 @@ import static org.testng.Assert.*;
  * @author Tomas Smid <smid.thomas@gmail.com>
  */
 @ContextConfiguration(classes = ApplicationConfig.class)
-public class TeamPlayerDaoTest extends AbstractTransactionalTestNGSpringContextTests
+public class TeamPlayerDaoImplTest extends AbstractTransactionalTestNGSpringContextTests
 {
 
     @Autowired
-    public TeamPlayerDao teamPlayerDao;
+    public TeamPlayerDaoImpl teamPlayerDao;
 
     @PersistenceContext
     public EntityManager em;

@@ -17,11 +17,11 @@ import java.util.UUID;
  * @author Filip Procházka <filip@prochazka.su>
  */
 @ContextConfiguration(classes = ApplicationConfig.class)
-public class TeamMatchDAOImplTest extends AbstractTransactionalTestNGSpringContextTests
+public class TeamMatchDaoImplTest extends AbstractTransactionalTestNGSpringContextTests
 {
 
     @Autowired
-    public TeamMatchDAO teamMatchDao;
+    public TeamMatchDaoImpl teamMatchDao;
 
     @PersistenceContext
     public EntityManager em;
