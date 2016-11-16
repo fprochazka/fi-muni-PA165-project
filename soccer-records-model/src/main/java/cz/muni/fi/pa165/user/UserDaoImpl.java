@@ -4,7 +4,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
 import java.util.UUID;
@@ -18,10 +17,9 @@ public class UserDaoImpl implements UserDao
 
     private EntityManager em;
 
-    @PersistenceContext
-    public void setEntityManager(final EntityManager entityManager)
+    public UserDaoImpl(EntityManager em)
     {
-        this.em = entityManager;
+        this.em = em;
     }
 
     @Override
