@@ -83,24 +83,4 @@ public class User
         this.role = UserRole.MODERATOR;
     }
 
-    @Override
-    public boolean equals(Object o)
-    {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof User)) {
-            return false;
-        }
-
-        User that = (User) o;
-
-        return id.equals(that.getId());
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return id.hashCode();
-    }
 }

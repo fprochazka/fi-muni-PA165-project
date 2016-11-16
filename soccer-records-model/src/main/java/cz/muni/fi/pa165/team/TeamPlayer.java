@@ -101,24 +101,4 @@ public class TeamPlayer
         return team;
     }
 
-    @Override
-    public boolean equals(Object o)
-    {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof TeamPlayer)) {
-            return false;
-        }
-
-        TeamPlayer that = (TeamPlayer) o;
-
-        return id.equals(that.getId());
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return id.hashCode();
-    }
 }
