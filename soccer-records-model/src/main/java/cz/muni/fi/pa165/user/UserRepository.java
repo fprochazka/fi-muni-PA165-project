@@ -6,23 +6,13 @@ import java.util.UUID;
 /**
  * @author Filip Prochazka <filip@prochazka.su>
  */
-public interface UserDao
+public interface UserRepository
 {
-
-    /**
-     * Persists the given user
-     */
-    void createUser(User u);
-
-    /**
-     * Persists the given user
-     */
-    void deleteUser(User u);
 
     /**
      * Finds user by his id
      */
-    User findUserById(UUID id);
+    User getUserById(final UUID id);
 
     /**
      * Finds user by his email

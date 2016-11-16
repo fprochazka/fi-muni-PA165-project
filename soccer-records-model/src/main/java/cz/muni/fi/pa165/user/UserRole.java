@@ -5,9 +5,29 @@ package cz.muni.fi.pa165.user;
  */
 public enum UserRole
 {
-    USER("user"),
-    MODERATOR("moderator"),
-    ADMIN("admin");
+    USER("user") {
+        @Override
+        public boolean allowTransition(UserRole role)
+        {
+            return role == ADMIN || role == MODERATOR;
+        }
+    },
+
+    MODERATOR("moderator") {
+        @Override
+        public boolean allowTransition(UserRole role)
+        {
+            return role == ADMIN;
+        }
+    },
+
+    ADMIN("admin") {
+        @Override
+        public boolean allowTransition(UserRole role)
+        {
+            return false;
+        }
+    };
 
     private final String text;
 
@@ -15,6 +35,11 @@ public enum UserRole
     {
         this.text = text;
     }
+
+    /**
+     * Verifies if the user can be transitioned to given role.
+     */
+    public abstract boolean allowTransition(UserRole role);
 
     /**
      * @see java.lang.Enum#toString()
