@@ -119,24 +119,4 @@ public class TeamMatch
         this.endTime = (endTime == null ? null : new Date(endTime.getTime()));
     }
 
-    @Override
-    public boolean equals(Object o)
-    {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof TeamMatch)) {
-            return false;
-        }
-
-        TeamMatch that = (TeamMatch) o;
-
-        return id.equals(that.getId());
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return id.hashCode();
-    }
 }

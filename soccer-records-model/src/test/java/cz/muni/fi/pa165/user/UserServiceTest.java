@@ -16,7 +16,7 @@ public class UserServiceTest
     {
         UserService userService = new UserService(new BCryptPasswordEncoder(13));
 
-        User user = userService.createUser("filip@prochazka.su", "heslo");
+        User user = userService.createUser("filip@prochazka.su", null, "heslo");
         assertEquals("filip@prochazka.su", user.getEmail());
         assertNotEquals("heslo", user.getPasswordHash());
         assertEquals(UserRole.USER, user.getRole());

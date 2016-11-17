@@ -93,24 +93,4 @@ public class TeamMatchGoal
         return matchTime == null ? null : new Date(matchTime.getTime());
     }
 
-    @Override
-    public boolean equals(Object o)
-    {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof TeamMatchGoal)) {
-            return false;
-        }
-
-        TeamMatchGoal that = (TeamMatchGoal) o;
-
-        return id.equals(that.getId());
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return id.hashCode();
-    }
 }

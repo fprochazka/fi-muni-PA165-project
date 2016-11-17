@@ -1,5 +1,6 @@
 package cz.muni.fi.pa165.user;
 
+import cz.muni.fi.pa165.user.exceptions.UserCannotBePromotedToRoleExceptions;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -72,6 +73,10 @@ public class User
      */
     public void promoteToAdmin()
     {
+        if (!this.role.allowTransition(UserRole.ADMIN)) {
+            throw new UserCannotBePromotedToRoleExceptions(this, UserRole.ADMIN);
+        }
+
         this.role = UserRole.ADMIN;
     }
 
@@ -80,27 +85,11 @@ public class User
      */
     public void promoteToModerator()
     {
+        if (!this.role.allowTransition(UserRole.MODERATOR)) {
+            throw new UserCannotBePromotedToRoleExceptions(this, UserRole.MODERATOR);
+        }
+
         this.role = UserRole.MODERATOR;
     }
 
-    @Override
-    public boolean equals(Object o)
-    {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof User)) {
-            return false;
-        }
-
-        User that = (User) o;
-
-        return id.equals(that.getId());
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return id.hashCode();
-    }
 }

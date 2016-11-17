@@ -4,7 +4,6 @@ import org.springframework.stereotype.Repository;
 
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
@@ -22,8 +21,7 @@ public class TeamMatchDaoImpl implements TeamMatchDAO
 
     private EntityManager em;
 
-    @PersistenceContext
-    public void setEntityManager(EntityManager em)
+    public TeamMatchDaoImpl(EntityManager em)
     {
         this.em = em;
     }

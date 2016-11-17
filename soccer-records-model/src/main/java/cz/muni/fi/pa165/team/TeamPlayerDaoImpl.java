@@ -3,7 +3,6 @@ package cz.muni.fi.pa165.team;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
 import java.util.UUID;
@@ -19,10 +18,9 @@ public class TeamPlayerDaoImpl implements TeamPlayerDao
 
     private EntityManager em;
 
-    @PersistenceContext
-    public void setEntityManager(EntityManager entityManager)
+    public TeamPlayerDaoImpl(EntityManager em)
     {
-        this.em = entityManager;
+        this.em = em;
     }
 
     @Override

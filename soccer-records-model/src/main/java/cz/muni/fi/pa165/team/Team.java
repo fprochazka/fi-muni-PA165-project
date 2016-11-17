@@ -62,24 +62,4 @@ public class Team
         this.name = name;
     }
 
-    @Override
-    public boolean equals(Object o)
-    {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Team)) {
-            return false;
-        }
-
-        Team that = (Team) o;
-
-        return id.equals(that.getId());
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return id.hashCode();
-    }
 }

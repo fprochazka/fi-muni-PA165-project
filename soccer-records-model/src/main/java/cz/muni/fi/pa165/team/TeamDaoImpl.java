@@ -2,7 +2,10 @@ package cz.muni.fi.pa165.team;
 
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -16,6 +19,11 @@ public class TeamDaoImpl implements TeamDao
 {
 
     private EntityManager em;
+
+    public TeamDaoImpl(EntityManager em)
+    {
+        this.em = em;
+    }
 
     @Override
     public Team findTeamByName(String name)
@@ -57,12 +65,6 @@ public class TeamDaoImpl implements TeamDao
         } catch (NoResultException e) {
             return null;
         }
-    }
-
-    @PersistenceContext
-    public void setEntityManager(EntityManager em)
-    {
-        this.em = em;
     }
 
     @Override

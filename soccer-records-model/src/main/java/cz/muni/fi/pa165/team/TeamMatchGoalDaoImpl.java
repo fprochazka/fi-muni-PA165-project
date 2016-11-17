@@ -3,7 +3,6 @@ package cz.muni.fi.pa165.team;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
 import java.util.UUID;
@@ -19,8 +18,7 @@ public class TeamMatchGoalDaoImpl implements TeamMatchGoalDAO
 
     private EntityManager em;
 
-    @PersistenceContext
-    public void setEntityManager(EntityManager em)
+    public TeamMatchGoalDaoImpl(EntityManager em)
     {
         this.em = em;
     }
