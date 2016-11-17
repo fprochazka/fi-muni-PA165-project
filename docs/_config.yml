@@ -19,8 +19,6 @@ description: > # this means to ignore newlines until "baseurl:"
   Soccer records information system.
 baseurl: "/fi-muni-PA165-project" # the subpath of your site, e.g. /blog
 url: "https://fprochazka.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: ProchazkaFilip
-github_username: fprochazka
 
 # Build settings
 markdown: kramdown
