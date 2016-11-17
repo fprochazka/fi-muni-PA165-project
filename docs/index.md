@@ -1,4 +1,6 @@
-# PA165 project: Soccer records
+---
+layout: home
+---
 
 * **Vedoucí:** [Procházka, Filip](https://github.com/fprochazka) (433457)
 * [Galajda, Denis](https://github.com/ATP93) (461458)
@@ -15,10 +17,3 @@ Next it should support entering information related to particular match between 
 * Goals
 * Team statistics (win, tie, loss, goals scored, goals received)
 * Player statistics (goals scored)
-
-## Contents
-
-* [System use-cases](./01.model-classes.md)
-* [Model](./02.system-use-cases.md)
-* UI
-* ...

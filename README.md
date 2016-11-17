@@ -10,7 +10,7 @@
 
 ## Important links
 
-* [Project wiki](https://github.com/fprochazka/fi-muni-PA165-project/wiki)
+* [Project wiki](https://fprochazka.github.io/fi-muni-PA165-project/)
 
 ## Assignment
 

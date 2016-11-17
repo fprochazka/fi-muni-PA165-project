@@ -1,0 +1,21 @@
+---
+layout: default
+---
+
+<div class="home">
+
+  <h1 class="page-heading">{{ page.title }}</h1>
+
+  {{ content }}
+
+  <h2>Contents</h2>
+
+  <ul>
+    {% for page in site.wiki %}
+      <li>
+        <a href="{{ page.url | relative_url }}">{{ page.title | escape }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+</div>
