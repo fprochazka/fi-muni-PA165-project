@@ -21,7 +21,7 @@ public class TeamMatchDaoImplTest extends AbstractTransactionalTestNGSpringConte
 {
 
     @Autowired
-    public TeamMatchDaoImpl teamMatchDao;
+    public TeamMatchRepositoryImpl teamMatchDao;
 
     @PersistenceContext
     public EntityManager em;
