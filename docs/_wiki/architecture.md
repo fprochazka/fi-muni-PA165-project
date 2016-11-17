@@ -7,7 +7,9 @@ title: System architecture
 
 ## Entity
 
-* zodpovídá za svoji konzistenci, není anémická
+* zapouzdřuje data
+* zodpovídá za svoji konzistenci, validuje si přijímaná data, není anémická
+	* v každém momentu své existence je validní
 	* [AnemicDomainModel by Martin Fowler](http://www.martinfowler.com/bliki/AnemicDomainModel.html)
 	* [Anemic domain model on Wikipedia](https://en.wikipedia.org/wiki/Anemic_domain_model)
 	* Hlavní důvod proč nechceme takové entity je, že anémický model popírá principy OOP, viz zkrácené "Liabilities" na wikipedii.
@@ -20,8 +22,10 @@ title: System architecture
 * je persistence agnostic/ignorant
 	* [Nejstravitelnější zdůvodnění je na SO](http://stackoverflow.com/a/906094/602899)
 * její identita je daná její existencí
+	* [Classification by Eric Evans on Martin Fowler's blog](http://martinfowler.com/bliki/EvansClassification.html)
 	* Tak jako v reálném světe jsem já jako jedinec uníkátní z principu toho že existuji, tak stejnou vlastnost má i entita a nějaký identifikátor je pouze implementační detail srovnatelný s mým rodným číslem. Ovšem budu existovat i bez rodného čísla a nikdy nebudu stejný jako někdo jiný.
 	* Entity nikdy nebudeme porovnávat přes bussines equivalence, ale pouze přes reference (fakt že ukazují na stejné místo v paměti).
+	* Mohlo by se zdát, že dvě entity jsou stejné pokud mají stejné `id` a typ, ale to není tak jednoduché. Dva objekty jsou stejné pouze pokud mají stejnou identitu a v případě že je načítáme z databáze tak budou stejné pouze v případě, že mají stejné nejen `id` a typ ale navíc je vrátila stejná instance EntityManageru, která by měla po dobu běhu transakce být neměnná.
 
 ## Services
 
@@ -36,6 +40,10 @@ title: System architecture
 * kontroluje pouze věci, které neumí zkontrolovat sama entita
 	* například že uživatel v databázi je unikátní, ovšem na databázi nesahá, místo toho si nechá předat nullable argumentem případného již existujícího uživatele se stejným emailem od fasády
 * nesmí sahat na fasády ani repozitáře
+* není nutné, aby odpovídaly 1:1 entitám, repozitářům nebo fasádám
+* je striktně bezstavová
+* další výhody:
+	* maximální znovupoužitelnost i v rámci jiných services
 
 ## Repositories
 
@@ -45,9 +53,13 @@ title: System architecture
 * striktní zákaz volání jakéhokoliv `persist()`, `flush()`, `clear()`, `merge()` a dalších metod na modifikaci entit nebo čištění identity mapy
 * nikdy nepřijímá v argumentech entity, ani když podle nich potřebuje hledat
 	* místo toho přijímá vždy jejich identifikátory - častěji mám k dispozici `id` entity, než entitu samotnou
+* není nutné, aby odpovídaly 1:1 entitám, službám nebo fasádám
 
 ## Facades
 
+* veřejné rozhranní aplikace
+	* metody odpovídají jednotlivým use-cases, které je v aplikaci možné provádět
+	* slouží jako znovupoužitelná horní vrstva abstrakce nad modelem - je možné použít v controlleru, cli rozhranní, restovém api, cronech, ...
 * obsahuje co nejmenší množství logiky, v ideálním případě vůbec žádnou
 * využívají služby, repozitáře a entity manager
 * z repozitářů načítá data, které vyžaduje služba ke svojí práci
@@ -59,6 +71,7 @@ title: System architecture
 * přijímá buď surová data, nebo struktury (v třídách, které jsou definované ve stejném namespace)
 * může vracet buď specifické result objeky, nebo entity
 	* entity zodpovídají za svůj stav - nevadí tedy, že je vypustíme mimo fasády
+* není nutné, aby odpovídaly 1:1 entitám, službám nebo repozitářům
 
 ## Controllers
 
