@@ -53,6 +53,7 @@ title: System architecture
 * striktní zákaz volání jakéhokoliv `persist()`, `flush()`, `clear()`, `merge()` a dalších metod na modifikaci entit nebo čištění identity mapy
 * nikdy nepřijímá v argumentech entity, ani když podle nich potřebuje hledat
 	* místo toho přijímá vždy jejich identifikátory - častěji mám k dispozici `id` entity, než entitu samotnou
+* pokud není nutné kontrolovat oprávnění a pouze se čtou data, je možné pro zachování jednoduchosti volat repozitář přímo v controlleru, cli, atd
 * není nutné, aby odpovídaly 1:1 entitám, službám nebo fasádám
 
 ## Facades
