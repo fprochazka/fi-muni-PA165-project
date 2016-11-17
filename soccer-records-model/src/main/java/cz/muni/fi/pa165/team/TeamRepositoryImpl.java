@@ -1,10 +1,11 @@
 package cz.muni.fi.pa165.team;
 
+import cz.muni.fi.pa165.team.exceptions.TeamNotFoundException;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
 import java.util.UUID;
@@ -15,12 +16,12 @@ import java.util.UUID;
  * @author Denis Galajda
  */
 @Repository
-public class TeamDaoImpl implements TeamDao
+public class TeamRepositoryImpl implements TeamRepository
 {
 
     private EntityManager em;
 
-    public TeamDaoImpl(EntityManager em)
+    public TeamRepositoryImpl(EntityManager em)
     {
         this.em = em;
     }
@@ -44,9 +45,19 @@ public class TeamDaoImpl implements TeamDao
     }
 
     @Override
-    public Team findTeamById(UUID id)
+    public Team getTeamById(UUID teamId)
     {
-        return em.find(Team.class, id);
+        Assert.notNull(teamId, "Cannot search for a null teamId");
+
+        try {
+            return em
+                .createQuery("SELECT t FROM Team t WHERE t.id = :teamId", Team.class)
+                .setParameter("teamId", teamId)
+                .getSingleResult();
+
+        } catch (NoResultException e) {
+            throw new TeamNotFoundException(teamId, e);
+        }
     }
 
     @Override
@@ -68,42 +79,10 @@ public class TeamDaoImpl implements TeamDao
     }
 
     @Override
-    public void updateTeam(Team t)
-    {
-        em.merge(t);
-    }
-
-    @Override
-    public void deleteTeam(Team t)
-    {
-        Query query = em.createQuery("DELETE FROM TeamMatchGoal tmg WHERE tmg.match IN " +
-            "(SELECT tm FROM TeamMatch tm WHERE tm.awayTeam = :tid OR tm.homeTeam = :tid)")
-            .setParameter("tid", t);
-        query.executeUpdate();
-
-        query = em.createQuery("DELETE FROM TeamMatch tm WHERE tm.awayTeam = :tid OR " +
-            "tm.homeTeam = :tid")
-            .setParameter("tid", t);
-        query.executeUpdate();
-
-        query = em.createQuery("DELETE FROM TeamPlayer tp WHERE tp.team = :tid")
-            .setParameter("tid", t);
-        query.executeUpdate();
-
-        em.remove(t);
-    }
-
-    @Override
     public Collection<Team> findAll()
     {
         TypedQuery<Team> query = em.createQuery("SELECT t FROM Team t", Team.class);
         return query.getResultList();
-    }
-
-    @Override
-    public void createTeam(Team t)
-    {
-        em.persist(t);
     }
 
 }

@@ -8,7 +8,7 @@ import java.util.UUID;
  *
  * @author Denis Galajda
  */
-public interface TeamDao
+public interface TeamRepository
 {
 
     /**
@@ -18,7 +18,7 @@ public interface TeamDao
      * @return the team with the given id, or null if such team
      * does not exist
      */
-    Team findTeamById(UUID id);
+    Team getTeamById(UUID id);
 
     /**
      * Find team by it's name.
@@ -44,26 +44,5 @@ public interface TeamDao
      * @return collection of all stored teams in database
      */
     Collection<Team> findAll();
-
-    /**
-     * Stores the given team into the database.
-     *
-     * @param entity team which should be created
-     */
-    void createTeam(Team entity);
-
-    /**
-     * Update the given team in the database.
-     *
-     * @param entity team which should be update
-     */
-    void updateTeam(Team entity);
-
-    /**
-     * Deletes the given team into the database.
-     *
-     * @param entity team which should be deleted
-     */
-    void deleteTeam(Team entity);
 
 }

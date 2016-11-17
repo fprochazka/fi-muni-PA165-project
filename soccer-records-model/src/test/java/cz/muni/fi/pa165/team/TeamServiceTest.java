@@ -18,5 +18,4 @@ public class TeamServiceTest
         Team team = teamService.createTeam("ManUtd", null);
         assertEquals("ManUtd", team.getName());
     }
-
 }
