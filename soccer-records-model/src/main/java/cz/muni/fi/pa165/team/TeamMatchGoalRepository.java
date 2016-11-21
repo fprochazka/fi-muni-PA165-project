@@ -8,29 +8,8 @@ import java.util.UUID;
  *
  * @author Tomas Smid <smid.thomas@gmail.com>
  */
-interface TeamMatchGoalDAO
+interface TeamMatchGoalRepository
 {
-
-    /**
-     * Stores the goal into the database.
-     *
-     * @param goal goal which is going to be stored
-     */
-    void createGoal(TeamMatchGoal goal);
-
-    /**
-     * Updates the goal stored in the database.
-     *
-     * @param goal goal which should be updated
-     */
-    void updateGoal(TeamMatchGoal goal);
-
-    /**
-     * Deletes the goal from the database.
-     *
-     * @param goal goal which should be deleted
-     */
-    void deleteGoal(TeamMatchGoal goal);
 
     /**
      * Retrieves the goal from database according to
@@ -40,7 +19,7 @@ interface TeamMatchGoalDAO
      * @return the match with the given id, or null if such goal
      * does not exist
      */
-    TeamMatchGoal findGoalById(UUID id);
+    TeamMatchGoal getGoalById(UUID id);
 
     /**
      * Retrieves the goal from the database according to

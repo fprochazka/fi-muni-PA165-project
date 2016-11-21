@@ -1,50 +1,43 @@
 package cz.muni.fi.pa165.team;
 
+import cz.muni.fi.pa165.team.exceptions.GoalNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
 import java.util.UUID;
 
 /**
- * This class implements the TeamMatchGoalDAO interface.
+ * This class implements the TeamMatchGoalRepository interface.
  *
  * @author Tomas Smid <smid.thomas@gmail.com>
  */
 @Repository
-public class TeamMatchGoalDaoImpl implements TeamMatchGoalDAO
+public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
 {
 
     private EntityManager em;
 
-    public TeamMatchGoalDaoImpl(EntityManager em)
+    public TeamMatchGoalRepositoryImpl(EntityManager em)
     {
         this.em = em;
     }
 
     @Override
-    public void createGoal(TeamMatchGoal goal)
+    public TeamMatchGoal getGoalById(UUID goalId)
     {
-        em.persist(goal);
-    }
+        if(goalId == null){
+            throw new IllegalArgumentException("Cannot search for a null goal id");
+        }
 
-    @Override
-    public void updateGoal(TeamMatchGoal goal)
-    {
-        em.merge(goal);
-    }
-
-    @Override
-    public void deleteGoal(TeamMatchGoal goal)
-    {
-        em.remove(goal);
-    }
-
-    @Override
-    public TeamMatchGoal findGoalById(UUID id)
-    {
-        return em.find(TeamMatchGoal.class, id);
+        try {
+            return em.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.id = :goalId",
+                TeamMatchGoal.class).setParameter("goalId", goalId).getSingleResult();
+        }catch (NoResultException ex){
+            throw new GoalNotFoundException(goalId, ex);
+        }
     }
 
     @Override
