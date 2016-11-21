@@ -26,7 +26,7 @@ public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
     }
 
     @Override
-    public TeamMatchGoal getGoalById(UUID goalId)
+    public TeamMatchGoal getGoalById(final UUID goalId)
     {
         if(goalId == null){
             throw new IllegalArgumentException("Cannot search for a null goal id");
@@ -41,44 +41,44 @@ public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
     }
 
     @Override
-    public Collection<TeamMatchGoal> findGoalByScorer(TeamPlayer scorer)
+    public Collection<TeamMatchGoal> findGoalByScorer(final UUID playerId)
     {
-        if (scorer == null) {
+        if (playerId == null) {
             throw new IllegalArgumentException("Cannot search for null scorer");
         }
 
         TypedQuery<TeamMatchGoal> query = em
             .createQuery("SELECT g FROM TeamMatchGoal g WHERE g.scorer = :scorerid",
                 TeamMatchGoal.class)
-            .setParameter("scorerid", scorer);
+            .setParameter("scorerid", playerId);
         return query.getResultList();
     }
 
     @Override
-    public Collection<TeamMatchGoal> findGoalByAssistant(TeamPlayer assistant)
+    public Collection<TeamMatchGoal> findGoalByAssistant(final UUID playerId)
     {
-        if (assistant == null) {
+        if (playerId == null) {
             throw new IllegalArgumentException("Cannot search for null assistant");
         }
 
         TypedQuery<TeamMatchGoal> query = em
             .createQuery("SELECT g FROM TeamMatchGoal g WHERE g.assistant = :assistantid",
                 TeamMatchGoal.class)
-            .setParameter("assistantid", assistant);
+            .setParameter("assistantid", playerId);
         return query.getResultList();
     }
 
     @Override
-    public Collection<TeamMatchGoal> findGoalByMatch(TeamMatch match)
+    public Collection<TeamMatchGoal> findGoalByMatch(final UUID matchId)
     {
-        if (match == null) {
+        if (matchId == null) {
             throw new IllegalArgumentException("Cannot search for null match");
         }
 
         TypedQuery<TeamMatchGoal> query = em
             .createQuery("SELECT g FROM TeamMatchGoal g WHERE g.match = :matchid",
                 TeamMatchGoal.class)
-            .setParameter("matchid", match);
+            .setParameter("matchid", matchId);
         return query.getResultList();
     }
 
