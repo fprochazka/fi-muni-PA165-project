@@ -110,28 +110,30 @@ public class TeamMatch
     }
 
     /**
-     * This method enables the match times change.
+     * This method enables change the match start and end time.
      *
-     * @param startTime new start time of the match - set only if it is not null,
-     *                  otherwise the actual start time remains set up
+     * @param startTime new start time of the match, cannot be null
      * @param endTime new end time of the match, can be null
      */
     public void changeMatchTime(Date startTime, Date endTime){
-        if(startTime != null){
-            this.startTime = new Date(startTime.getTime());
+        if(startTime == null){
+            throw new IllegalArgumentException("Cannot change the match start time to null");
         }
+
+        this.startTime = new Date(startTime.getTime());
         this.endTime = (endTime == null ? null : new Date(endTime.getTime()));
     }
 
     /**
      * Ends the match, respectively sets the new end time of the match.
      *
-     * @param endTime new end time of the match - cannot be null,
-     *                otherwise the actual end time remains set up
+     * @param endTime new end time of the match, cannot be null
      */
     public void endMatch(Date endTime){
-        if(endTime != null){
-            this.endTime = new Date(endTime.getTime());
+        if(endTime == null){
+            throw new IllegalArgumentException("Cannot end the match with a null end time");
         }
+
+        this.endTime = new Date(endTime.getTime());
     }
 }
