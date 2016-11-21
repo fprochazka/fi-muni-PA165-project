@@ -104,19 +104,34 @@ public class TeamMatch
         return startTime == null ? null : new Date(startTime.getTime());
     }
 
-    public void setStartTime(Date startTime)
-    {
-        this.startTime = (startTime == null ? null : new Date(startTime.getTime()));
-    }
-
     public Date getEndTime()
     {
         return endTime == null ? null : new Date(endTime.getTime());
     }
 
-    public void setEndTime(Date endTime)
-    {
+    /**
+     * This method enables the match times change.
+     *
+     * @param startTime new start time of the match - set only if it is not null,
+     *                  otherwise the actual start time remains set up
+     * @param endTime new end time of the match, can be null
+     */
+    public void changeMatchTime(Date startTime, Date endTime){
+        if(startTime != null){
+            this.startTime = new Date(startTime.getTime());
+        }
         this.endTime = (endTime == null ? null : new Date(endTime.getTime()));
     }
 
+    /**
+     * Ends the match, respectively sets the new end time of the match.
+     *
+     * @param endTime new end time of the match - cannot be null,
+     *                otherwise the actual end time remains set up
+     */
+    public void endMatch(Date endTime){
+        if(endTime != null){
+            this.endTime = new Date(endTime.getTime());
+        }
+    }
 }
