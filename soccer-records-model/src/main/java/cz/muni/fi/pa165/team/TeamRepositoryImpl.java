@@ -27,7 +27,7 @@ public class TeamRepositoryImpl implements TeamRepository
     }
 
     @Override
-    public Team findTeamByName(String name)
+    public Team findTeamByName(final String name)
     {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Cannot search for null name");
@@ -45,7 +45,7 @@ public class TeamRepositoryImpl implements TeamRepository
     }
 
     @Override
-    public Team getTeamById(UUID teamId)
+    public Team getTeamById(final UUID teamId)
     {
         Assert.notNull(teamId, "Cannot search for a null teamId");
 
@@ -61,7 +61,7 @@ public class TeamRepositoryImpl implements TeamRepository
     }
 
     @Override
-    public Team findTeamByPlayer(TeamPlayer tp)
+    public Team findTeamByPlayer(final TeamPlayer tp)
     {
         if (tp == null) {
             throw new IllegalArgumentException("Cannot search for null name");

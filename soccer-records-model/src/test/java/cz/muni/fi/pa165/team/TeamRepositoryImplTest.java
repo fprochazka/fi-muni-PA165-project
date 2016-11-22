@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.team;
 
 import cz.muni.fi.pa165.config.ApplicationConfig;
+import cz.muni.fi.pa165.team.exceptions.TeamNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
@@ -12,9 +13,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Collection;
 import java.util.Date;
+import java.util.UUID;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 /**
  * @author Libor Mühlpachr <libor.muhl@seznam.cz>
@@ -24,7 +25,7 @@ public class TeamRepositoryImplTest extends AbstractTransactionalTestNGSpringCon
 {
 
     @Autowired
-    public TeamRepositoryImpl teamDao;
+    public TeamRepositoryImpl teamRepository;
 
     @PersistenceContext
     public EntityManager em;
@@ -88,19 +89,32 @@ public class TeamRepositoryImplTest extends AbstractTransactionalTestNGSpringCon
     }
 
     @Test
-    public void findByName()
+    public void findTeamByName()
     {
-        Assert.assertNotNull(teamDao.findTeamByName(t1.getName()));
+        Assert.assertNotNull(teamRepository.findTeamByName(t1.getName()));
     }
 
     @Test
-    public void findById()
+    public void getTeamById()
     {
-        Assert.assertNotNull(teamDao.getTeamById(t2.getId()));
+        Assert.assertNotNull(teamRepository.getTeamById(t2.getId()));
     }
 
     @Test
-    public void findByPlayer()
+    public void testGetByNonexistentIdThrows() throws Exception
+    {
+        UUID teamId = UUID.randomUUID();
+        try {
+            teamRepository.getTeamById(teamId);
+            fail("Expected exception");
+
+        } catch (TeamNotFoundException e) {
+            assertEquals(teamId, e.getTeamId());
+        }
+    }
+
+    @Test
+    public void findTeamByPlayer()
     {
         Team tmpTeam = new Team("bla");
         em.persist(tmpTeam);
@@ -110,13 +124,13 @@ public class TeamRepositoryImplTest extends AbstractTransactionalTestNGSpringCon
         em.persist(player);
         em.flush();
 
-        Assert.assertTrue(teamDao.findTeamByPlayer(player).equals(tmpTeam));
+        Assert.assertTrue(teamRepository.findTeamByPlayer(player).equals(tmpTeam));
     }
 
     @Test
     public void findAll()
     {
-        Collection<Team> teamList = teamDao.findAll();
+        Collection<Team> teamList = teamRepository.findAll();
         assertEquals(teamList.size(), 4);
 
         assertTrue(teamList.stream().filter(t -> t.getName().equals("MAN UTD")).count() == 1);

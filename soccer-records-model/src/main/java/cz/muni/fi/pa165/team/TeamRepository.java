@@ -18,7 +18,7 @@ public interface TeamRepository
      * @return the team with the given id, or null if such team
      * does not exist
      */
-    Team getTeamById(UUID id);
+    Team getTeamById(final UUID id);
 
     /**
      * Find team by it's name.
@@ -27,7 +27,7 @@ public interface TeamRepository
      * @return the team with the given name, or null if such team
      * does not exist
      */
-    Team findTeamByName(String name);
+    Team findTeamByName(final String name);
 
     /**
      * Find team by it's player.
@@ -36,7 +36,7 @@ public interface TeamRepository
      * @return the team with the given player, or null if such team
      * does not exist
      */
-    Team findTeamByPlayer(TeamPlayer tp);
+    Team findTeamByPlayer(final TeamPlayer tp);
 
     /**
      * Find all teams

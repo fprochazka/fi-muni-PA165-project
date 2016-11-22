@@ -1,7 +1,6 @@
 package cz.muni.fi.pa165.team;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.UUID;
 
 /**
@@ -65,19 +64,19 @@ public class TeamFacade
     {
         Team team = teamRepository.getTeamById(teamId);
 
-        Query query = entityManager.createQuery("DELETE FROM TeamMatchGoal tmg WHERE tmg.match IN " +
+        entityManager.createQuery("DELETE FROM TeamMatchGoal tmg WHERE tmg.match IN " +
             "(SELECT tm FROM TeamMatch tm WHERE tm.awayTeam = :tid OR tm.homeTeam = :tid)")
-            .setParameter("tid", team);
-        query.executeUpdate();
+            .setParameter("tid", team)
+            .executeUpdate();
 
-        query = entityManager.createQuery("DELETE FROM TeamMatch tm WHERE tm.awayTeam = :tid OR " +
+        entityManager.createQuery("DELETE FROM TeamMatch tm WHERE tm.awayTeam = :tid OR " +
             "tm.homeTeam = :tid")
-            .setParameter("tid", team);
-        query.executeUpdate();
+            .setParameter("tid", team)
+            .executeUpdate();
 
-        query = entityManager.createQuery("DELETE FROM TeamPlayer tp WHERE tp.team = :tid")
-            .setParameter("tid", team);
-        query.executeUpdate();
+        entityManager.createQuery("DELETE FROM TeamPlayer tp WHERE tp.team = :tid")
+            .setParameter("tid", team)
+            .executeUpdate();
 
         entityManager.remove(team);
 

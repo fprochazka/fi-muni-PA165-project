@@ -18,4 +18,11 @@ public class TeamServiceTest
         Team team = teamService.createTeam("ManUtd", null);
         assertEquals("ManUtd", team.getName());
     }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testCreateUserWithNullNameThrows() throws Exception
+    {
+        TeamService teamService = new TeamService();
+        teamService.createTeam(null, null);
+    }
 }
