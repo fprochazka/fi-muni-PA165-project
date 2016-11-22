@@ -2,6 +2,7 @@ package cz.muni.fi.pa165.user;
 
 import cz.muni.fi.pa165.user.exceptions.UserWithSameEmailIsAlreadyRegisteredException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.Assert;
 
 /**
  * @author Filip Prochazka <filip@prochazka.su>
@@ -25,6 +26,8 @@ public class UserService
         String password
     )
     {
+        Assert.notNull(password, "Cannot create user with null password");
+
         if (sameEmailUser != null) {
             throw new UserWithSameEmailIsAlreadyRegisteredException(sameEmailUser.getEmail());
         }

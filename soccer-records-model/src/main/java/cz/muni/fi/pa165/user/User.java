@@ -2,6 +2,7 @@ package cz.muni.fi.pa165.user;
 
 import cz.muni.fi.pa165.user.exceptions.UserCannotBePromotedToRoleExceptions;
 import org.hibernate.annotations.Type;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -35,6 +36,9 @@ public class User
 
     public User(String email, String passwordHash)
     {
+        Assert.notNull(email, "Cannot create user with null e-mail");
+        Assert.notNull(passwordHash, "Cannot create user with null password");
+
         this.id = UUID.randomUUID();
         this.role = UserRole.USER;
         this.email = email;
