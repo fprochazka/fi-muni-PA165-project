@@ -140,7 +140,7 @@ public class TeamDaoImplTest extends AbstractTransactionalTestNGSpringContextTes
     {
         String oldName = t3.getName();
         String newName = t3.getName() + "3";
-        t3.setName(newName);
+        t3.changeName(newName);
         teamDao.updateTeam(t3);
         em.flush();
 
