@@ -48,7 +48,7 @@ public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
         }
 
         TypedQuery<TeamMatchGoal> query = em
-            .createQuery("SELECT g FROM TeamMatchGoal g WHERE g.scorer = :scorerid",
+            .createQuery("SELECT g FROM TeamMatchGoal g WHERE g.scorer.id = :scorerid",
                 TeamMatchGoal.class)
             .setParameter("scorerid", playerId);
         return query.getResultList();
@@ -62,7 +62,7 @@ public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
         }
 
         TypedQuery<TeamMatchGoal> query = em
-            .createQuery("SELECT g FROM TeamMatchGoal g WHERE g.assistant = :assistantid",
+            .createQuery("SELECT g FROM TeamMatchGoal g WHERE g.assistant.id = :assistantid",
                 TeamMatchGoal.class)
             .setParameter("assistantid", playerId);
         return query.getResultList();
@@ -76,7 +76,7 @@ public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
         }
 
         TypedQuery<TeamMatchGoal> query = em
-            .createQuery("SELECT g FROM TeamMatchGoal g WHERE g.match = :matchid",
+            .createQuery("SELECT g FROM TeamMatchGoal g WHERE g.match.id = :matchid",
                 TeamMatchGoal.class)
             .setParameter("matchid", matchId);
         return query.getResultList();
