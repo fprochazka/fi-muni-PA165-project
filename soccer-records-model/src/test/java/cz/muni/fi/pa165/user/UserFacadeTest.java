@@ -20,9 +20,6 @@ public class UserFacadeTest extends AbstractTransactionalTestNGSpringContextTest
 {
 
     @Autowired
-    public UserRepository userRepository;
-
-    @Autowired
     public UserFacade userFacade;
 
     @Autowired
@@ -37,7 +34,7 @@ public class UserFacadeTest extends AbstractTransactionalTestNGSpringContextTest
         User createdUser = userFacade.createUser("filip@prochazka.su", "heslo");
         em.clear();
 
-        User foundUser = userRepository.getUserById(createdUser.getId());
+        User foundUser = em.find(User.class, createdUser.getId());
         assertNotNull(foundUser);
         assertEquals("filip@prochazka.su", foundUser.getEmail());
     }
@@ -53,7 +50,7 @@ public class UserFacadeTest extends AbstractTransactionalTestNGSpringContextTest
         userFacade.promoteUserToModerator(user.getId());
         em.clear();
 
-        User promotedUser = userRepository.getUserById(user.getId());
+        User promotedUser = em.find(User.class, user.getId());
         assertEquals(UserRole.MODERATOR, promotedUser.getRole());
     }
 
@@ -68,7 +65,7 @@ public class UserFacadeTest extends AbstractTransactionalTestNGSpringContextTest
         userFacade.promoteUserToAdmin(user.getId());
         em.clear();
 
-        User promotedUser = userRepository.getUserById(user.getId());
+        User promotedUser = em.find(User.class, user.getId());
         assertEquals(UserRole.ADMIN, promotedUser.getRole());
     }
 
