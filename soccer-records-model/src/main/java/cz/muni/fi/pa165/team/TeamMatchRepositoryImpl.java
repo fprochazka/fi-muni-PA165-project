@@ -109,6 +109,10 @@ public class TeamMatchRepositoryImpl implements TeamMatchRepository
     @Override
     public Collection<TeamMatch> findAllPlayedMatchesOfTeam(final UUID teamId)
     {
+        if(teamId == null){
+            throw new IllegalArgumentException("Cannot search all played matches for a null team");
+        }
+
         TypedQuery<TeamMatch> query = em.createQuery("SELECT m FROM TeamMatch m WHERE m.endTime IS NOT NULL " +
                                             "AND (m.homeTeam.id = :teamId OR m.awayTeam.id = :teamId)", TeamMatch.class)
                                         .setParameter("teamId", teamId);
@@ -118,6 +122,10 @@ public class TeamMatchRepositoryImpl implements TeamMatchRepository
     @Override
     public Collection<TeamMatch> findAllPlannedMatchesOfTeam(final UUID teamId)
     {
+        if(teamId == null){
+            throw new IllegalArgumentException("Cannot search all planned matches for a null team");
+        }
+
         TypedQuery<TeamMatch> query = em.createQuery("SELECT m FROM TeamMatch m WHERE m.endTime IS NULL " +
                                             "AND (m.homeTeam.id = :teamId OR m.awayTeam.id = :teamId)", TeamMatch.class)
                                         .setParameter("teamId", teamId);
