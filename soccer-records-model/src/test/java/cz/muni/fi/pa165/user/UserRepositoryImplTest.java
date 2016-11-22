@@ -89,7 +89,7 @@ public class UserRepositoryImplTest extends AbstractTransactionalTestNGSpringCon
     }
 
     @Test
-    public void testFindById() throws Exception
+    public void testGetById() throws Exception
     {
         User user1 = userService.createUser("libor.muhl+1@gmail.com", null, "secret");
 
