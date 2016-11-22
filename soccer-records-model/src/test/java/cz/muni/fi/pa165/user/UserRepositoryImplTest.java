@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.user;
 
 import cz.muni.fi.pa165.config.ApplicationConfig;
+import cz.muni.fi.pa165.user.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
@@ -10,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import java.util.Collection;
+import java.util.UUID;
 
 import static org.testng.Assert.*;
 
@@ -98,6 +100,19 @@ public class UserRepositoryImplTest extends AbstractTransactionalTestNGSpringCon
 
         User foundUser = userRepository.getUserById(user1.getId());
         assertEquals("libor.muhl+1@gmail.com", foundUser.getEmail());
+    }
+
+    @Test
+    public void testGetByNonexistentIdThrows() throws Exception
+    {
+        UUID userId = UUID.randomUUID();
+        try {
+            userRepository.getUserById(userId);
+            fail("Expected exception");
+
+        } catch (UserNotFoundException e) {
+            assertEquals(userId, e.getUserId());
+        }
     }
 
     @Test
