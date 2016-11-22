@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.team;
 
 import org.hibernate.annotations.Type;
+import org.springframework.util.Assert;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,6 +35,8 @@ public class Team
      */
     public Team(String name)
     {
+        Assert.notNull(name, "Name for Team should not be null");
+
         this.id = UUID.randomUUID();
         this.name = name;
     }
@@ -57,8 +60,15 @@ public class Team
         return name;
     }
 
-    public void setName(String name)
+    /**
+     * Change name of team
+     *
+     * @param name new name of the team
+     */
+    public void changeName(String name)
     {
+        Assert.notNull(name, "Name for Team should not be null");
+
         this.name = name;
     }
 
