@@ -2,6 +2,7 @@ package cz.muni.fi.pa165.team;
 
 import cz.muni.fi.pa165.team.exceptions.GoalNotFoundException;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -28,13 +29,12 @@ public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
     @Override
     public TeamMatchGoal getGoalById(final UUID goalId)
     {
-        if(goalId == null){
-            throw new IllegalArgumentException("Cannot search for a null goal id");
-        }
+        Assert.notNull(goalId, "Cannot search for a null goal id");
 
         try {
-            return em.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.id = :goalId",
-                TeamMatchGoal.class).setParameter("goalId", goalId).getSingleResult();
+            return em.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.id = :goalId", TeamMatchGoal.class)
+                     .setParameter("goalId", goalId)
+                     .getSingleResult();
         }catch (NoResultException ex){
             throw new GoalNotFoundException(goalId, ex);
         }
@@ -43,50 +43,36 @@ public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
     @Override
     public Collection<TeamMatchGoal> findGoalByScorer(final UUID playerId)
     {
-        if (playerId == null) {
-            throw new IllegalArgumentException("Cannot search for null scorer");
-        }
+        Assert.notNull(playerId, "Cannot search for null scorer");
 
-        TypedQuery<TeamMatchGoal> query = em
-            .createQuery("SELECT g FROM TeamMatchGoal g WHERE g.scorer.id = :scorerid",
-                TeamMatchGoal.class)
-            .setParameter("scorerid", playerId);
-        return query.getResultList();
+        return em.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.scorer.id = :scorerid",TeamMatchGoal.class)
+                 .setParameter("scorerid", playerId)
+                 .getResultList();
     }
 
     @Override
     public Collection<TeamMatchGoal> findGoalByAssistant(final UUID playerId)
     {
-        if (playerId == null) {
-            throw new IllegalArgumentException("Cannot search for null assistant");
-        }
+        Assert.notNull(playerId, "Cannot search for null assistant");
 
-        TypedQuery<TeamMatchGoal> query = em
-            .createQuery("SELECT g FROM TeamMatchGoal g WHERE g.assistant.id = :assistantid",
-                TeamMatchGoal.class)
-            .setParameter("assistantid", playerId);
-        return query.getResultList();
+        return em.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.assistant.id = :assistantid",TeamMatchGoal.class)
+                 .setParameter("assistantid", playerId)
+                 .getResultList();
     }
 
     @Override
     public Collection<TeamMatchGoal> findGoalByMatch(final UUID matchId)
     {
-        if (matchId == null) {
-            throw new IllegalArgumentException("Cannot search for null match");
-        }
+        Assert.notNull(matchId, "Cannot search for null match");
 
-        TypedQuery<TeamMatchGoal> query = em
-            .createQuery("SELECT g FROM TeamMatchGoal g WHERE g.match.id = :matchid",
-                TeamMatchGoal.class)
-            .setParameter("matchid", matchId);
-        return query.getResultList();
+        return em.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.match.id = :matchid",TeamMatchGoal.class)
+                 .setParameter("matchid", matchId)
+                 .getResultList();
     }
 
     @Override
     public Collection<TeamMatchGoal> findAllGoals()
     {
-        TypedQuery<TeamMatchGoal> query = em.createQuery("SELECT g FROM TeamMatchGoal g",
-            TeamMatchGoal.class);
-        return query.getResultList();
+        return em.createQuery("SELECT g FROM TeamMatchGoal g",TeamMatchGoal.class).getResultList();
     }
 }
