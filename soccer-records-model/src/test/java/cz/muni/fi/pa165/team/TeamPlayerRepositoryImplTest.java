@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.team;
 
 import cz.muni.fi.pa165.config.ApplicationConfig;
+import cz.muni.fi.pa165.team.exceptions.TeamPlayerNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
@@ -17,56 +18,17 @@ import static org.testng.Assert.*;
  * @author Tomas Smid <smid.thomas@gmail.com>
  */
 @ContextConfiguration(classes = ApplicationConfig.class)
-public class TeamPlayerDaoImplTest extends AbstractTransactionalTestNGSpringContextTests
+public class TeamPlayerRepositoryImplTest extends AbstractTransactionalTestNGSpringContextTests
 {
 
     @Autowired
-    public TeamPlayerDaoImpl teamPlayerDao;
+    public TeamPlayerRepositoryImpl teamPlayerRepository;
 
     @PersistenceContext
     public EntityManager em;
 
     @Test
-    public void testCreatePlayer()
-    {
-        Team team = new Team("Liverpool");
-        em.persist(team);
-
-        TeamPlayer player = new TeamPlayer("Filip", "Procházka", 185, 80, team);
-        em.persist(player);
-
-        TeamPlayer dbPlayer = em.find(TeamPlayer.class, player.getId());
-        em.flush();
-
-        assertNotNull(dbPlayer);
-        assertEquals(dbPlayer.getFirstname(), player.getFirstname());
-        assertEquals(dbPlayer.getSurname(), player.getSurname());
-        assertEquals(dbPlayer.getHeight(), player.getHeight());
-        assertEquals(dbPlayer.getWeight(), player.getWeight());
-        assertEquals(dbPlayer.getTeam(), player.getTeam());
-    }
-
-    @Test
-    public void testDeletePlayer()
-    {
-        Team team = new Team("Liverpool");
-        em.persist(team);
-
-        TeamPlayer player = new TeamPlayer("Filip", "Procházka", 185, 80, team);
-        em.persist(player);
-
-        TeamPlayer dbPlayer = em.find(TeamPlayer.class, player.getId());
-        assertNotNull(dbPlayer);
-
-        teamPlayerDao.deletePlayer(player);
-        dbPlayer = em.find(TeamPlayer.class, player.getId());
-        em.flush();
-
-        assertNull(dbPlayer);
-    }
-
-    @Test
-    public void testFindPlayerByFirstname()
+    public void testFindTeamPlayerByFirstname()
     {
         Team team = new Team("Liverpool");
         em.persist(team);
@@ -80,9 +42,9 @@ public class TeamPlayerDaoImplTest extends AbstractTransactionalTestNGSpringCont
         em.persist(player3);
         em.persist(player4);
 
-        Collection<TeamPlayer> dbPlayers = teamPlayerDao.findPlayerByFirstname(player2.getFirstname());
-
         em.flush();
+
+        Collection<TeamPlayer> dbPlayers = teamPlayerRepository.findTeamPlayerByFirstname(player2.getFirstname());
 
         assertEquals(dbPlayers.size(), 2);
         assertTrue(dbPlayers.contains(player2));
@@ -92,21 +54,19 @@ public class TeamPlayerDaoImplTest extends AbstractTransactionalTestNGSpringCont
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testFindPlayerByFirstnameNull()
+    public void testFindTeamPlayerByFirstnameNull()
     {
-        Collection<TeamPlayer> dbPlayers = teamPlayerDao.findPlayerByFirstname(null);
-        em.flush();
+        teamPlayerRepository.findTeamPlayerByFirstname(null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testFindPlayerByFirstnameEmpty()
+    public void testFindTeamPlayerByFirstnameEmpty()
     {
-        Collection<TeamPlayer> dbPlayers = teamPlayerDao.findPlayerByFirstname("");
-        em.flush();
+        teamPlayerRepository.findTeamPlayerByFirstname("");
     }
 
     @Test
-    public void testFindPlayerByFirstnameNonExistent()
+    public void testFindTeamPlayerByFirstnameNonExistent()
     {
         Team team = new Team("Liverpool");
         em.persist(team);
@@ -119,17 +79,14 @@ public class TeamPlayerDaoImplTest extends AbstractTransactionalTestNGSpringCont
         em.persist(player2);
         em.persist(player3);
         em.persist(player4);
-
-        Collection<TeamPlayer> dbPlayers = teamPlayerDao.findPlayerByFirstname("Lukáš");
-
         em.flush();
 
+        Collection<TeamPlayer> dbPlayers = teamPlayerRepository.findTeamPlayerByFirstname("Lukáš");
         assertTrue(dbPlayers.isEmpty());
-
     }
 
     @Test
-    public void testFindPlayerBySurname()
+    public void testFindTeamPlayerBySurname()
     {
         Team team = new Team("Liverpool");
         em.persist(team);
@@ -142,10 +99,9 @@ public class TeamPlayerDaoImplTest extends AbstractTransactionalTestNGSpringCont
         em.persist(player2);
         em.persist(player3);
         em.persist(player4);
-
-        Collection<TeamPlayer> dbPlayers = teamPlayerDao.findPlayerBySurname(player3.getSurname());
-
         em.flush();
+
+        Collection<TeamPlayer> dbPlayers = teamPlayerRepository.findTeamPlayerBySurname(player3.getSurname());
 
         assertEquals(dbPlayers.size(), 2);
         assertTrue(dbPlayers.contains(player3));
@@ -155,21 +111,19 @@ public class TeamPlayerDaoImplTest extends AbstractTransactionalTestNGSpringCont
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testFindPlayerBySurnameNull()
+    public void testFindTeamPlayerBySurnameNull()
     {
-        Collection<TeamPlayer> dbPlayers = teamPlayerDao.findPlayerBySurname(null);
-        em.flush();
+        teamPlayerRepository.findTeamPlayerBySurname(null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testFindPlayerBySurnameEmpty()
+    public void testFindTeamPlayerBySurnameEmpty()
     {
-        Collection<TeamPlayer> dbPlayers = teamPlayerDao.findPlayerBySurname("");
-        em.flush();
+        teamPlayerRepository.findTeamPlayerBySurname("");
     }
 
     @Test
-    public void testFindPlayerBySurnameNonExistent()
+    public void testFindTeamPlayerBySurnameNonExistent()
     {
         Team team = new Team("Liverpool");
         em.persist(team);
@@ -182,16 +136,14 @@ public class TeamPlayerDaoImplTest extends AbstractTransactionalTestNGSpringCont
         em.persist(player2);
         em.persist(player3);
         em.persist(player4);
-
-        Collection<TeamPlayer> dbPlayers = teamPlayerDao.findPlayerBySurname("Novák");
-
         em.flush();
 
+        Collection<TeamPlayer> dbPlayers = teamPlayerRepository.findTeamPlayerBySurname("Novák");
         assertTrue(dbPlayers.isEmpty());
     }
 
     @Test
-    public void testFindPlayerById()
+    public void testFindTeamPlayerById()
     {
         Team team = new Team("Liverpool");
         em.persist(team);
@@ -200,9 +152,9 @@ public class TeamPlayerDaoImplTest extends AbstractTransactionalTestNGSpringCont
         TeamPlayer player2 = new TeamPlayer("Libor", "Mühlpachr", 175, 85, team);
         em.persist(player1);
         em.persist(player2);
-
-        TeamPlayer dbPlayer = teamPlayerDao.findPlayerById(player1.getId());
         em.flush();
+
+        TeamPlayer dbPlayer = teamPlayerRepository.getTeamPlayerById(player1.getId());
 
         assertEquals(dbPlayer.getFirstname(), player1.getFirstname());
         assertEquals(dbPlayer.getSurname(), player1.getSurname());
@@ -212,25 +164,19 @@ public class TeamPlayerDaoImplTest extends AbstractTransactionalTestNGSpringCont
     }
 
     @Test
-    public void testFindPlayerByIdNonExistent()
+    public void testFindTeamPlayerByIdNonExistent()
     {
-        Team team = new Team("Liverpool");
-        em.persist(team);
-
-        TeamPlayer player = new TeamPlayer("Filip", "Procházka", 185, 80, team);
-        em.persist(player);
-
         UUID badId = UUID.randomUUID();
-        assertNotEquals(player.getId(), badId);
-
-        TeamPlayer dbPlayer = teamPlayerDao.findPlayerById(badId);
-        em.flush();
-
-        assertNull(dbPlayer);
+        try {
+            teamPlayerRepository.getTeamPlayerById(badId);
+            fail("Expected exception");
+        } catch (TeamPlayerNotFoundException e) {
+            assertEquals(badId, e.getTeamPlayerId());
+        }
     }
 
     @Test
-    public void testFindPlayerByTeam()
+    public void testFindTeamPlayerByTeam()
     {
         Team team1 = new Team("Liverpool");
         Team team2 = new Team("Arsenal");
@@ -247,10 +193,9 @@ public class TeamPlayerDaoImplTest extends AbstractTransactionalTestNGSpringCont
         em.persist(player2);
         em.persist(player3);
         em.persist(player4);
-
-        Collection<TeamPlayer> dbPlayers = teamPlayerDao.findPlayerByTeam(team3);
-
         em.flush();
+
+        Collection<TeamPlayer> dbPlayers = teamPlayerRepository.findTeamPlayerByTeam(team3);
 
         assertEquals(dbPlayers.size(), 2);
         assertTrue(dbPlayers.contains(player1));
@@ -260,15 +205,13 @@ public class TeamPlayerDaoImplTest extends AbstractTransactionalTestNGSpringCont
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testFindPlayerByTeamNull()
+    public void testFindTeamPlayerByTeamNull()
     {
-        Collection<TeamPlayer> dbPlayers = teamPlayerDao.findPlayerByTeam(null);
-        em.flush();
+        teamPlayerRepository.findTeamPlayerByTeam(null);
     }
 
-
     @Test
-    public void testFindPlayerByTeamNonExistent()
+    public void testFindTeamPlayerByTeamNonExistent()
     {
         Team team = new Team("Liverpool");
         em.persist(team);
@@ -276,22 +219,19 @@ public class TeamPlayerDaoImplTest extends AbstractTransactionalTestNGSpringCont
         TeamPlayer player1 = new TeamPlayer("Filip", "Procházka", 185, 80, team);
         TeamPlayer player2 = new TeamPlayer("Libor", "Mühlpachr", 175, 85, team);
         TeamPlayer player3 = new TeamPlayer("Libor", "Galajda", 175, 80, team);
-        TeamPlayer player4= new TeamPlayer("Tomáš", "Šmíd", 180, 75, team);
+        TeamPlayer player4 = new TeamPlayer("Tomáš", "Šmíd", 180, 75, team);
         em.persist(player1);
         em.persist(player2);
         em.persist(player3);
         em.persist(player4);
-
-        Collection<TeamPlayer> dbPlayers = teamPlayerDao.findPlayerByTeam(new Team("Chelsea"));
-
         em.flush();
 
+        Collection<TeamPlayer> dbPlayers = teamPlayerRepository.findTeamPlayerByTeam(new Team("Chelsea"));
         assertTrue(dbPlayers.isEmpty());
-
     }
 
     @Test
-    public void testFindAllPlayers()
+    public void testFindAllTeamPlayers()
     {
         Team team1 = new Team("Liverpool");
         Team team2 = new Team("Arsenal");
@@ -308,10 +248,9 @@ public class TeamPlayerDaoImplTest extends AbstractTransactionalTestNGSpringCont
         em.persist(player2);
         em.persist(player3);
         em.persist(player4);
-
-        Collection<TeamPlayer> dbPlayers = teamPlayerDao.findAllPlayers();
-
         em.flush();
+
+        Collection<TeamPlayer> dbPlayers = teamPlayerRepository.findAllTeamPlayers();
 
         assertEquals(dbPlayers.size(), 4);
         assertTrue(dbPlayers.contains(player1));
