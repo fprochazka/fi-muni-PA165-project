@@ -1,30 +1,33 @@
 package cz.muni.fi.pa165.team;
 
 import org.springframework.stereotype.Repository;
+import cz.muni.fi.pa165.team.exceptions.TeamPlayerNotFoundException;
+import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
 import java.util.UUID;
 
 /**
- * This class implements the TeamPlayerDao interface.
+ * This class implements the TeamPlayerRepository interface.
  *
  * @author Libor Mühlpachr <libor.muhl@seznam.cz>
  */
 @Repository
-public class TeamPlayerDaoImpl implements TeamPlayerDao
+public class TeamPlayerRepositoryImpl implements TeamPlayerRepository
 {
 
     private EntityManager em;
 
-    public TeamPlayerDaoImpl(EntityManager em)
+    public TeamPlayerRepositoryImpl(EntityManager em)
     {
         this.em = em;
     }
 
     @Override
-    public Collection<TeamPlayer> findPlayerByFirstname(String firstname)
+    public Collection<TeamPlayer> findTeamPlayerByFirstname(String firstname)
     {
         if (firstname == null || firstname.isEmpty()) {
             throw new IllegalArgumentException("Cannot search for null firstname");
@@ -36,7 +39,7 @@ public class TeamPlayerDaoImpl implements TeamPlayerDao
     }
 
     @Override
-    public Collection<TeamPlayer> findPlayerBySurname(String surname)
+    public Collection<TeamPlayer> findTeamPlayerBySurname(String surname)
     {
         if (surname == null || surname.isEmpty()) {
             throw new IllegalArgumentException("Cannot search for null surname");
@@ -47,7 +50,7 @@ public class TeamPlayerDaoImpl implements TeamPlayerDao
     }
 
     @Override
-    public Collection<TeamPlayer> findPlayerByTeam(Team team)
+    public Collection<TeamPlayer> findTeamPlayerByTeam(Team team)
     {
         if (team == null) {
             throw new IllegalArgumentException("Cannot search for null team");
@@ -59,31 +62,23 @@ public class TeamPlayerDaoImpl implements TeamPlayerDao
     }
 
     @Override
-    public TeamPlayer findPlayerById(UUID id)
+    public TeamPlayer getTeamPlayerById(UUID teamPlayerId)
     {
-        return em.find(TeamPlayer.class, id);
+        Assert.notNull(teamPlayerId, "Cannot search for null teamPlayerId");
+
+        try {
+            return em
+                .createQuery("SELECT tp FROM TeamPlayer tp WHERE tp.id = :teamPlayerId", TeamPlayer.class)
+                .setParameter("teamPlayerId", teamPlayerId)
+                .getSingleResult();
+
+        } catch (NoResultException e) {
+            throw new TeamPlayerNotFoundException(teamPlayerId, e);
+        }
     }
 
     @Override
-    public void createPlayer(TeamPlayer tp)
-    {
-        em.persist(tp);
-    }
-
-    @Override
-    public void updatePlayer(TeamPlayer tp)
-    {
-        em.merge(tp);
-    }
-
-    @Override
-    public void deletePlayer(TeamPlayer tp)
-    {
-        em.remove(tp);
-    }
-
-    @Override
-    public Collection<TeamPlayer> findAllPlayers()
+    public Collection<TeamPlayer> findAllTeamPlayers()
     {
         TypedQuery<TeamPlayer> query = em.createQuery("SELECT tp FROM TeamPlayer tp", TeamPlayer.class);
         return query.getResultList();
