@@ -9,33 +9,47 @@ import java.util.UUID;
  */
 public class MatchTimeCollisionException extends RuntimeException
 {
-    private final UUID matchId;
+    private final UUID matchPlannedToBeChangedId;
 
-    private final UUID team;
+    private final UUID teamId;
 
     private final Date startTime;
 
-    public MatchTimeCollisionException(UUID matchId, UUID team, Date startTime)
-    {
-        super(String.format("There cannot be changed the start time of the match %s with team %s to new value %s, " +
-                "because there already exists another match with that same start time and same team",
-            matchId.toString(),
-            team.toString(),
-            new SimpleDateFormat("dd/MM/YYYY hh:mm:ss").format(startTime)));
+    private final UUID collidingMatchId;
 
-        this.matchId = matchId;
-        this.team = team;
+    public MatchTimeCollisionException(
+        UUID matchPlannedToBeChangedId,
+        UUID collidingMatchId,
+        UUID teamId,
+        Date startTime
+    )
+    {
+        super(String.format("There cannot be changed the start time of the match %s with teamId %s to new value %s, " +
+                "because there already exists another match %s with that same start time and same teamId",
+            matchPlannedToBeChangedId.toString(),
+            teamId.toString(),
+            new SimpleDateFormat("dd/MM/YYYY hh:mm:ss").format(startTime),
+            collidingMatchId));
+
+        this.matchPlannedToBeChangedId = matchPlannedToBeChangedId;
+        this.collidingMatchId = collidingMatchId;
+        this.teamId = teamId;
         this.startTime = new Date(startTime.getTime());
     }
 
-    public UUID getMatchId()
+    public UUID getMatchPlannedToBeChangedId()
     {
-        return matchId;
+        return matchPlannedToBeChangedId;
     }
 
-    public UUID getTeam()
+    public UUID getCollidingMatchId()
     {
-        return team;
+        return collidingMatchId;
+    }
+
+    public UUID getTeamId()
+    {
+        return teamId;
     }
 
     public Date getStartTime()
