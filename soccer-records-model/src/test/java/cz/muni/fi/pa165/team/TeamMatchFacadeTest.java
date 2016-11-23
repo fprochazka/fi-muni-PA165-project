@@ -39,7 +39,12 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
         em.persist(awayTeam);
         em.flush();
 
-        TeamMatch teamMatch = teamMatchFacade.createMatch(homeTeam, awayTeam, startTime, endTime);
+        TeamMatch teamMatch = teamMatchFacade.createMatch(
+            homeTeam.getId(),
+            awayTeam.getId(),
+            startTime,
+            endTime
+        );
         em.clear();
 
         TeamMatch dbMatch = em.find(TeamMatch.class, teamMatch.getId());
@@ -113,7 +118,12 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
         em.persist(match);
         em.flush();
 
-        TeamMatchGoal goal = teamMatchFacade.addNewScoredGoal(scorer, assistant, match, new Date(time));
+        TeamMatchGoal goal = teamMatchFacade.addNewScoredGoal(
+            scorer.getId(),
+            assistant.getId(),
+            match.getId(),
+            new Date(time)
+        );
         em.clear();
 
         TeamMatchGoal dbGoal = em.find(TeamMatchGoal.class, goal.getId());

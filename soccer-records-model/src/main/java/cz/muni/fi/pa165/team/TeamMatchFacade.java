@@ -3,7 +3,6 @@ package cz.muni.fi.pa165.team;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,7 +11,6 @@ import java.util.UUID;
 /**
  * @author Tomas Smid <smid.thomas@gmail.com>
  */
-@Component
 public class TeamMatchFacade
 {
     private TeamMatchService teamMatchService;
@@ -21,28 +19,41 @@ public class TeamMatchFacade
 
     private TeamMatchGoalRepository teamMatchGoalRepository;
 
+    private TeamRepository teamRepository;
+
+    private TeamPlayerRepository teamPlayerRepository;
+
     private EntityManager entityManager;
 
     public TeamMatchFacade(
         TeamMatchService teamMatchService,
         TeamMatchRepository teamMatchRepository,
         TeamMatchGoalRepository teamMatchGoalRepository,
+        TeamRepository teamRepository,
+        TeamPlayerRepository teamPlayerRepository,
         EntityManager entityManager
     )
     {
         this.teamMatchService = teamMatchService;
         this.teamMatchRepository = teamMatchRepository;
         this.teamMatchGoalRepository = teamMatchGoalRepository;
+        this.teamRepository = teamRepository;
+        this.teamPlayerRepository = teamPlayerRepository;
         this.entityManager = entityManager;
     }
 
-    public TeamMatch createMatch(Team homeTeam, Team awayTeam, Date startTime, Date endTime)
+    public TeamMatch createMatch(UUID homeTeamId, UUID awayTeamId, Date startTime, Date endTime)
     {
-        List<TeamMatch> sameHomeTeamMatches =
-            new ArrayList<>(teamMatchRepository.findMatchByHomeTeam(homeTeam.getId()));
+        Team homeTeam = teamRepository.getTeamById(homeTeamId);
+        Team awayTeam = teamRepository.getTeamById(awayTeamId);
+        List<TeamMatch> allMatchesOfHomeTeam =
+            new ArrayList<>(teamMatchRepository.findAllMatchesOfTeam(homeTeam.getId()));
+        List<TeamMatch> allMatchesOfAwayTeam =
+            new ArrayList<>(teamMatchRepository.findAllMatchesOfTeam(awayTeam.getId()));
 
         TeamMatch teamMatch = teamMatchService.createMatch(
-            sameHomeTeamMatches,
+            allMatchesOfHomeTeam,
+            allMatchesOfAwayTeam,
             homeTeam,
             awayTeam,
             startTime,
@@ -85,8 +96,11 @@ public class TeamMatchFacade
         entityManager.flush();
     }
 
-    public TeamMatchGoal addNewScoredGoal(TeamPlayer scorer, TeamPlayer assistant, TeamMatch match, Date matchTime)
+    public TeamMatchGoal addNewScoredGoal(UUID scorerId, UUID assistantId, UUID matchId, Date matchTime)
     {
+        TeamPlayer scorer = teamPlayerRepository.getTeamPlayerById(scorerId);
+        TeamPlayer assistant = teamPlayerRepository.getTeamPlayerById(assistantId);
+        TeamMatch match = teamMatchRepository.getMatchById(matchId);
         List<TeamMatchGoal> goalsInActualMatch = new ArrayList<>(teamMatchGoalRepository.findGoalByMatch(match.getId()));
 
         TeamMatchGoal teamMatchGoal = teamMatchService.addNewScoredGoal(
