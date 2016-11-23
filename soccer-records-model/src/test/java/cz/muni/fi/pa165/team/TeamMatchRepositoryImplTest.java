@@ -477,36 +477,36 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     }
 
     @Test
-    public void testFindAllPlannedMatchesOfTeam(){
-        long time = System.currentTimeMillis();
-        Team team1 = new Team("Team1");
-        Team team2 = new Team("Team2");
-        Team team3 = new Team("Team3");
-        Team team4 = new Team("Team4");
-        em.persist(team1);
-        em.persist(team2);
-        em.persist(team3);
-        em.persist(team4);
+public void testFindAllPlannedMatchesOfTeam(){
+    long time = System.currentTimeMillis();
+    Team team1 = new Team("Team1");
+    Team team2 = new Team("Team2");
+    Team team3 = new Team("Team3");
+    Team team4 = new Team("Team4");
+    em.persist(team1);
+    em.persist(team2);
+    em.persist(team3);
+    em.persist(team4);
 
-        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time), new Date(time + 5400000));
-        TeamMatch teamMatch2 = new TeamMatch(team2, team3, new Date(time + 1000));
-        TeamMatch teamMatch3 = new TeamMatch(team3, team4, new Date(time + 2500), new Date(time + 5520000));
-        TeamMatch teamMatch4 = new TeamMatch(team2, team1, new Date(time + 60000));
+    TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time), new Date(time + 5400000));
+    TeamMatch teamMatch2 = new TeamMatch(team2, team3, new Date(time + 1000));
+    TeamMatch teamMatch3 = new TeamMatch(team3, team4, new Date(time + 2500), new Date(time + 5520000));
+    TeamMatch teamMatch4 = new TeamMatch(team2, team1, new Date(time + 60000));
 
-        em.persist(teamMatch1);
-        em.persist(teamMatch2);
-        em.persist(teamMatch3);
-        em.persist(teamMatch4);
-        em.flush();
+    em.persist(teamMatch1);
+    em.persist(teamMatch2);
+    em.persist(teamMatch3);
+    em.persist(teamMatch4);
+    em.flush();
 
-        Collection<TeamMatch> dbMatches = teamMatchRepository.findAllPlannedMatchesOfTeam(team2.getId());
+    Collection<TeamMatch> dbMatches = teamMatchRepository.findAllPlannedMatchesOfTeam(team2.getId());
 
-        Assert.assertEquals(dbMatches.size(), 2);
-        Assert.assertTrue(dbMatches.contains(teamMatch2));
-        Assert.assertTrue(dbMatches.contains(teamMatch4));
-        Assert.assertFalse(dbMatches.contains(teamMatch1));
-        Assert.assertFalse(dbMatches.contains(teamMatch3));
-    }
+    Assert.assertEquals(dbMatches.size(), 2);
+    Assert.assertTrue(dbMatches.contains(teamMatch2));
+    Assert.assertTrue(dbMatches.contains(teamMatch4));
+    Assert.assertFalse(dbMatches.contains(teamMatch1));
+    Assert.assertFalse(dbMatches.contains(teamMatch3));
+}
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testFindAllPlannedMatchesOfNullTeam(){
@@ -558,6 +558,92 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.flush();
 
         Collection<TeamMatch> dbMatches = teamMatchRepository.findAllPlannedMatchesOfTeam(new Team("Team5").getId());
+
+        Assert.assertTrue(dbMatches.isEmpty());
+    }
+
+    @Test
+    public void testFindAllMatchesOfTeam(){
+        long time = System.currentTimeMillis();
+        Team team1 = new Team("Team1");
+        Team team2 = new Team("Team2");
+        Team team3 = new Team("Team3");
+        Team team4 = new Team("Team4");
+        em.persist(team1);
+        em.persist(team2);
+        em.persist(team3);
+        em.persist(team4);
+
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time), new Date(time + 5400000));
+        TeamMatch teamMatch2 = new TeamMatch(team2, team3, new Date(time + 1000));
+        TeamMatch teamMatch3 = new TeamMatch(team3, team4, new Date(time + 2500), new Date(time + 5520000));
+        TeamMatch teamMatch4 = new TeamMatch(team2, team1, new Date(time + 60000));
+
+        em.persist(teamMatch1);
+        em.persist(teamMatch2);
+        em.persist(teamMatch3);
+        em.persist(teamMatch4);
+        em.flush();
+
+        Collection<TeamMatch> dbMatches = teamMatchRepository.findAllMatchesOfTeam(team2.getId());
+
+        Assert.assertEquals(dbMatches.size(), 3);
+        Assert.assertTrue(dbMatches.contains(teamMatch1));
+        Assert.assertTrue(dbMatches.contains(teamMatch2));
+        Assert.assertTrue(dbMatches.contains(teamMatch4));
+        Assert.assertFalse(dbMatches.contains(teamMatch3));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testFindAllMatchesOfNullTeam(){
+        long time = System.currentTimeMillis();
+        Team team1 = new Team("Team1");
+        Team team2 = new Team("Team2");
+        Team team3 = new Team("Team3");
+        Team team4 = new Team("Team4");
+        em.persist(team1);
+        em.persist(team2);
+        em.persist(team3);
+        em.persist(team4);
+
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time), new Date(time + 5400000));
+        TeamMatch teamMatch2 = new TeamMatch(team2, team3, new Date(time + 1000));
+        TeamMatch teamMatch3 = new TeamMatch(team3, team4, new Date(time + 2500), new Date(time + 5520000));
+        TeamMatch teamMatch4 = new TeamMatch(team2, team1, new Date(time + 60000));
+
+        em.persist(teamMatch1);
+        em.persist(teamMatch2);
+        em.persist(teamMatch3);
+        em.persist(teamMatch4);
+        em.flush();
+
+        Collection<TeamMatch> dbMatches = teamMatchRepository.findAllPlannedMatchesOfTeam(null);
+    }
+
+    @Test
+    public void testFindAllMatchesOfNonexistentTeam(){
+        long time = System.currentTimeMillis();
+        Team team1 = new Team("Team1");
+        Team team2 = new Team("Team2");
+        Team team3 = new Team("Team3");
+        Team team4 = new Team("Team4");
+        em.persist(team1);
+        em.persist(team2);
+        em.persist(team3);
+        em.persist(team4);
+
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time), new Date(time + 5400000));
+        TeamMatch teamMatch2 = new TeamMatch(team2, team3, new Date(time + 1000));
+        TeamMatch teamMatch3 = new TeamMatch(team3, team4, new Date(time + 2500), new Date(time + 5520000));
+        TeamMatch teamMatch4 = new TeamMatch(team2, team1, new Date(time + 60000));
+
+        em.persist(teamMatch1);
+        em.persist(teamMatch2);
+        em.persist(teamMatch3);
+        em.persist(teamMatch4);
+        em.flush();
+
+        Collection<TeamMatch> dbMatches = teamMatchRepository.findAllMatchesOfTeam(new Team("Team5").getId());
 
         Assert.assertTrue(dbMatches.isEmpty());
     }
