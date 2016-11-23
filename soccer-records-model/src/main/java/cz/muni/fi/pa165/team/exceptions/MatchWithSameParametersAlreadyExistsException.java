@@ -9,33 +9,23 @@ import java.util.UUID;
  */
 public class MatchWithSameParametersAlreadyExistsException extends RuntimeException
 {
-
-    private final UUID homeTeamId;
-
-    private final UUID awayTeamId;
+    private final UUID teamId;
 
     private final Date startTime;
 
-    public MatchWithSameParametersAlreadyExistsException(UUID homeTeamId, UUID awayTeamId, Date startTime)
+    public MatchWithSameParametersAlreadyExistsException(UUID teamId, Date startTime)
     {
-        super(String.format("Match with home team %s, away team %s and start time %s already exists",
-            homeTeamId.toString(),
-            awayTeamId.toString(),
+        super(String.format("There already exists match with team %s with start time %s",
+            teamId.toString(),
             new SimpleDateFormat("dd/MM/YYYY hh:mm:ss").format(startTime)));
 
-        this.homeTeamId = homeTeamId;
-        this.awayTeamId = awayTeamId;
+        this.teamId = teamId;
         this.startTime = new Date(startTime.getTime());
     }
 
-    public UUID getHomeTeamId()
+    public UUID getTeamId()
     {
-        return homeTeamId;
-    }
-
-    public UUID getAwayTeamId()
-    {
-        return awayTeamId;
+        return teamId;
     }
 
     public Date getStartTime()
