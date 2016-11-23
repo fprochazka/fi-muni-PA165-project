@@ -10,42 +10,41 @@ import java.util.UUID;
 public class GoalWithSameParametersAlreadyExistsException extends  RuntimeException
 {
 
-    private final String scorer;
+    private final UUID scorerId;
 
-    private final String assistant;
+    private final UUID assistantId;
 
     private final UUID matchId;
 
     private final Date matchTime;
 
     public GoalWithSameParametersAlreadyExistsException(
-        String scorer,
-        String assistant,
+        UUID scorerId,
+        UUID assistantId,
         UUID matchId,
         Date matchTime
     )
     {
-        super(String.format("Goal from match %s scored by %s with assistant %s " +
-                "and scored in match time %s already exists",
+        super(String.format("Goal from match %s scored by %s with assistant %s and scored in match time %s already exists",
             matchId.toString(),
-            scorer,
-            assistant,
+            scorerId.toString(),
+            assistantId.toString(),
             new SimpleDateFormat("dd/MM/YYYY hh:mm:ss").format(matchTime)));
 
-        this.scorer = scorer;
-        this.assistant = assistant;
+        this.scorerId = scorerId;
+        this.assistantId = assistantId;
         this.matchId = matchId;
         this.matchTime = new Date(matchTime.getTime());
     }
 
-    public String getScorer()
+    public UUID getScorerId()
     {
-        return scorer;
+        return scorerId;
     }
 
-    public String getAssistant()
+    public UUID getAssistantId()
     {
-        return assistant;
+        return assistantId;
     }
 
     public UUID getMatchId()
