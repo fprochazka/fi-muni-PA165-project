@@ -112,4 +112,14 @@ public class TeamMatchRepositoryImpl implements TeamMatchRepository
                  .setParameter("teamId", teamId)
                  .getResultList();
     }
+
+    @Override
+    public Collection<TeamMatch> findAllMatchesOfTeam(final UUID teamId){
+        Assert.notNull(teamId, "Cannot search all planned matches for a null team");
+
+        return em.createQuery("SELECT m FROM TeamMatch m WHERE m.homeTeam.id = :teamId " +
+                                "OR m.awayTeam.id = :teamId", TeamMatch.class)
+                 .setParameter("teamId", teamId)
+                 .getResultList();
+    }
 }

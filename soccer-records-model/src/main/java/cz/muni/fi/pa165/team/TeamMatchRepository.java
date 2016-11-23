@@ -90,4 +90,13 @@ public interface TeamMatchRepository
      * @return collection of all planned not played matches of the given team
      */
     Collection<TeamMatch> findAllPlannedMatchesOfTeam(final UUID teamId);
+
+    /**
+     * Retrieves all the matches in which play the required team, does not
+     * matter if it is in role of home team or away team.
+     *
+     * @param teamId team which matches are going to be retrieved
+     * @return all matches with the given team
+     */
+    Collection<TeamMatch> findAllMatchesOfTeam(final UUID teamId);
 }
