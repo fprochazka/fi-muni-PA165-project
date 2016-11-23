@@ -10,7 +10,8 @@ public class GoalNotFoundException extends RuntimeException
 
     private final UUID goalId;
 
-    public GoalNotFoundException(final UUID goalId, Throwable cause){
+    public GoalNotFoundException(final UUID goalId, Throwable cause)
+    {
         super(String.format("Goal %s not found", goalId.toString()), cause);
         this.goalId = goalId;
     }

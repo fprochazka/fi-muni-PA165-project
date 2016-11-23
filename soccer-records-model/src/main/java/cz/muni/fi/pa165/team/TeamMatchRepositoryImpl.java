@@ -7,7 +7,6 @@ import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
@@ -35,9 +34,9 @@ public class TeamMatchRepositoryImpl implements TeamMatchRepository
 
         try {
             return em.createQuery("SELECT m FROM TeamMatch m WHERE m.id = :matchId", TeamMatch.class)
-                     .setParameter("matchId", matchId)
-                     .getSingleResult();
-        }catch (NoResultException ex){
+                .setParameter("matchId", matchId)
+                .getSingleResult();
+        } catch (NoResultException ex) {
             throw new MatchNotFoundException(matchId, ex);
         }
     }
@@ -48,8 +47,8 @@ public class TeamMatchRepositoryImpl implements TeamMatchRepository
         Assert.notNull(teamId, "Cannot search for null match home team");
 
         return em.createQuery("SELECT m FROM TeamMatch m WHERE m.homeTeam.id = :teamId", TeamMatch.class)
-                 .setParameter("teamId", teamId)
-                 .getResultList();
+            .setParameter("teamId", teamId)
+            .getResultList();
     }
 
     @Override
@@ -58,8 +57,8 @@ public class TeamMatchRepositoryImpl implements TeamMatchRepository
         Assert.notNull(teamId, "Cannot search for null match away team");
 
         return em.createQuery("SELECT m FROM TeamMatch m WHERE m.awayTeam.id = :teamId", TeamMatch.class)
-                 .setParameter("teamId", teamId)
-                 .getResultList();
+            .setParameter("teamId", teamId)
+            .getResultList();
     }
 
 
@@ -69,8 +68,8 @@ public class TeamMatchRepositoryImpl implements TeamMatchRepository
         Assert.notNull(startTime, "Cannot search for null match start time");
 
         return em.createQuery("SELECT m FROM TeamMatch m WHERE m.startTime = :startTime", TeamMatch.class)
-                 .setParameter("startTime", startTime)
-                 .getResultList();
+            .setParameter("startTime", startTime)
+            .getResultList();
     }
 
     @Override
@@ -88,7 +87,7 @@ public class TeamMatchRepositoryImpl implements TeamMatchRepository
     @Override
     public Collection<TeamMatch> findAllPlannedMatches()
     {
-        return em.createQuery("SELECT m FROM TeamMatch m WHERE m.endTime IS NULL",TeamMatch.class).getResultList();
+        return em.createQuery("SELECT m FROM TeamMatch m WHERE m.endTime IS NULL", TeamMatch.class).getResultList();
     }
 
     @Override
@@ -97,9 +96,9 @@ public class TeamMatchRepositoryImpl implements TeamMatchRepository
         Assert.notNull(teamId, "Cannot search all played matches for a null team");
 
         return em.createQuery("SELECT m FROM TeamMatch m WHERE m.endTime IS NOT NULL AND (m.homeTeam.id = :teamId " +
-                                "OR m.awayTeam.id = :teamId)", TeamMatch.class)
-                 .setParameter("teamId", teamId)
-                 .getResultList();
+            "OR m.awayTeam.id = :teamId)", TeamMatch.class)
+            .setParameter("teamId", teamId)
+            .getResultList();
     }
 
     @Override
@@ -108,18 +107,19 @@ public class TeamMatchRepositoryImpl implements TeamMatchRepository
         Assert.notNull(teamId, "Cannot search all planned matches for a null team");
 
         return em.createQuery("SELECT m FROM TeamMatch m WHERE m.endTime IS NULL AND (m.homeTeam.id = :teamId " +
-                                "OR m.awayTeam.id = :teamId)", TeamMatch.class)
-                 .setParameter("teamId", teamId)
-                 .getResultList();
+            "OR m.awayTeam.id = :teamId)", TeamMatch.class)
+            .setParameter("teamId", teamId)
+            .getResultList();
     }
 
     @Override
-    public Collection<TeamMatch> findAllMatchesOfTeam(final UUID teamId){
+    public Collection<TeamMatch> findAllMatchesOfTeam(final UUID teamId)
+    {
         Assert.notNull(teamId, "Cannot search all planned matches for a null team");
 
         return em.createQuery("SELECT m FROM TeamMatch m WHERE m.homeTeam.id = :teamId " +
-                                "OR m.awayTeam.id = :teamId", TeamMatch.class)
-                 .setParameter("teamId", teamId)
-                 .getResultList();
+            "OR m.awayTeam.id = :teamId", TeamMatch.class)
+            .setParameter("teamId", teamId)
+            .getResultList();
     }
 }

@@ -131,8 +131,8 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
         assertNotNull(dbGoal);
         assertEquals(dbGoal.getScorer().getId(), goal.getScorer().getId());
         assertEquals(dbGoal.getAssistant().getId(), goal.getAssistant().getId());
-        assertEquals(dbGoal.getMatch().getId(),goal.getMatch().getId());
-        assertEquals(dbGoal.getMatchTime(),goal.getMatchTime());
+        assertEquals(dbGoal.getMatch().getId(), goal.getMatch().getId());
+        assertEquals(dbGoal.getMatchTime(), goal.getMatchTime());
     }
 
     @Test
@@ -164,7 +164,8 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
     }
 
     @Test
-    public void testChangeMatchTime(){
+    public void testChangeMatchTime()
+    {
         long time = System.currentTimeMillis();
         Date startTime = new Date(time);
         Date endTime = new Date(time + 5520000);
@@ -173,7 +174,7 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
         em.persist(homeTeam);
         em.persist(awayTeam);
 
-        TeamMatch teamMatch = new TeamMatch(homeTeam,awayTeam,startTime,endTime);
+        TeamMatch teamMatch = new TeamMatch(homeTeam, awayTeam, startTime, endTime);
         em.persist(teamMatch);
         em.flush();
         em.clear();
@@ -196,7 +197,8 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
     }
 
     @Test
-    public void testEndMatch(){
+    public void testEndMatch()
+    {
         long time = System.currentTimeMillis();
         Date startTime = new Date(time);
         Team homeTeam = new Team("HomeTeam");
@@ -204,7 +206,7 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
         em.persist(homeTeam);
         em.persist(awayTeam);
 
-        TeamMatch teamMatch = new TeamMatch(homeTeam,awayTeam,startTime);
+        TeamMatch teamMatch = new TeamMatch(homeTeam, awayTeam, startTime);
         em.persist(teamMatch);
         em.flush();
         em.clear();

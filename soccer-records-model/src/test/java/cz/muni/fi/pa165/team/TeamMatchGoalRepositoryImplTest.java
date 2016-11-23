@@ -57,7 +57,8 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetGoalByNullId(){
+    public void testGetGoalByNullId()
+    {
         long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");

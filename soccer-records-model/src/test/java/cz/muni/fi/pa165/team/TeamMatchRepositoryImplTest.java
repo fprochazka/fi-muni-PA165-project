@@ -333,7 +333,8 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     }
 
     @Test
-    public void testFindAllPlayedMatches(){
+    public void testFindAllPlayedMatches()
+    {
         long time = System.currentTimeMillis();
         Team homeTeam1 = new Team("HomeTeam1");
         Team awayTeam1 = new Team("AwayTeam1");
@@ -362,7 +363,8 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     }
 
     @Test
-    public void testFindAllPlannedMatches(){
+    public void testFindAllPlannedMatches()
+    {
         long time = System.currentTimeMillis();
         Team homeTeam1 = new Team("HomeTeam1");
         Team awayTeam1 = new Team("AwayTeam1");
@@ -391,7 +393,8 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     }
 
     @Test
-    public void testFindAllPlayedMatchesOfTeam(){
+    public void testFindAllPlayedMatchesOfTeam()
+    {
         long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
@@ -423,7 +426,8 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testFindAllPlayedMatchesOfNullTeam(){
+    public void testFindAllPlayedMatchesOfNullTeam()
+    {
         long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
@@ -449,7 +453,8 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     }
 
     @Test
-    public void testFindAllPlayedMatchesOfNonexistentTeam(){
+    public void testFindAllPlayedMatchesOfNonexistentTeam()
+    {
         long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
@@ -477,39 +482,41 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     }
 
     @Test
-public void testFindAllPlannedMatchesOfTeam(){
-    long time = System.currentTimeMillis();
-    Team team1 = new Team("Team1");
-    Team team2 = new Team("Team2");
-    Team team3 = new Team("Team3");
-    Team team4 = new Team("Team4");
-    em.persist(team1);
-    em.persist(team2);
-    em.persist(team3);
-    em.persist(team4);
+    public void testFindAllPlannedMatchesOfTeam()
+    {
+        long time = System.currentTimeMillis();
+        Team team1 = new Team("Team1");
+        Team team2 = new Team("Team2");
+        Team team3 = new Team("Team3");
+        Team team4 = new Team("Team4");
+        em.persist(team1);
+        em.persist(team2);
+        em.persist(team3);
+        em.persist(team4);
 
-    TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time), new Date(time + 5400000));
-    TeamMatch teamMatch2 = new TeamMatch(team2, team3, new Date(time + 1000));
-    TeamMatch teamMatch3 = new TeamMatch(team3, team4, new Date(time + 2500), new Date(time + 5520000));
-    TeamMatch teamMatch4 = new TeamMatch(team2, team1, new Date(time + 60000));
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time), new Date(time + 5400000));
+        TeamMatch teamMatch2 = new TeamMatch(team2, team3, new Date(time + 1000));
+        TeamMatch teamMatch3 = new TeamMatch(team3, team4, new Date(time + 2500), new Date(time + 5520000));
+        TeamMatch teamMatch4 = new TeamMatch(team2, team1, new Date(time + 60000));
 
-    em.persist(teamMatch1);
-    em.persist(teamMatch2);
-    em.persist(teamMatch3);
-    em.persist(teamMatch4);
-    em.flush();
+        em.persist(teamMatch1);
+        em.persist(teamMatch2);
+        em.persist(teamMatch3);
+        em.persist(teamMatch4);
+        em.flush();
 
-    Collection<TeamMatch> dbMatches = teamMatchRepository.findAllPlannedMatchesOfTeam(team2.getId());
+        Collection<TeamMatch> dbMatches = teamMatchRepository.findAllPlannedMatchesOfTeam(team2.getId());
 
-    Assert.assertEquals(dbMatches.size(), 2);
-    Assert.assertTrue(dbMatches.contains(teamMatch2));
-    Assert.assertTrue(dbMatches.contains(teamMatch4));
-    Assert.assertFalse(dbMatches.contains(teamMatch1));
-    Assert.assertFalse(dbMatches.contains(teamMatch3));
-}
+        Assert.assertEquals(dbMatches.size(), 2);
+        Assert.assertTrue(dbMatches.contains(teamMatch2));
+        Assert.assertTrue(dbMatches.contains(teamMatch4));
+        Assert.assertFalse(dbMatches.contains(teamMatch1));
+        Assert.assertFalse(dbMatches.contains(teamMatch3));
+    }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testFindAllPlannedMatchesOfNullTeam(){
+    public void testFindAllPlannedMatchesOfNullTeam()
+    {
         long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
@@ -535,7 +542,8 @@ public void testFindAllPlannedMatchesOfTeam(){
     }
 
     @Test
-    public void testFindAllPlannedMatchesOfNonexistentTeam(){
+    public void testFindAllPlannedMatchesOfNonexistentTeam()
+    {
         long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
@@ -563,7 +571,8 @@ public void testFindAllPlannedMatchesOfTeam(){
     }
 
     @Test
-    public void testFindAllMatchesOfTeam(){
+    public void testFindAllMatchesOfTeam()
+    {
         long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
@@ -595,7 +604,8 @@ public void testFindAllPlannedMatchesOfTeam(){
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testFindAllMatchesOfNullTeam(){
+    public void testFindAllMatchesOfNullTeam()
+    {
         long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
@@ -621,7 +631,8 @@ public void testFindAllPlannedMatchesOfTeam(){
     }
 
     @Test
-    public void testFindAllMatchesOfNonexistentTeam(){
+    public void testFindAllMatchesOfNonexistentTeam()
+    {
         long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");

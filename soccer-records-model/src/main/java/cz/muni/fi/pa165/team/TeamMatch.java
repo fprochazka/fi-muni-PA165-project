@@ -114,7 +114,7 @@ public class TeamMatch
      * This method enables change the match start and end time.
      *
      * @param startTime new start time of the match, cannot be null
-     * @param endTime new end time of the match, can be null
+     * @param endTime   new end time of the match, can be null
      */
     public void changeMatchTime(Date startTime, Date endTime)
     {

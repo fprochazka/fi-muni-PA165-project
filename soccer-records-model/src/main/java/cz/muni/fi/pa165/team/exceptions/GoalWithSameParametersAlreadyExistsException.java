@@ -7,7 +7,7 @@ import java.util.UUID;
 /**
  * @author Tomas Smid <smid.thomas@gmail.com>
  */
-public class GoalWithSameParametersAlreadyExistsException extends  RuntimeException
+public class GoalWithSameParametersAlreadyExistsException extends RuntimeException
 {
 
     private final UUID scorerId;

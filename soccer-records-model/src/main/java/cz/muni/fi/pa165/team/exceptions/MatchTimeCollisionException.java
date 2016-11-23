@@ -9,6 +9,7 @@ import java.util.UUID;
  */
 public class MatchTimeCollisionException extends RuntimeException
 {
+
     private final UUID matchPlannedToBeChangedId;
 
     private final UUID teamId;

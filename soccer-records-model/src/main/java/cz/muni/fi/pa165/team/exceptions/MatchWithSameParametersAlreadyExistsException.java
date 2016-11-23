@@ -9,6 +9,7 @@ import java.util.UUID;
  */
 public class MatchWithSameParametersAlreadyExistsException extends RuntimeException
 {
+
     private final UUID teamId;
 
     private final Date startTime;

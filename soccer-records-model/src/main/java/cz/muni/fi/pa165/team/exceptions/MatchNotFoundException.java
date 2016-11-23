@@ -10,7 +10,8 @@ public class MatchNotFoundException extends RuntimeException
 
     private final UUID matchId;
 
-    public MatchNotFoundException(final UUID matchId, Throwable cause){
+    public MatchNotFoundException(final UUID matchId, Throwable cause)
+    {
         super(String.format("Match %s not found", matchId.toString()), cause);
         this.matchId = matchId;
     }

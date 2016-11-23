@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.team;
 
 import org.testng.annotations.Test;
+
 import java.util.Date;
 
 import static org.testng.Assert.assertEquals;
@@ -11,30 +12,34 @@ import static org.testng.Assert.assertNull;
  */
 public class TeamMatchTest
 {
+
     @Test
-    public void testChangeMatchTime(){
+    public void testChangeMatchTime()
+    {
         TeamMatch teamMatch = getTeamMatch();
-        Date newStartTime = new Date(teamMatch.getStartTime().getTime()+15000);
-        Date newEndTime = new Date(newStartTime.getTime()+5420000);
+        Date newStartTime = new Date(teamMatch.getStartTime().getTime() + 15000);
+        Date newEndTime = new Date(newStartTime.getTime() + 5420000);
 
-        teamMatch.changeMatchTime(newStartTime,newEndTime);
+        teamMatch.changeMatchTime(newStartTime, newEndTime);
 
-        assertEquals(newStartTime,teamMatch.getStartTime());
-        assertEquals(newEndTime,teamMatch.getEndTime());
+        assertEquals(newStartTime, teamMatch.getStartTime());
+        assertEquals(newEndTime, teamMatch.getEndTime());
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testChangeMatchTimeNullStartTime(){
+    public void testChangeMatchTimeNullStartTime()
+    {
         TeamMatch teamMatch = getTeamMatch();
-        Date newEndTime = new Date(teamMatch.getStartTime().getTime()+50000);
+        Date newEndTime = new Date(teamMatch.getStartTime().getTime() + 50000);
 
         teamMatch.changeMatchTime(null, newEndTime);
     }
 
     @Test
-    public void testChangeMatchTimeNullEndTime(){
+    public void testChangeMatchTimeNullEndTime()
+    {
         TeamMatch teamMatch = getTeamMatch();
-        Date newStartTime = new Date(teamMatch.getStartTime().getTime()+2000);
+        Date newStartTime = new Date(teamMatch.getStartTime().getTime() + 2000);
 
         teamMatch.changeMatchTime(newStartTime, null);
 
@@ -43,7 +48,8 @@ public class TeamMatchTest
     }
 
     @Test
-    public void testChangeMatchTimeValidEndTimeToNullEndTime(){
+    public void testChangeMatchTimeValidEndTimeToNullEndTime()
+    {
         long time = System.currentTimeMillis();
         TeamMatch teamMatch = getTeamMatch(new Date(time + 15000000));
         Date newStartTime = new Date();
@@ -57,7 +63,8 @@ public class TeamMatchTest
     }
 
     @Test
-    public void testEndMatch(){
+    public void testEndMatch()
+    {
         TeamMatch teamMatch = getTeamMatch();
         Date newEndTime = new Date(teamMatch.getStartTime().getTime() + 5400000);
 
@@ -69,14 +76,16 @@ public class TeamMatchTest
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testEndMatchNullEndTimeToNullEndTime(){
+    public void testEndMatchNullEndTimeToNullEndTime()
+    {
         TeamMatch teamMatch = getTeamMatch();
 
         teamMatch.endMatch(null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testEndMatchValidEndTimeToNullEndTime(){
+    public void testEndMatchValidEndTimeToNullEndTime()
+    {
         long time = System.currentTimeMillis();
         TeamMatch teamMatch = getTeamMatch(new Date(time + 1500000));
 
@@ -85,11 +94,13 @@ public class TeamMatchTest
         teamMatch.endMatch(null);
     }
 
-    private TeamMatch getTeamMatch(){
+    private TeamMatch getTeamMatch()
+    {
         return getTeamMatch(null);
     }
 
-    private TeamMatch getTeamMatch(Date endTime){
+    private TeamMatch getTeamMatch(Date endTime)
+    {
         return (endTime == null ?
             new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), new Date()) :
             new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), new Date(), new Date(endTime.getTime())));
