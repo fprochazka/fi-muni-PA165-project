@@ -3,7 +3,9 @@ package cz.muni.fi.pa165.team;
 import cz.muni.fi.pa165.team.exceptions.GoalWithSameParametersAlreadyExistsException;
 import cz.muni.fi.pa165.team.exceptions.MatchTimeCollisionException;
 import cz.muni.fi.pa165.team.exceptions.MatchWithSameParametersAlreadyExistsException;
+import org.springframework.util.Assert;
 
+import javax.validation.constraints.AssertTrue;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,13 +29,8 @@ public class TeamMatchService
         Date endTime
     )
     {
-        if (awayTeam == null){
-            throw new IllegalArgumentException("Match cannot be created with a null away team");
-        }
-
-        if (homeTeam.equals(awayTeam)){
-            throw new IllegalArgumentException("Match cannot be created for home and away teams which are same");
-        }
+        Assert.notNull(awayTeam, "Match cannot be created with a null away team");
+        Assert.isTrue(!homeTeam.equals(awayTeam), "Match cannot be created for home and away teams which are same");
 
         validateMatchTimes(startTime, endTime);
 
@@ -41,12 +38,11 @@ public class TeamMatchService
         {
             for(TeamMatch tm : sameHomeTeamMatches)
             {
-                if (awayTeam.equals(tm.getAwayTeam()) &&
-                        startTime.equals(tm.getStartTime()))
+                if (awayTeam.equals(tm.getAwayTeam()) && startTime.equals(tm.getStartTime()))
                 {
                     throw new MatchWithSameParametersAlreadyExistsException(
-                        homeTeam.getName(),
-                        awayTeam.getName(),
+                        homeTeam.getId(),
+                        awayTeam.getId(),
                         startTime
                     );
                 }
@@ -57,39 +53,32 @@ public class TeamMatchService
     }
 
     public void changeMatchTime(
-        List<TeamMatch> allMatches,
+        List<TeamMatch> sameStartTimeMatches,
         TeamMatch match,
-        String strStartTime,
-        String strEndTime
+        Date startTime,
+        Date endTime
     )
     {
-
-        Date startTime = getProperDate(strStartTime, "start");
-        Date endTime = getProperDate(strEndTime, "end");
-
         validateMatchTimes(startTime, endTime);
 
-        for (TeamMatch tm : allMatches){
-            if (startTime.equals(tm.getStartTime()) &&
-                (match.getHomeTeam().equals(tm.getHomeTeam()) ||
-                    match.getAwayTeam().equals(tm.getAwayTeam())))
+        for (TeamMatch tm : sameStartTimeMatches)
+        {
+            if (match.getHomeTeam().equals(tm.getHomeTeam()))
             {
-                throw new MatchTimeCollisionException(
-                    match.getId(),
-                    match.getHomeTeam().getName(),
-                    match.getAwayTeam().getName(),
-                    startTime);
+                throw new MatchTimeCollisionException(match.getId(), match.getHomeTeam().getId(), startTime);
+            }
+            if (match.getAwayTeam().equals(tm.getAwayTeam()))
+            {
+                throw new MatchTimeCollisionException(match.getId(), match.getAwayTeam().getId(), startTime);
             }
         }
 
         match.changeMatchTime(startTime, endTime);
     }
 
-    public void endMatch(TeamMatch match, Date endTime){
-
-        if (endTime == null){
-            throw new IllegalArgumentException("Cannot end the match with a null end time");
-        }
+    public void endMatch(TeamMatch match, Date endTime)
+    {
+        Assert.notNull(endTime, "Cannot end the match with a null end time");
 
         validateMatchTimes(match.getStartTime(),endTime);
 
@@ -104,17 +93,9 @@ public class TeamMatchService
         Date matchTime
     )
     {
-        if (scorer == null){
-            throw new IllegalArgumentException("Cannot create new goal with a null scorer");
-        }
-
-        if (assistant == null){
-            throw new IllegalArgumentException("Cannot create new goal with a null assistant");
-        }
-
-        if (scorer.equals(assistant)){
-            throw new IllegalArgumentException("Cannot create new goal with scorer and assistant who are the same player");
-        }
+        Assert.notNull(scorer, "Cannot create new goal with a null scorer");
+        Assert.notNull(assistant, "Cannot create new goal with a null assistant");
+        Assert.isTrue(!scorer.equals(assistant), "Cannot create new goal with scorer and assistant who are the same player");
 
         validateGoalMatchTime(matchTime,match);
 
@@ -126,8 +107,8 @@ public class TeamMatchService
                     && tmg.getMatchTime().equals(matchTime))
                 {
                     throw new GoalWithSameParametersAlreadyExistsException(
-                        String.format("%s %s",scorer.getFirstname(),scorer.getSurname()),
-                        String.format("%s %s",assistant.getFirstname(),assistant.getSurname()),
+                        scorer.getId(),
+                        assistant.getId(),
                         match.getId(),
                         matchTime
                     );
@@ -138,50 +119,18 @@ public class TeamMatchService
         return new TeamMatchGoal(scorer,assistant,match,matchTime);
     }
 
-    private Date getProperDate(String date, String whatDate){
-
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/YYYY");
-        formatter.setLenient(false);
-        Date properDate = null;
-
-        if (date != null){
-            try {
-                properDate = formatter.parse(date);
-            } catch (ParseException ex) {
-                throw new IllegalArgumentException(
-                    String.format("Cannot change match %s time, because of its invalid format",whatDate)
-                );
-            }
-        }
-
-        return properDate;
+    private void validateMatchTimes(Date startTime, Date endTime)
+    {
+        Assert.notNull(startTime, "Match start time is null");
+        Assert.isTrue((endTime == null || endTime.after(startTime)), "Match end time is not after start time");
     }
 
-    private void validateMatchTimes(Date startTime, Date endTime){
-
-        if(startTime == null){
-            throw new IllegalArgumentException("Match start time is null");
-        }
-
-        if(endTime != null && !endTime.after(startTime)){
-            throw new IllegalArgumentException("Match end time is not after start time");
-        }
-    }
-
-    private void validateGoalMatchTime(Date matchTime, TeamMatch match){
-
-        if (matchTime == null){
-            throw new IllegalArgumentException("Cannot create new goal with a null match time");
-        }
-
-        if (matchTime.before(match.getStartTime())){
-            throw new IllegalArgumentException("Cannot create new goal with invalid match time " +
-                "- goal match time is before match start time");
-        }
-
-        if (match.getEndTime() != null && matchTime.after(match.getEndTime())){
-            throw new IllegalArgumentException("Cannot create new goal with invalid match time " +
-                "- goal match time is after match end time");
-        }
+    private void validateGoalMatchTime(Date matchTime, TeamMatch match)
+    {
+        Assert.notNull(matchTime, "Cannot create new goal with a null match time");
+        Assert.isTrue(matchTime.after(match.getStartTime()), "Cannot create new goal with goal match time which is not " +
+                                                              "after match start time");
+        Assert.isTrue(match.getEndTime() == null || matchTime.before(match.getEndTime()),
+            "Cannot create new goal with goal match time which is not before match end time");
     }
 }
