@@ -1,5 +1,7 @@
 package cz.muni.fi.pa165.team;
 
+import org.springframework.stereotype.Component;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import java.util.UUID;
 /**
  * @author Tomas Smid <smid.thomas@gmail.com>
  */
+@Component
 public class TeamMatchFacade
 {
     private TeamMatchService teamMatchService;
@@ -82,7 +85,7 @@ public class TeamMatchFacade
         entityManager.flush();
     }
 
-    public void addNewScoredGoal(TeamPlayer scorer, TeamPlayer assistant, TeamMatch match, Date matchTime)
+    public TeamMatchGoal addNewScoredGoal(TeamPlayer scorer, TeamPlayer assistant, TeamMatch match, Date matchTime)
     {
         List<TeamMatchGoal> goalsInActualMatch = new ArrayList<>(teamMatchGoalRepository.findGoalByMatch(match.getId()));
 
@@ -96,6 +99,8 @@ public class TeamMatchFacade
 
         entityManager.persist(teamMatchGoal);
         entityManager.flush();
+
+        return teamMatchGoal;
     }
 
     public void deleteMatchGoal(UUID goalId){
