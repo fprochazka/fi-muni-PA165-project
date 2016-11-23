@@ -3,11 +3,9 @@ package cz.muni.fi.pa165.team;
 import cz.muni.fi.pa165.team.exceptions.GoalWithSameParametersAlreadyExistsException;
 import cz.muni.fi.pa165.team.exceptions.MatchTimeCollisionException;
 import cz.muni.fi.pa165.team.exceptions.MatchWithSameParametersAlreadyExistsException;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import javax.validation.constraints.AssertTrue;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -22,26 +20,41 @@ public class TeamMatchService
     }
 
     public TeamMatch createMatch(
-        List<TeamMatch> sameHomeTeamMatches,
+        List<TeamMatch> allMatchesOfHomeTeam,
+        List<TeamMatch> allMatchesOfAwayTeam,
         Team homeTeam,
         Team awayTeam,
         Date startTime,
         Date endTime
     )
     {
+        Assert.notNull(homeTeam, "Match cannot be created with a null home team");
         Assert.notNull(awayTeam, "Match cannot be created with a null away team");
         Assert.isTrue(!homeTeam.equals(awayTeam), "Match cannot be created for home and away teams which are same");
 
         validateMatchTimes(startTime, endTime);
 
-        if(!sameHomeTeamMatches.isEmpty())
+        if(!allMatchesOfHomeTeam.isEmpty())
         {
-            for(TeamMatch tm : sameHomeTeamMatches)
+            for(TeamMatch tm : allMatchesOfHomeTeam)
             {
-                if (awayTeam.equals(tm.getAwayTeam()) && startTime.equals(tm.getStartTime()))
+                if (startTime.equals(tm.getStartTime()))
                 {
                     throw new MatchWithSameParametersAlreadyExistsException(
                         homeTeam.getId(),
+                        startTime
+                    );
+                }
+            }
+        }
+
+        if(!allMatchesOfAwayTeam.isEmpty())
+        {
+            for(TeamMatch tm : allMatchesOfAwayTeam)
+            {
+                if (startTime.equals(tm.getStartTime()))
+                {
+                    throw new MatchWithSameParametersAlreadyExistsException(
                         awayTeam.getId(),
                         startTime
                     );
@@ -59,17 +72,32 @@ public class TeamMatchService
         Date endTime
     )
     {
+        Assert.notNull(match, "Cannot change match times to null match");
         validateMatchTimes(startTime, endTime);
 
-        for (TeamMatch tm : sameStartTimeMatches)
-        {
-            if (match.getHomeTeam().equals(tm.getHomeTeam()))
+        if (!sameStartTimeMatches.isEmpty()){
+            for (TeamMatch tm : sameStartTimeMatches)
             {
-                throw new MatchTimeCollisionException(match.getId(), match.getHomeTeam().getId(), startTime);
-            }
-            if (match.getAwayTeam().equals(tm.getAwayTeam()))
-            {
-                throw new MatchTimeCollisionException(match.getId(), match.getAwayTeam().getId(), startTime);
+                if (match.getHomeTeam().equals(tm.getHomeTeam()) ||
+                    match.getHomeTeam().equals(tm.getAwayTeam()))
+                {
+                    throw new MatchTimeCollisionException(
+                        match.getId(),
+                        tm.getId(),
+                        match.getHomeTeam().getId(),
+                        startTime
+                    );
+                }
+                if (match.getAwayTeam().equals(tm.getAwayTeam()) ||
+                    match.getAwayTeam().equals(tm.getHomeTeam()))
+                {
+                    throw new MatchTimeCollisionException(
+                        match.getId(),
+                        tm.getId(),
+                        match.getAwayTeam().getId(),
+                        startTime
+                    );
+                }
             }
         }
 
@@ -78,7 +106,9 @@ public class TeamMatchService
 
     public void endMatch(TeamMatch match, Date endTime)
     {
+        Assert.notNull(match, "Cannot end the null match");
         Assert.notNull(endTime, "Cannot end the match with a null end time");
+        Assert.isNull(match.getEndTime(), "Cannot end already ended match");
 
         validateMatchTimes(match.getStartTime(),endTime);
 
