@@ -98,6 +98,7 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
 
         TeamMatchGoal goal = new TeamMatchGoal(scorer, assistant, match, new Date(time));
         em.persist(goal);
+        em.flush();
 
         UUID badId = UUID.randomUUID();
         Assert.assertNotEquals(badId, goal.getId());
@@ -133,10 +134,9 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(goal1);
         em.persist(goal2);
         em.persist(goal3);
+        em.flush();
 
         Collection<TeamMatchGoal> dbGoals = teamMatchGoalRepository.findGoalByScorer(scorer.getId());
-
-        em.flush();
 
         Assert.assertEquals(dbGoals.size(), 2);
         Assert.assertTrue(dbGoals.contains(goal1));
@@ -172,6 +172,7 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(goal1);
         em.persist(goal2);
         em.persist(goal3);
+        em.flush();
 
         Collection<TeamMatchGoal> dbGoals = teamMatchGoalRepository.findGoalByScorer(null);
     }
@@ -204,6 +205,7 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(goal1);
         em.persist(goal2);
         em.persist(goal3);
+        em.flush();
 
         TeamPlayer scorer3 = new TeamPlayer("Derek", "Lock", 187, 95, homeTeam);
         Collection<TeamMatchGoal> dbGoals = teamMatchGoalRepository.findGoalByScorer(scorer3.getId());
@@ -239,10 +241,9 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(goal1);
         em.persist(goal2);
         em.persist(goal3);
+        em.flush();
 
         Collection<TeamMatchGoal> dbGoals = teamMatchGoalRepository.findGoalByAssistant(assistant.getId());
-
-        em.flush();
 
         Assert.assertEquals(dbGoals.size(), 2);
         Assert.assertTrue(dbGoals.contains(goal1));
@@ -278,9 +279,9 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(goal1);
         em.persist(goal2);
         em.persist(goal3);
+        em.flush();
 
         Collection<TeamMatchGoal> dbGoals = teamMatchGoalRepository.findGoalByAssistant(null);
-
     }
 
     @Test
@@ -311,6 +312,7 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(goal1);
         em.persist(goal2);
         em.persist(goal3);
+        em.flush();
 
         TeamPlayer assistant3 = new TeamPlayer("Derek", "Lock", 187, 95, homeTeam);
         Collection<TeamMatchGoal> dbGoals = teamMatchGoalRepository.findGoalByAssistant(assistant3.getId());
@@ -350,6 +352,7 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(goal1);
         em.persist(goal2);
         em.persist(goal3);
+        em.flush();
 
         Collection<TeamMatchGoal> dbGoals = teamMatchGoalRepository.findGoalByMatch(match.getId());
 
@@ -391,6 +394,7 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(goal1);
         em.persist(goal2);
         em.persist(goal3);
+        em.flush();
 
         Collection<TeamMatchGoal> dbGoals = teamMatchGoalRepository.findGoalByMatch(null);
     }
@@ -429,6 +433,7 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(goal1);
         em.persist(goal2);
         em.persist(goal3);
+        em.flush();
 
         TeamMatch match3 = new TeamMatch(homeTeam, awayTeam3, new Date(time + 10000));
 
@@ -469,6 +474,7 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(goal1);
         em.persist(goal2);
         em.persist(goal3);
+        em.flush();
 
         Collection<TeamMatchGoal> dbGoals = teamMatchGoalRepository.findAllGoals();
 
@@ -477,5 +483,4 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         Assert.assertTrue(dbGoals.contains(goal2));
         Assert.assertTrue(dbGoals.contains(goal3));
     }
-
 }

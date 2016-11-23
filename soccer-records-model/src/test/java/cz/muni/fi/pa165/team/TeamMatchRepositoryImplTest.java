@@ -35,15 +35,12 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(homeTeam);
         em.persist(awayTeam);
 
-        em.flush();
-
         TeamMatch teamMatch = new TeamMatch(homeTeam, awayTeam, new Date());
 
         em.persist(teamMatch);
+        em.flush();
 
         TeamMatch dbMatch = teamMatchRepository.getMatchById(teamMatch.getId());
-
-        em.flush();
 
         Assert.assertEquals(dbMatch.getAwayTeam(), teamMatch.getAwayTeam());
         Assert.assertEquals(dbMatch.getHomeTeam(), teamMatch.getHomeTeam());
@@ -58,8 +55,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         Team awayTeam = new Team("AwayTeam");
         em.persist(homeTeam);
         em.persist(awayTeam);
-
-        em.flush();
 
         TeamMatch teamMatch = new TeamMatch(homeTeam, awayTeam, new Date());
 
@@ -108,10 +103,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(teamMatch1);
         em.persist(teamMatch2);
         em.persist(teamMatch3);
+        em.flush();
 
         Collection<TeamMatch> dbMatches = teamMatchRepository.findMatchByHomeTeam(homeTeam1.getId());
-
-        em.flush();
 
         Assert.assertEquals(dbMatches.size(), 2);
         Assert.assertTrue(dbMatches.contains(teamMatch1));
@@ -139,6 +133,7 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(teamMatch1);
         em.persist(teamMatch2);
         em.persist(teamMatch3);
+        em.flush();
 
         Collection<TeamMatch> dbMatches = teamMatchRepository.findMatchByHomeTeam(null);
     }
@@ -163,10 +158,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(teamMatch1);
         em.persist(teamMatch2);
         em.persist(teamMatch3);
+        em.flush();
 
         Collection<TeamMatch> dbMatches = teamMatchRepository.findMatchByHomeTeam(new Team("homeTeam3").getId());
-
-        em.flush();
 
         Assert.assertTrue(dbMatches.isEmpty());
     }
@@ -191,10 +185,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(teamMatch1);
         em.persist(teamMatch2);
         em.persist(teamMatch3);
+        em.flush();
 
         Collection<TeamMatch> dbMatches = teamMatchRepository.findMatchByAwayTeam(awayTeam1.getId());
-
-        em.flush();
 
         Assert.assertEquals(dbMatches.size(), 2);
         Assert.assertTrue(dbMatches.contains(teamMatch1));
@@ -222,6 +215,7 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(teamMatch1);
         em.persist(teamMatch2);
         em.persist(teamMatch3);
+        em.flush();
 
         Collection<TeamMatch> dbMatches = teamMatchRepository.findMatchByAwayTeam(null);
     }
@@ -246,10 +240,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(teamMatch1);
         em.persist(teamMatch2);
         em.persist(teamMatch3);
+        em.flush();
 
         Collection<TeamMatch> dbMatches = teamMatchRepository.findMatchByAwayTeam(new Team("awayTeam3").getId());
-
-        em.flush();
 
         Assert.assertTrue(dbMatches.isEmpty());
     }
@@ -274,10 +267,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(teamMatch1);
         em.persist(teamMatch2);
         em.persist(teamMatch3);
+        em.flush();
 
         Collection<TeamMatch> dbMatches = teamMatchRepository.findMatchByStartTime(new Date(time + 1000));
-
-        em.flush();
 
         Assert.assertEquals(dbMatches.size(), 2);
         Assert.assertTrue(dbMatches.contains(teamMatch2));
@@ -305,6 +297,7 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(teamMatch1);
         em.persist(teamMatch2);
         em.persist(teamMatch3);
+        em.flush();
 
         Collection<TeamMatch> dbMatches = teamMatchRepository.findMatchByStartTime(null);
     }
@@ -329,10 +322,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(teamMatch1);
         em.persist(teamMatch2);
         em.persist(teamMatch3);
+        em.flush();
 
         Collection<TeamMatch> dbMatches = teamMatchRepository.findAllMatches();
-
-        em.flush();
 
         Assert.assertEquals(dbMatches.size(), 3);
         Assert.assertTrue(dbMatches.contains(teamMatch1));
@@ -359,10 +351,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(teamMatch1);
         em.persist(teamMatch2);
         em.persist(teamMatch3);
+        em.flush();
 
         Collection<TeamMatch> dbMatches = teamMatchRepository.findAllPlayedMatches();
-
-        em.flush();
 
         Assert.assertEquals(dbMatches.size(), 2);
         Assert.assertTrue(dbMatches.contains(teamMatch1));
@@ -389,10 +380,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(teamMatch1);
         em.persist(teamMatch2);
         em.persist(teamMatch3);
+        em.flush();
 
         Collection<TeamMatch> dbMatches = teamMatchRepository.findAllPlannedMatches();
-
-        em.flush();
 
         Assert.assertEquals(dbMatches.size(), 1);
         Assert.assertTrue(dbMatches.contains(teamMatch2));
@@ -421,10 +411,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(teamMatch2);
         em.persist(teamMatch3);
         em.persist(teamMatch4);
+        em.flush();
 
         Collection<TeamMatch> dbMatches = teamMatchRepository.findAllPlayedMatchesOfTeam(team2.getId());
-
-        em.flush();
 
         Assert.assertEquals(dbMatches.size(), 2);
         Assert.assertTrue(dbMatches.contains(teamMatch1));
@@ -454,6 +443,7 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(teamMatch2);
         em.persist(teamMatch3);
         em.persist(teamMatch4);
+        em.flush();
 
         Collection<TeamMatch> dbMatches = teamMatchRepository.findAllPlayedMatchesOfTeam(null);
     }
@@ -479,10 +469,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(teamMatch2);
         em.persist(teamMatch3);
         em.persist(teamMatch4);
+        em.flush();
 
         Collection<TeamMatch> dbMatches = teamMatchRepository.findAllPlayedMatchesOfTeam(new Team("Team5").getId());
-
-        em.flush();
 
         Assert.assertTrue(dbMatches.isEmpty());
     }
@@ -508,10 +497,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(teamMatch2);
         em.persist(teamMatch3);
         em.persist(teamMatch4);
+        em.flush();
 
         Collection<TeamMatch> dbMatches = teamMatchRepository.findAllPlannedMatchesOfTeam(team2.getId());
-
-        em.flush();
 
         Assert.assertEquals(dbMatches.size(), 2);
         Assert.assertTrue(dbMatches.contains(teamMatch2));
@@ -541,6 +529,7 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(teamMatch2);
         em.persist(teamMatch3);
         em.persist(teamMatch4);
+        em.flush();
 
         Collection<TeamMatch> dbMatches = teamMatchRepository.findAllPlannedMatchesOfTeam(null);
     }
@@ -566,10 +555,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(teamMatch2);
         em.persist(teamMatch3);
         em.persist(teamMatch4);
+        em.flush();
 
         Collection<TeamMatch> dbMatches = teamMatchRepository.findAllPlannedMatchesOfTeam(new Team("Team5").getId());
-
-        em.flush();
 
         Assert.assertTrue(dbMatches.isEmpty());
     }
