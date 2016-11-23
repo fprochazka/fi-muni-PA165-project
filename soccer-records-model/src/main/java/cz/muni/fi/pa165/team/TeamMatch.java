@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.team;
 
 import org.hibernate.annotations.Type;
+import org.springframework.util.Assert;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -115,10 +116,9 @@ public class TeamMatch
      * @param startTime new start time of the match, cannot be null
      * @param endTime new end time of the match, can be null
      */
-    public void changeMatchTime(Date startTime, Date endTime){
-        if(startTime == null){
-            throw new IllegalArgumentException("Cannot change the match start time to null");
-        }
+    public void changeMatchTime(Date startTime, Date endTime)
+    {
+        Assert.notNull(startTime, "Cannot change the match start time to null");
 
         this.startTime = new Date(startTime.getTime());
         this.endTime = (endTime == null ? null : new Date(endTime.getTime()));
@@ -129,10 +129,9 @@ public class TeamMatch
      *
      * @param endTime new end time of the match, cannot be null
      */
-    public void endMatch(Date endTime){
-        if(endTime == null){
-            throw new IllegalArgumentException("Cannot end the match with a null end time");
-        }
+    public void endMatch(Date endTime)
+    {
+        Assert.notNull(endTime, "Cannot end the match with a null end time");
 
         this.endTime = new Date(endTime.getTime());
     }
