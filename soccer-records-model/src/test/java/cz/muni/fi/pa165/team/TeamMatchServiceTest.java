@@ -64,7 +64,6 @@ public class TeamMatchServiceTest
         Date endTime2 = new Date(time + 5550000);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
-        Team team3 = new Team("Team3");
         TeamMatch match1 = new TeamMatch(team1, team2, startTime1, endTime1);
         List<TeamMatch> allMatchesOfHomeTeam = Arrays.asList(match1);
         List<TeamMatch> allMatchesOfAwayTeam = new ArrayList<>();
@@ -90,7 +89,6 @@ public class TeamMatchServiceTest
         Date endTime2 = new Date(time + 5550000);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
-        Team team3 = new Team("Team3");
         TeamMatch match1 = new TeamMatch(team1, team2, startTime1, endTime1);
         List<TeamMatch> allMatchesOfHomeTeam = Arrays.asList(match1);
         List<TeamMatch> allMatchesOfAwayTeam = Arrays.asList(match1);
@@ -111,7 +109,6 @@ public class TeamMatchServiceTest
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
         Date startTime1 = new Date(time);
-        Date startTime2 = new Date(time + 50000);
         Date endTime1 = new Date(time + 5500000);
         Date endTime2 = new Date(time + 5550000);
         Team team1 = new Team("Team1");
@@ -875,7 +872,6 @@ public class TeamMatchServiceTest
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
         Date startTime = new Date(time);
-        Date endTime = new Date(time + 5500000);
         Date goalMatchTime1 = new Date(time + 15000);
         Date goalMatchTime2 = new Date(time + 5500001);
         Team homeTeam = new Team("HomeTeam");
@@ -903,7 +899,6 @@ public class TeamMatchServiceTest
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
         Date startTime = new Date(time);
-        Date endTime = new Date(time + 5500000);
         Date goalMatchTime1 = new Date(time + 15000);
         Date goalMatchTime2 = new Date(time + 5500000);
         Team homeTeam = new Team("HomeTeam");
