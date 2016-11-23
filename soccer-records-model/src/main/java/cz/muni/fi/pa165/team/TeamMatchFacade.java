@@ -23,11 +23,13 @@ public class TeamMatchFacade
     public TeamMatchFacade(
         TeamMatchService teamMatchService,
         TeamMatchRepository teamMatchRepository,
+        TeamMatchGoalRepository teamMatchGoalRepository,
         EntityManager entityManager
     )
     {
         this.teamMatchService = teamMatchService;
         this.teamMatchRepository = teamMatchRepository;
+        this.teamMatchGoalRepository = teamMatchGoalRepository;
         this.entityManager = entityManager;
     }
 
@@ -54,19 +56,19 @@ public class TeamMatchFacade
 
         TeamMatch teamMatch = teamMatchRepository.getMatchById(matchId);
 
-        Query query = entityManager.createQuery("DELETE TeamMatchGoal tmg WHERE tmg.match = :teamMatch")
-            .setParameter("teamMatch", teamMatch);
-        query.executeUpdate();
+        entityManager.createQuery("DELETE TeamMatchGoal tmg WHERE tmg.match = :teamMatch")
+                     .setParameter("teamMatch", teamMatch)
+                     .executeUpdate();
 
         entityManager.remove(teamMatch);
     }
 
-    public void changeMatchTime(UUID matchId, String startTime, String endTime){
+    public void changeMatchTime(UUID matchId, Date startTime, Date endTime){
 
         TeamMatch teamMatch = teamMatchRepository.getMatchById(matchId);
-        List<TeamMatch> allMatches = new ArrayList<>(teamMatchRepository.findAllMatches());
+        List<TeamMatch> sameStartTimeMatches = new ArrayList<>(teamMatchRepository.findMatchByStartTime(startTime));
 
-        teamMatchService.changeMatchTime(allMatches,teamMatch,startTime,endTime);
+        teamMatchService.changeMatchTime(sameStartTimeMatches,teamMatch,startTime,endTime);
 
         entityManager.flush();
     }
@@ -80,15 +82,9 @@ public class TeamMatchFacade
         entityManager.flush();
     }
 
-    public void addNewScoredGoal(
-        TeamPlayer scorer,
-        TeamPlayer assistant,
-        TeamMatch match,
-        Date matchTime
-    )
+    public void addNewScoredGoal(TeamPlayer scorer, TeamPlayer assistant, TeamMatch match, Date matchTime)
     {
-        List<TeamMatchGoal> goalsInActualMatch =
-            new ArrayList<>(teamMatchGoalRepository.findGoalByMatch(match.getId()));
+        List<TeamMatchGoal> goalsInActualMatch = new ArrayList<>(teamMatchGoalRepository.findGoalByMatch(match.getId()));
 
         TeamMatchGoal teamMatchGoal = teamMatchService.addNewScoredGoal(
             goalsInActualMatch,
@@ -97,6 +93,7 @@ public class TeamMatchFacade
             match,
             matchTime
         );
+
         entityManager.persist(teamMatchGoal);
         entityManager.flush();
     }
