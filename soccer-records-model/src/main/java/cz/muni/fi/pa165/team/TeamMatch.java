@@ -122,7 +122,7 @@ public class TeamMatch
      */
     public void changeMatchTime(Date startTime, Date endTime)
     {
-        validateMatchTimes(startTime,endTime);
+        validateMatchTimes(startTime, endTime);
 
         this.startTime = new Date(startTime.getTime());
         this.endTime = (endTime == null ? null : new Date(endTime.getTime()));

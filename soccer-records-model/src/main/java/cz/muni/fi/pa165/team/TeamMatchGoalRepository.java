@@ -62,10 +62,10 @@ interface TeamMatchGoalRepository
     /**
      * Search if there exists a goal which has the same paramaters as the given.
      *
-     * @param matchId id of the match in which we want search same goal
-     * @param scorerId id of the scorer of goal
+     * @param matchId     id of the match in which we want search same goal
+     * @param scorerId    id of the scorer of goal
      * @param assistantId id of the assistant of goal
-     * @param matchTime time of the match in which goal is scored
+     * @param matchTime   time of the match in which goal is scored
      * @return found conflicting goal, null otherwise
      */
     TeamMatchGoal findConflictingGoal(final UUID matchId, final UUID scorerId, final UUID assistantId, final Date matchTime);

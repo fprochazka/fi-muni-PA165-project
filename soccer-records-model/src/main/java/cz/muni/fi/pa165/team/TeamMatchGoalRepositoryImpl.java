@@ -77,22 +77,23 @@ public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
     }
 
     @Override
-    public TeamMatchGoal findConflictingGoal(final UUID matchId, final UUID scorerId, final UUID assistantId, final Date matchTime){
+    public TeamMatchGoal findConflictingGoal(final UUID matchId, final UUID scorerId, final UUID assistantId, final Date matchTime)
+    {
         Assert.notNull(matchId, "Cannot search goal for a null match");
         Assert.notNull(scorerId, "Cannot search goal for a null scorer");
         Assert.notNull(assistantId, "Cannot search goal for a null assistant");
         Assert.notNull(matchTime, "Cannot search goal for a null goal match time");
 
         TeamMatchGoal conflictingGoal;
-        try{
+        try {
             conflictingGoal = em.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.match.id = :matchId AND " +
                 "g.scorer.id = :scorerId AND g.assistant.id = :assistantId AND g.matchTime = :matchTime", TeamMatchGoal.class)
-                .setParameter("matchId",matchId)
+                .setParameter("matchId", matchId)
                 .setParameter("scorerId", scorerId)
                 .setParameter("assistantId", assistantId)
                 .setParameter("matchTime", matchTime)
                 .getSingleResult();
-        }catch(NoResultException ex){
+        } catch (NoResultException ex) {
             return null;
         }
 

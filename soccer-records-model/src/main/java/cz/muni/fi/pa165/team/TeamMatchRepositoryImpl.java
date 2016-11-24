@@ -130,13 +130,13 @@ public class TeamMatchRepositoryImpl implements TeamMatchRepository
         Assert.notNull(startTime, "Cannot search for conflicting match with a null match start time");
 
         TeamMatch conflictingMatch;
-        try{
+        try {
             conflictingMatch = em.createQuery("SELECT m FROM TeamMatch m WHERE m.startTime = :startTime AND " +
                 "(m.homeTeam.id = :teamId OR m.awayTeam = :teamId)", TeamMatch.class)
                 .setParameter("startTime", startTime)
                 .setParameter("teamId", teamId)
                 .getSingleResult();
-        }catch(NoResultException ex){
+        } catch (NoResultException ex) {
             return null;
         }
 

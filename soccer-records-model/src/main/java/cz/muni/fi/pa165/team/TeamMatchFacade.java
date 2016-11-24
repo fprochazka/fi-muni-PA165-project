@@ -46,22 +46,22 @@ public class TeamMatchFacade
      *
      * @param homeTeamId id of home team in the match
      * @param awayTeamId id of away team in the match
-     * @param startTime start time of the match
-     * @param endTime end time of the match, can be null
+     * @param startTime  start time of the match
+     * @param endTime    end time of the match, can be null
      * @return newly created match
      */
     public TeamMatch createMatch(UUID homeTeamId, UUID awayTeamId, Date startTime, Date endTime)
     {
         Team homeTeam = teamRepository.getTeamById(homeTeamId);
         Team awayTeam = teamRepository.getTeamById(awayTeamId);
-        List<TeamMatch> allMatchesOfHomeTeam =
-            new ArrayList<>(teamMatchRepository.findAllMatchesOfTeam(homeTeam.getId()));
-        List<TeamMatch> allMatchesOfAwayTeam =
-            new ArrayList<>(teamMatchRepository.findAllMatchesOfTeam(awayTeam.getId()));
+        TeamMatch conflictingMatchForHomeTeam =
+            teamMatchRepository.findConflictingMatchByTeamAndStartTime(homeTeam.getId(), startTime);
+        TeamMatch conflictingMatchForAwayTeam =
+            teamMatchRepository.findConflictingMatchByTeamAndStartTime(awayTeam.getId(), startTime);
 
         TeamMatch teamMatch = teamMatchService.createMatch(
-            allMatchesOfHomeTeam,
-            allMatchesOfAwayTeam,
+            conflictingMatchForHomeTeam,
+            conflictingMatchForAwayTeam,
             homeTeam,
             awayTeam,
             startTime,
@@ -89,22 +89,32 @@ public class TeamMatchFacade
             .executeUpdate();
 
         entityManager.remove(teamMatch);
+        entityManager.flush();
     }
 
     /**
      * This method changes start time and end time of the match.
      *
-     * @param matchId id of the match which times should be updated
+     * @param matchId   id of the match which times should be updated
      * @param startTime new start time of the match
-     * @param endTime new end time of the match
+     * @param endTime   new end time of the match
      */
     public void changeMatchTime(UUID matchId, Date startTime, Date endTime)
     {
 
         TeamMatch teamMatch = teamMatchRepository.getMatchById(matchId);
-        List<TeamMatch> sameStartTimeMatches = new ArrayList<>(teamMatchRepository.findMatchByStartTime(startTime));
+        TeamMatch conflictingMatchForHomeTeam =
+            teamMatchRepository.findConflictingMatchByTeamAndStartTime(teamMatch.getHomeTeam().getId(), startTime);
+        TeamMatch conflictingMatchForAwayTeam =
+            teamMatchRepository.findConflictingMatchByTeamAndStartTime(teamMatch.getAwayTeam().getId(), startTime);
 
-        teamMatchService.changeMatchTime(sameStartTimeMatches, teamMatch, startTime, endTime);
+        teamMatchService.changeMatchTime(
+            conflictingMatchForHomeTeam,
+            conflictingMatchForAwayTeam,
+            teamMatch,
+            startTime,
+            endTime
+        );
 
         entityManager.flush();
     }
@@ -128,10 +138,10 @@ public class TeamMatchFacade
     /**
      * This method creates and stores new goal in DB.
      *
-     * @param scorerId id of the scorer of the goal
+     * @param scorerId    id of the scorer of the goal
      * @param assistantId id of the assistant of the goal
-     * @param matchId id of the match in which the goal is scored
-     * @param matchTime time in which the goal is scored
+     * @param matchId     id of the match in which the goal is scored
+     * @param matchTime   time in which the goal is scored
      * @return newly created goal
      */
     public TeamMatchGoal addNewScoredGoal(UUID scorerId, UUID assistantId, UUID matchId, Date matchTime)
@@ -139,14 +149,19 @@ public class TeamMatchFacade
         TeamPlayer scorer = teamPlayerRepository.getTeamPlayerById(scorerId);
         TeamPlayer assistant = teamPlayerRepository.getTeamPlayerById(assistantId);
         TeamMatch match = teamMatchRepository.getMatchById(matchId);
-        List<TeamMatchGoal> goalsInActualMatch = new ArrayList<>(teamMatchGoalRepository.findGoalByMatch(match.getId()));
+        TeamMatchGoal sameGoal = teamMatchGoalRepository.findConflictingGoal(
+            match.getId(),
+            scorer.getId(),
+            assistant.getId(),
+            matchTime
+        );
 
         TeamMatchGoal teamMatchGoal = teamMatchService.addNewScoredGoal(
-            goalsInActualMatch,
             scorer,
             assistant,
             match,
-            matchTime
+            matchTime,
+            sameGoal
         );
 
         entityManager.persist(teamMatchGoal);

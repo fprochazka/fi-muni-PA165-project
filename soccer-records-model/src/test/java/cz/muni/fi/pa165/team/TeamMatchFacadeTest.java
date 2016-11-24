@@ -85,7 +85,6 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
         assertNotNull(em.find(TeamMatch.class, teamMatch.getId()));
 
         teamMatchFacade.deleteMatch(teamMatch.getId());
-        em.flush();
         em.clear();
 
         Team dbHomeTeam = em.find(Team.class, homeTeam.getId());
