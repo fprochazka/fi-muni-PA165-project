@@ -11,7 +11,7 @@ public class TeamServiceTest
 {
 
     @Test
-    public void testCreateUser() throws Exception
+    public void testCreateTeam() throws Exception
     {
         TeamService teamService = new TeamService();
 
@@ -19,4 +19,10 @@ public class TeamServiceTest
         assertEquals("ManUtd", team.getName());
     }
 
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testCreateTeamWithNullNameThrows() throws Exception
+    {
+        TeamService teamService = new TeamService();
+        teamService.createTeam(null, null);
+    }
 }

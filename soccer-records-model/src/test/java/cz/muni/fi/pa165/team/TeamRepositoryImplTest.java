@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.team;
 
 import cz.muni.fi.pa165.config.ApplicationConfig;
+import cz.muni.fi.pa165.team.exceptions.TeamNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
@@ -12,19 +13,19 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Collection;
 import java.util.Date;
+import java.util.UUID;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 /**
  * @author Libor Mühlpachr <libor.muhl@seznam.cz>
  */
 @ContextConfiguration(classes = ApplicationConfig.class)
-public class TeamDaoImplTest extends AbstractTransactionalTestNGSpringContextTests
+public class TeamRepositoryImplTest extends AbstractTransactionalTestNGSpringContextTests
 {
 
     @Autowired
-    public TeamDaoImpl teamDao;
+    public TeamRepositoryImpl teamRepository;
 
     @PersistenceContext
     public EntityManager em;
@@ -88,35 +89,48 @@ public class TeamDaoImplTest extends AbstractTransactionalTestNGSpringContextTes
     }
 
     @Test
-    public void findByName()
+    public void findTeamByName()
     {
-        Assert.assertNotNull(teamDao.findTeamByName(t1.getName()));
+        Assert.assertNotNull(teamRepository.findTeamByName(t1.getName()));
     }
 
     @Test
-    public void findById()
+    public void getTeamById()
     {
-        Assert.assertNotNull(teamDao.findTeamById(t2.getId()));
+        Assert.assertNotNull(teamRepository.getTeamById(t2.getId()));
     }
 
     @Test
-    public void findByPlayer()
+    public void testGetByNonexistentIdThrows() throws Exception
+    {
+        UUID teamId = UUID.randomUUID();
+        try {
+            teamRepository.getTeamById(teamId);
+            fail("Expected exception");
+
+        } catch (TeamNotFoundException e) {
+            assertEquals(teamId, e.getTeamId());
+        }
+    }
+
+    @Test
+    public void findTeamByPlayer()
     {
         Team tmpTeam = new Team("bla");
-        teamDao.createTeam(tmpTeam);
+        em.persist(tmpTeam);
         em.flush();
 
         TeamPlayer player = new TeamPlayer("John", "Doe", 187, 85, tmpTeam);
         em.persist(player);
         em.flush();
 
-        Assert.assertTrue(teamDao.findTeamByPlayer(player).equals(tmpTeam));
+        Assert.assertTrue(teamRepository.findTeamByPlayer(player).equals(tmpTeam));
     }
 
     @Test
     public void findAll()
     {
-        Collection<Team> teamList = teamDao.findAll();
+        Collection<Team> teamList = teamRepository.findAll();
         assertEquals(teamList.size(), 4);
 
         assertTrue(teamList.stream().filter(t -> t.getName().equals("MAN UTD")).count() == 1);
@@ -125,67 +139,4 @@ public class TeamDaoImplTest extends AbstractTransactionalTestNGSpringContextTes
         assertTrue(teamList.stream().filter(t -> t.getName().equals("RLM")).count() == 1);
     }
 
-    @Test
-    public void create()
-    {
-        Team team = new Team("FC Blazice");
-        teamDao.createTeam(team);
-        em.flush();
-
-        Assert.assertNotNull(em.find(Team.class, team.getId()));
-    }
-
-    @Test
-    public void update()
-    {
-        String oldName = t3.getName();
-        String newName = t3.getName() + "3";
-        t3.changeName(newName);
-        teamDao.updateTeam(t3);
-        em.flush();
-
-        Assert.assertNotNull(teamDao.findTeamByName(newName));
-        Assert.assertNull(teamDao.findTeamByName(oldName));
-    }
-
-    @Test
-    public void delete()
-    {
-        Team tmpTeam = new Team("Banik Ostrava");
-        teamDao.createTeam(tmpTeam);
-        em.flush();
-
-        TeamPlayer player1 = new TeamPlayer("John", "Doe", 187, 85, tmpTeam);
-        em.persist(player1);
-        em.flush();
-
-        TeamPlayer player2 = new TeamPlayer("Ctiziadoslav", "Tetrov", 187, 85, tmpTeam);
-        em.persist(player2);
-        em.flush();
-
-        long time = System.currentTimeMillis();
-        TeamMatch match = new TeamMatch(tmpTeam, t2, new Date(time), new Date(time + 5520000));
-        em.persist(match);
-        em.flush();
-
-        TeamMatchGoal goal = new TeamMatchGoal(player1, player2, match, new Date(time));
-        em.persist(goal);
-        em.flush();
-
-        Assert.assertNotNull(em.find(TeamMatchGoal.class, goal.getId()));
-        Assert.assertNotNull(em.find(TeamMatch.class, match.getId()));
-        Assert.assertNotNull(em.find(Team.class, tmpTeam.getId()));
-        Assert.assertNotNull(em.find(TeamPlayer.class, player1.getId()));
-        Assert.assertNotNull(em.find(TeamPlayer.class, player2.getId()));
-
-        teamDao.deleteTeam(tmpTeam);
-        em.flush();
-        em.clear();
-
-        Assert.assertNull(em.find(TeamMatchGoal.class, goal.getId()));
-        Assert.assertNull(em.find(TeamMatch.class, match.getId()));
-        Assert.assertNull(em.find(Team.class, tmpTeam.getId()));
-        Assert.assertNull(em.find(TeamPlayer.class, player1.getId()));
-        Assert.assertNull(em.find(TeamPlayer.class, player2.getId()));
-    }
 }
