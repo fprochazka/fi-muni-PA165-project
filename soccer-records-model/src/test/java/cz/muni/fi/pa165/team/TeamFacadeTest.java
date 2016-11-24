@@ -100,5 +100,4 @@ public class TeamFacadeTest extends AbstractTransactionalTestNGSpringContextTest
         Assert.assertNull(em.find(TeamPlayer.class, player2.getId()));
     }
 
-
 }
