@@ -6,6 +6,8 @@
 
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
 
+    <bean class="cz.muni.fi.pa165.team.TeamPlayerFacade" autowire="constructor"/>
+    <bean class="cz.muni.fi.pa165.team.TeamPlayerService" autowire="constructor"/>
     <bean class="cz.muni.fi.pa165.team.TeamFacade" autowire="constructor"/>
     <bean class="cz.muni.fi.pa165.team.TeamService" autowire="constructor"/>
     <bean class="cz.muni.fi.pa165.user.UserFacade" autowire="constructor"/>
