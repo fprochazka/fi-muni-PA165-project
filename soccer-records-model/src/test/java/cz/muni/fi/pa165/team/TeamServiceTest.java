@@ -11,7 +11,7 @@ public class TeamServiceTest
 {
 
     @Test
-    public void testCreateTest() throws Exception
+    public void testCreateTeam() throws Exception
     {
         TeamService teamService = new TeamService();
 
