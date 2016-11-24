@@ -11,7 +11,7 @@ public class TeamServiceTest
 {
 
     @Test
-    public void testCreateUser() throws Exception
+    public void testCreateTest() throws Exception
     {
         TeamService teamService = new TeamService();
 
@@ -20,7 +20,7 @@ public class TeamServiceTest
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testCreateUserWithNullNameThrows() throws Exception
+    public void testCreateTeamWithNullNameThrows() throws Exception
     {
         TeamService teamService = new TeamService();
         teamService.createTeam(null, null);
