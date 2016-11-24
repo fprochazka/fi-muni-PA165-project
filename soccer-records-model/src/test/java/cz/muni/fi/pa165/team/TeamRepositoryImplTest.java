@@ -77,10 +77,10 @@ public class TeamRepositoryImplTest extends AbstractTransactionalTestNGSpringCon
         em.persist(p42);
         em.flush();
 
-        g1 = new TeamMatchGoal(p1, p12, m1, new Date(time));
-        g2 = new TeamMatchGoal(p2, p22, m2, new Date(time));
-        g3 = new TeamMatchGoal(p3, p32, m3, new Date(time));
-        g4 = new TeamMatchGoal(p4, p42, m4, new Date(time));
+        g1 = new TeamMatchGoal(p1, p12, m1, new Date(time + 2520000));
+        g2 = new TeamMatchGoal(p2, p22, m2, new Date(time + 2520000));
+        g3 = new TeamMatchGoal(p3, p32, m3, new Date(time + 2520000));
+        g4 = new TeamMatchGoal(p4, p42, m4, new Date(time + 2520000));
         em.persist(g1);
         em.persist(g2);
         em.persist(g3);

@@ -4,7 +4,6 @@ import cz.muni.fi.pa165.team.exceptions.MatchNotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
-
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import java.util.Collection;
@@ -132,7 +131,7 @@ public class TeamMatchRepositoryImpl implements TeamMatchRepository
         TeamMatch conflictingMatch;
         try {
             conflictingMatch = em.createQuery("SELECT m FROM TeamMatch m WHERE m.startTime = :startTime AND " +
-                "(m.homeTeam.id = :teamId OR m.awayTeam = :teamId)", TeamMatch.class)
+                "(m.homeTeam.id = :teamId OR m.awayTeam.id = :teamId)", TeamMatch.class)
                 .setParameter("startTime", startTime)
                 .setParameter("teamId", teamId)
                 .getSingleResult();

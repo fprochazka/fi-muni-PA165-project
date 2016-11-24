@@ -26,20 +26,14 @@ public class TeamMatchServiceTest
     {
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
         Date startTime2 = new Date(time + 50000);
-        Date endTime1 = new Date(time + 5500000);
         Date endTime2 = new Date(time + 5550000);
         Team team1 = new Team("Team1");
-        Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
-        TeamMatch match1 = new TeamMatch(team1, team2, startTime1, endTime1);
-        List<TeamMatch> allMatchesOfHomeTeam = Arrays.asList(match1);
-        List<TeamMatch> allMatchesOfAwayTeam = new ArrayList<>();
 
         TeamMatch newMatch = teamMatchService.createMatch(
-            allMatchesOfHomeTeam,
-            allMatchesOfAwayTeam,
+            null,
+            null,
             team1,
             team3,
             startTime2,
@@ -58,19 +52,13 @@ public class TeamMatchServiceTest
     {
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
         Date startTime2 = new Date(time + 50000);
-        Date endTime1 = new Date(time + 5500000);
         Date endTime2 = new Date(time + 5550000);
         Team team1 = new Team("Team1");
-        Team team2 = new Team("Team2");
-        TeamMatch match1 = new TeamMatch(team1, team2, startTime1, endTime1);
-        List<TeamMatch> allMatchesOfHomeTeam = Arrays.asList(match1);
-        List<TeamMatch> allMatchesOfAwayTeam = new ArrayList<>();
 
         TeamMatch newMatch = teamMatchService.createMatch(
-            allMatchesOfHomeTeam,
-            allMatchesOfAwayTeam,
+            null,
+            null,
             team1,
             null,
             startTime2,
@@ -94,8 +82,8 @@ public class TeamMatchServiceTest
         List<TeamMatch> allMatchesOfAwayTeam = Arrays.asList(match1);
 
         TeamMatch newMatch = teamMatchService.createMatch(
-            allMatchesOfHomeTeam,
-            allMatchesOfAwayTeam,
+            null,
+            null,
             team1,
             team1,
             startTime2,
@@ -119,8 +107,8 @@ public class TeamMatchServiceTest
         List<TeamMatch> allMatchesOfAwayTeam = new ArrayList<>();
 
         TeamMatch newMatch = teamMatchService.createMatch(
-            allMatchesOfHomeTeam,
-            allMatchesOfAwayTeam,
+            null,
+            null,
             team1,
             team3,
             null,
@@ -144,8 +132,8 @@ public class TeamMatchServiceTest
         List<TeamMatch> allMatchesOfAwayTeam = new ArrayList<>();
 
         TeamMatch newMatch = teamMatchService.createMatch(
-            allMatchesOfHomeTeam,
-            allMatchesOfAwayTeam,
+            null,
+            null,
             team1,
             team3,
             startTime2,
@@ -176,8 +164,8 @@ public class TeamMatchServiceTest
         List<TeamMatch> allMatchesOfAwayTeam = new ArrayList<>();
 
         TeamMatch newMatch = teamMatchService.createMatch(
-            allMatchesOfHomeTeam,
-            allMatchesOfAwayTeam,
+            null,
+            null,
             team1,
             team3,
             startTime2,
@@ -202,8 +190,8 @@ public class TeamMatchServiceTest
         List<TeamMatch> allMatchesOfAwayTeam = new ArrayList<>();
 
         TeamMatch newMatch = teamMatchService.createMatch(
-            allMatchesOfHomeTeam,
-            allMatchesOfAwayTeam,
+            null,
+            null,
             team1,
             team3,
             startTime2,
@@ -222,13 +210,11 @@ public class TeamMatchServiceTest
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
         TeamMatch match1 = new TeamMatch(team1, team2, startTime1);
-        List<TeamMatch> allMatchesOfHomeTeam = Arrays.asList(match1);
-        List<TeamMatch> allMatchesOfAwayTeam = new ArrayList<>();
 
         try {
             TeamMatch newMatch = teamMatchService.createMatch(
-                allMatchesOfHomeTeam,
-                allMatchesOfAwayTeam,
+                match1,
+                null,
                 team1,
                 team3,
                 startTime2,
@@ -252,13 +238,11 @@ public class TeamMatchServiceTest
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
         TeamMatch match1 = new TeamMatch(team1, team2, startTime1);
-        List<TeamMatch> allMatchesOfHomeTeam = new ArrayList<>();
-        List<TeamMatch> allMatchesOfAwayTeam = Arrays.asList(match1);
 
         try {
-            TeamMatch newMatch = teamMatchService.createMatch(
-                allMatchesOfHomeTeam,
-                allMatchesOfAwayTeam,
+            teamMatchService.createMatch(
+                null,
+                match1,
                 team3,
                 team2,
                 startTime2,
@@ -289,8 +273,8 @@ public class TeamMatchServiceTest
         List<TeamMatch> allMatchesOfAwayTeam = new ArrayList<>();
 
         TeamMatch newMatch = teamMatchService.createMatch(
-            allMatchesOfHomeTeam,
-            allMatchesOfAwayTeam,
+            null,
+            null,
             team3,
             team4,
             startTime2,
@@ -322,7 +306,8 @@ public class TeamMatchServiceTest
         List<TeamMatch> sameStartTimeMatches = Arrays.asList(match1);
 
         teamMatchService.changeMatchTime(
-            sameStartTimeMatches,
+            null,
+            null,
             match2,
             startTime2,
             endTime2
@@ -345,7 +330,8 @@ public class TeamMatchServiceTest
         List<TeamMatch> sameStartTimeMatches = new ArrayList<>();
 
         teamMatchService.changeMatchTime(
-            sameStartTimeMatches,
+            null,
+            null,
             match2,
             null,
             endTime2
@@ -369,7 +355,8 @@ public class TeamMatchServiceTest
         List<TeamMatch> sameStartTimeMatches = Arrays.asList(match1);
 
         teamMatchService.changeMatchTime(
-            sameStartTimeMatches,
+            null,
+            null,
             match2,
             startTime2,
             null
@@ -397,7 +384,8 @@ public class TeamMatchServiceTest
         List<TeamMatch> sameStartTimeMatches = Arrays.asList(match1);
 
         teamMatchService.changeMatchTime(
-            sameStartTimeMatches,
+            null,
+            null,
             match2,
             startTime2,
             endTime2
@@ -422,7 +410,8 @@ public class TeamMatchServiceTest
         List<TeamMatch> sameStartTimeMatches = Arrays.asList(match1);
 
         teamMatchService.changeMatchTime(
-            sameStartTimeMatches,
+            null,
+            null,
             match2,
             startTime2,
             endTime2
@@ -443,11 +432,11 @@ public class TeamMatchServiceTest
         Team team3 = new Team("Team3");
         TeamMatch match1 = new TeamMatch(team1, team2, startTime2, endTime1);
         TeamMatch match2 = new TeamMatch(team1, team3, startTime1);
-        List<TeamMatch> sameStartTimeMatches = Arrays.asList(match1);
 
         try {
             teamMatchService.changeMatchTime(
-                sameStartTimeMatches,
+                match1,
+                null,
                 match2,
                 startTime2,
                 endTime2
@@ -475,11 +464,11 @@ public class TeamMatchServiceTest
         Team team3 = new Team("Team3");
         TeamMatch match1 = new TeamMatch(team1, team2, startTime2, endTime1);
         TeamMatch match2 = new TeamMatch(team2, team3, startTime1);
-        List<TeamMatch> sameStartTimeMatches = Arrays.asList(match1);
 
         try {
             teamMatchService.changeMatchTime(
-                sameStartTimeMatches,
+                match1,
+                null,
                 match2,
                 startTime2,
                 endTime2
@@ -507,11 +496,11 @@ public class TeamMatchServiceTest
         Team team3 = new Team("Team3");
         TeamMatch match1 = new TeamMatch(team1, team2, startTime2, endTime1);
         TeamMatch match2 = new TeamMatch(team3, team1, startTime1);
-        List<TeamMatch> sameStartTimeMatches = Arrays.asList(match1);
 
         try {
             teamMatchService.changeMatchTime(
-                sameStartTimeMatches,
+                null,
+                match1,
                 match2,
                 startTime2,
                 endTime2
@@ -539,11 +528,11 @@ public class TeamMatchServiceTest
         Team team3 = new Team("Team3");
         TeamMatch match1 = new TeamMatch(team1, team2, startTime2, endTime1);
         TeamMatch match2 = new TeamMatch(team3, team2, startTime1);
-        List<TeamMatch> sameStartTimeMatches = Arrays.asList(match1);
 
         try {
             teamMatchService.changeMatchTime(
-                sameStartTimeMatches,
+                match1,
+                null,
                 match2,
                 startTime2,
                 endTime2
@@ -553,7 +542,7 @@ public class TeamMatchServiceTest
             assertEquals(match2.getId(), ex.getMatchPlannedToBeChangedId());
             assertEquals(match1.getId(), ex.getCollidingMatchId());
             assertEquals(startTime2, ex.getStartTime());
-            assertEquals(team2.getId(), ex.getTeamId());
+            assertEquals(team3.getId(), ex.getTeamId());
         }
     }
 
@@ -571,7 +560,8 @@ public class TeamMatchServiceTest
         List<TeamMatch> sameStartTimeMatches = new ArrayList<>();
 
         teamMatchService.changeMatchTime(
-            sameStartTimeMatches,
+            null,
+            null,
             null,
             startTime1,
             endTime2
@@ -694,11 +684,11 @@ public class TeamMatchServiceTest
         List<TeamMatchGoal> goalsInActualMatch = Arrays.asList(goal1);
 
         TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
-            goalsInActualMatch,
             scorer2,
             assistant2,
             match,
-            goalMatchTime2
+            goalMatchTime2,
+            null
         );
 
         assertNotNull(newGoal);
@@ -726,11 +716,11 @@ public class TeamMatchServiceTest
         List<TeamMatchGoal> goalsInActualMatch = Arrays.asList(goal1);
 
         TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
-            goalsInActualMatch,
             null,
             assistant2,
             match,
-            goalMatchTime2
+            goalMatchTime2,
+            null
         );
     }
 
@@ -752,11 +742,11 @@ public class TeamMatchServiceTest
         List<TeamMatchGoal> goalsInActualMatch = Arrays.asList(goal1);
 
         TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
-            goalsInActualMatch,
             scorer2,
             null,
             match,
-            goalMatchTime2
+            goalMatchTime2,
+            null
         );
     }
 
@@ -778,11 +768,11 @@ public class TeamMatchServiceTest
         List<TeamMatchGoal> goalsInActualMatch = Arrays.asList(goal1);
 
         TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
-            goalsInActualMatch,
             scorer2,
             scorer2,
             match,
-            goalMatchTime2
+            goalMatchTime2,
+            null
         );
     }
 
@@ -804,10 +794,10 @@ public class TeamMatchServiceTest
         List<TeamMatchGoal> goalsInActualMatch = Arrays.asList(goal1);
 
         TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
-            goalsInActualMatch,
             scorer2,
             assistant2,
             match,
+            null,
             null
         );
     }
@@ -831,11 +821,11 @@ public class TeamMatchServiceTest
         List<TeamMatchGoal> goalsInActualMatch = Arrays.asList(goal1);
 
         TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
-            goalsInActualMatch,
             scorer2,
             assistant2,
             match,
-            goalMatchTime2
+            goalMatchTime2,
+            null
         );
     }
 
@@ -858,11 +848,11 @@ public class TeamMatchServiceTest
         List<TeamMatchGoal> goalsInActualMatch = Arrays.asList(goal1);
 
         TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
-            goalsInActualMatch,
             scorer2,
             assistant2,
             match,
-            goalMatchTime2
+            goalMatchTime2,
+            null
         );
     }
 
@@ -885,11 +875,11 @@ public class TeamMatchServiceTest
         List<TeamMatchGoal> goalsInActualMatch = Arrays.asList(goal1);
 
         TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
-            goalsInActualMatch,
             scorer2,
             assistant2,
             match,
-            goalMatchTime2
+            goalMatchTime2,
+            null
         );
     }
 
@@ -912,11 +902,11 @@ public class TeamMatchServiceTest
         List<TeamMatchGoal> goalsInActualMatch = Arrays.asList(goal1);
 
         TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
-            goalsInActualMatch,
             scorer2,
             assistant2,
             match,
-            goalMatchTime2
+            goalMatchTime2,
+            null
         );
     }
 
@@ -933,15 +923,14 @@ public class TeamMatchServiceTest
         TeamPlayer scorer1 = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
         TeamPlayer assistant1 = new TeamPlayer("Alex", "Collina", 187, 90, homeTeam);
         TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, goalMatchTime1);
-        List<TeamMatchGoal> goalsInActualMatch = Arrays.asList(goal1);
 
         try {
-            TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
-                goalsInActualMatch,
+            teamMatchService.addNewScoredGoal(
                 scorer1,
                 assistant1,
                 match,
-                goalMatchTime1
+                goalMatchTime1,
+                goal1
             );
             fail("Expected exception GoalWithSameParametersAlreadyExistsException");
         } catch (GoalWithSameParametersAlreadyExistsException ex) {

@@ -6,7 +6,6 @@ import cz.muni.fi.pa165.team.exceptions.MatchWithSameParametersAlreadyExistsExce
 import org.springframework.util.Assert;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author Tomas Smid <smid.thomas@gmail.com>
@@ -40,11 +39,19 @@ public class TeamMatchService
         Assert.notNull(awayTeam, "Match cannot be created with a null away team");
         Assert.isTrue(!homeTeam.equals(awayTeam), "Match cannot be created for home and away teams which are same");
 
-        if (conflictingMatchForHomeTeam != null) {
+        if (
+            conflictingMatchForHomeTeam != null
+            && conflictingMatchForHomeTeam.getStartTime().equals(startTime)
+            && conflictingMatchForHomeTeam.getHomeTeam() == homeTeam
+        ) {
             throw new MatchWithSameParametersAlreadyExistsException(homeTeam.getId(), startTime);
         }
 
-        if (conflictingMatchForAwayTeam != null) {
+        if (
+            conflictingMatchForAwayTeam != null
+            && conflictingMatchForAwayTeam.getStartTime().equals(startTime)
+            && conflictingMatchForAwayTeam.getAwayTeam() == awayTeam
+        ) {
             throw new MatchWithSameParametersAlreadyExistsException(awayTeam.getId(), startTime);
         }
 

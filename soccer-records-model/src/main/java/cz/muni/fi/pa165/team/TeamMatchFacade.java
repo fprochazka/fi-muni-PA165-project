@@ -1,9 +1,7 @@
 package cz.muni.fi.pa165.team;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -54,10 +52,10 @@ public class TeamMatchFacade
     {
         Team homeTeam = teamRepository.getTeamById(homeTeamId);
         Team awayTeam = teamRepository.getTeamById(awayTeamId);
-        TeamMatch conflictingMatchForHomeTeam =
-            teamMatchRepository.findConflictingMatchByTeamAndStartTime(homeTeam.getId(), startTime);
-        TeamMatch conflictingMatchForAwayTeam =
-            teamMatchRepository.findConflictingMatchByTeamAndStartTime(awayTeam.getId(), startTime);
+        TeamMatch conflictingMatchForHomeTeam = teamMatchRepository
+            .findConflictingMatchByTeamAndStartTime(homeTeam.getId(), startTime);
+        TeamMatch conflictingMatchForAwayTeam = teamMatchRepository
+            .findConflictingMatchByTeamAndStartTime(awayTeam.getId(), startTime);
 
         TeamMatch teamMatch = teamMatchService.createMatch(
             conflictingMatchForHomeTeam,
