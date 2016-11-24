@@ -658,4 +658,160 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
 
         Assert.assertTrue(dbMatches.isEmpty());
     }
+
+    @Test
+    public void testFindConflictingMatchByTeamAndStartTimeAsAwayTeam()
+    {
+        long time = System.currentTimeMillis();
+        Team team1 = new Team("Team1");
+        Team team2 = new Team("Team2");
+        Team team3 = new Team("Team3");
+        Team team4 = new Team("Team4");
+        em.persist(team1);
+        em.persist(team2);
+        em.persist(team3);
+        em.persist(team4);
+
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time+15000));
+
+        em.persist(teamMatch1);
+        em.persist(teamMatch2);
+        em.flush();
+
+        TeamMatch conflictingMatch =
+            teamMatchRepository.findConflictingMatchByTeamAndStartTime(team2.getId(), new Date(time));
+
+        Assert.assertNotNull(conflictingMatch);
+        Assert.assertEquals(conflictingMatch.getAwayTeam(), team2);
+        Assert.assertEquals(conflictingMatch.getStartTime(), new Date(time));
+    }
+
+    @Test
+    public void testFindConflictingMatchByTeamAndStartTimeAsHomeTeam()
+    {
+        long time = System.currentTimeMillis();
+        Team team1 = new Team("Team1");
+        Team team2 = new Team("Team2");
+        Team team3 = new Team("Team3");
+        Team team4 = new Team("Team4");
+        em.persist(team1);
+        em.persist(team2);
+        em.persist(team3);
+        em.persist(team4);
+
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time+15000));
+
+        em.persist(teamMatch1);
+        em.persist(teamMatch2);
+        em.flush();
+
+        TeamMatch conflictingMatch =
+            teamMatchRepository.findConflictingMatchByTeamAndStartTime(team3.getId(), new Date(time+15000));
+
+        Assert.assertNotNull(conflictingMatch);
+        Assert.assertEquals(conflictingMatch.getHomeTeam(), team3);
+        Assert.assertEquals(conflictingMatch.getStartTime(), new Date(time+15000));
+    }
+
+    @Test
+    public void testFindConflictingMatchByTeamAndStartTimeNoConflictWithTeam()
+    {
+        long time = System.currentTimeMillis();
+        Team team1 = new Team("Team1");
+        Team team2 = new Team("Team2");
+        Team team3 = new Team("Team3");
+        Team team4 = new Team("Team4");
+        em.persist(team1);
+        em.persist(team2);
+        em.persist(team3);
+        em.persist(team4);
+
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time+15000));
+
+        em.persist(teamMatch1);
+        em.persist(teamMatch2);
+        em.flush();
+
+        TeamMatch conflictingMatch =
+            teamMatchRepository.findConflictingMatchByTeamAndStartTime(new Team("Team5").getId(), new Date(time+15000));
+
+        Assert.assertNull(conflictingMatch);
+    }
+
+    @Test
+    public void testFindConflictingMatchByTeamAndStartTimeNoConflictWithTime()
+    {
+        long time = System.currentTimeMillis();
+        Team team1 = new Team("Team1");
+        Team team2 = new Team("Team2");
+        Team team3 = new Team("Team3");
+        Team team4 = new Team("Team4");
+        em.persist(team1);
+        em.persist(team2);
+        em.persist(team3);
+        em.persist(team4);
+
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time+15000));
+
+        em.persist(teamMatch1);
+        em.persist(teamMatch2);
+        em.flush();
+
+        TeamMatch conflictingMatch =
+            teamMatchRepository.findConflictingMatchByTeamAndStartTime(team4.getId(), new Date(time));
+
+        Assert.assertNull(conflictingMatch);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testFindConflictingMatchByNullTeamAndStartTime()
+    {
+        long time = System.currentTimeMillis();
+        Team team1 = new Team("Team1");
+        Team team2 = new Team("Team2");
+        Team team3 = new Team("Team3");
+        Team team4 = new Team("Team4");
+        em.persist(team1);
+        em.persist(team2);
+        em.persist(team3);
+        em.persist(team4);
+
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time+15000));
+
+        em.persist(teamMatch1);
+        em.persist(teamMatch2);
+        em.flush();
+
+        TeamMatch conflictingMatch =
+            teamMatchRepository.findConflictingMatchByTeamAndStartTime(null, new Date(time));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testFindConflictingMatchByTeamAndNullStartTime()
+    {
+        long time = System.currentTimeMillis();
+        Team team1 = new Team("Team1");
+        Team team2 = new Team("Team2");
+        Team team3 = new Team("Team3");
+        Team team4 = new Team("Team4");
+        em.persist(team1);
+        em.persist(team2);
+        em.persist(team3);
+        em.persist(team4);
+
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time+15000));
+
+        em.persist(teamMatch1);
+        em.persist(teamMatch2);
+        em.flush();
+
+        TeamMatch conflictingMatch =
+            teamMatchRepository.findConflictingMatchByTeamAndStartTime(team1.getId(), null);
+    }
 }

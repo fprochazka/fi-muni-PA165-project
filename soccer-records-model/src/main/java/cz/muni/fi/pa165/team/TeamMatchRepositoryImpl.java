@@ -122,4 +122,24 @@ public class TeamMatchRepositoryImpl implements TeamMatchRepository
             .setParameter("teamId", teamId)
             .getResultList();
     }
+
+    @Override
+    public TeamMatch findConflictingMatchByTeamAndStartTime(final UUID teamId, final Date startTime)
+    {
+        Assert.notNull(teamId, "Cannot search for conflicting match with a null team");
+        Assert.notNull(startTime, "Cannot search for conflicting match with a null match start time");
+
+        TeamMatch conflictingMatch;
+        try{
+            conflictingMatch = em.createQuery("SELECT m FROM TeamMatch m WHERE m.startTime = :startTime AND " +
+                "(m.homeTeam.id = :teamId OR m.awayTeam = :teamId)", TeamMatch.class)
+                .setParameter("startTime", startTime)
+                .setParameter("teamId", teamId)
+                .getSingleResult();
+        }catch(NoResultException ex){
+            return null;
+        }
+
+        return conflictingMatch;
+    }
 }

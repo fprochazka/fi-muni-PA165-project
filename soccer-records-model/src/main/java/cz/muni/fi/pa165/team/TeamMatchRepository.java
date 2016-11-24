@@ -99,4 +99,14 @@ public interface TeamMatchRepository
      * @return all matches with the given team
      */
     Collection<TeamMatch> findAllMatchesOfTeam(final UUID teamId);
+
+    /**
+     * Retrieves match which conflicts with another match, because of the same match
+     * start time and a same team.
+     *
+     * @param teamId id of a team which appears in both conflicting matches
+     * @param startTime start time of both conflicting matches
+     * @return found conflicting match if exists, null otherwise
+     */
+    TeamMatch findConflictingMatchByTeamAndStartTime(final UUID teamId, final Date startTime);
 }
