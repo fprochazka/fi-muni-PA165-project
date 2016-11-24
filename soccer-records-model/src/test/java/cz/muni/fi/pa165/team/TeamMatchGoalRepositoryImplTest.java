@@ -80,7 +80,7 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         TeamMatchGoal dbGoal = teamMatchGoalRepository.getGoalById(null);
     }
 
-    @Test(expectedExceptions = GoalNotFoundException.class)
+    @Test
     public void testFindGoalByNonexistentId()
     {
         long time = System.currentTimeMillis();
@@ -104,7 +104,11 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         UUID badId = UUID.randomUUID();
         Assert.assertNotEquals(badId, goal.getId());
 
-        TeamMatchGoal dbGoal = teamMatchGoalRepository.getGoalById(badId);
+        try{
+            TeamMatchGoal dbGoal = teamMatchGoalRepository.getGoalById(badId);
+        }catch (GoalNotFoundException ex){
+            Assert.assertEquals(badId, ex.getGoalId());
+        }
     }
 
     @Test
