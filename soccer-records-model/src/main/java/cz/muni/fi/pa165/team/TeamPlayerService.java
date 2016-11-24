@@ -1,12 +1,8 @@
 package cz.muni.fi.pa165.team;
 
-import org.springframework.stereotype.Service;
-
 /**
  * @author Libor Mühlpachr <libor.muhl@seznam.cz>
  */
-
-@Service
 public class TeamPlayerService
 {
 
@@ -22,7 +18,7 @@ public class TeamPlayerService
      */
     public TeamPlayer createTeamPlayer(String firstname, String surname, int height, int weight, Team team)
     {
-        return new TeamPlayer(firstname, surname, weight, height, team);
+        return new TeamPlayer(firstname, surname, height, weight, team);
     }
 
     /**

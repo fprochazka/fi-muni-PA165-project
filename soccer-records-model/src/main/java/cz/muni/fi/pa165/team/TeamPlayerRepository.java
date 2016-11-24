@@ -8,7 +8,6 @@ import java.util.UUID;
  *
  * @author Libor Mühlpachr <libor.muhl@seznam.cz>
  */
-
 public interface TeamPlayerRepository
 {
 

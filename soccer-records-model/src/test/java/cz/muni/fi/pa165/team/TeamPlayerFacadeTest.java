@@ -1,6 +1,8 @@
 package cz.muni.fi.pa165.team;
 
+import cz.muni.fi.pa165.config.ApplicationConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
@@ -12,13 +14,18 @@ import static org.testng.Assert.*;
 /**
  * @author Libor Mühlpachr <libor.muhl@seznam.cz>
  */
+@ContextConfiguration(classes=ApplicationConfig.class)
 public class TeamPlayerFacadeTest extends AbstractTransactionalTestNGSpringContextTests
 {
 
+    @Autowired
     public TeamPlayerFacade teamPlayerFacade;
 
     @Autowired
     public TeamPlayerService teamPlayerService;
+
+    @Autowired
+    public TeamService teamService;
 
     @PersistenceContext
     public EntityManager em;
@@ -26,8 +33,8 @@ public class TeamPlayerFacadeTest extends AbstractTransactionalTestNGSpringConte
     @Test
     public void testCreateTeamPlayer() throws Exception
     {
-        TeamService teamService = new TeamService();
         Team team = teamService.createTeam("Liverpool", null);
+        em.persist(team);
 
         TeamPlayer teamPlayer = teamPlayerFacade.createTeamPlayer("Filip", "Procházka", 185, 80, team);
         em.clear();
@@ -38,36 +45,36 @@ public class TeamPlayerFacadeTest extends AbstractTransactionalTestNGSpringConte
         assertEquals(foundPlayer.getFirstname(), "Filip");
         assertEquals(foundPlayer.getSurname(), "Procházka");
         assertEquals(foundPlayer.getHeight(), 185);
-        assertEquals(foundPlayer.getWeight(), 90);
-        assertEquals(foundPlayer.getTeam(), team);
+        assertEquals(foundPlayer.getWeight(), 80);
+        assertEquals(foundPlayer.getTeam().getId(), team.getId()); // em.clear => different ref
     }
 
     @Test
     public void testDeleteTeamPlayer() throws Exception
     {
-        TeamService teamService = new TeamService();
         Team team = teamService.createTeam("Liverpool", null);
+        em.persist(team);
 
-        TeamPlayer teamPlayer = teamPlayerFacade.createTeamPlayer("Filip", "Procházka", 185, 80, team);
+        TeamPlayer teamPlayer = teamPlayerService.createTeamPlayer("Filip", "Procházka", 185, 80, team);
+        em.persist(teamPlayer);
+        em.flush();
+        em.clear();
+
+        teamPlayerFacade.deleteTeamPlayer(teamPlayer.getId());
         em.clear();
 
         TeamPlayer dbPlayer = em.find(TeamPlayer.class, teamPlayer.getId());
-        assertNotNull(dbPlayer);
-
-        teamPlayerFacade.deleteTeamPlayer(teamPlayer.getId());
-        dbPlayer = em.find(TeamPlayer.class, teamPlayer.getId());
-
         assertNull(dbPlayer);
     }
 
     @Test
     public void testChangeTeamPlayerFirstname() throws Exception
     {
-        TeamService teamService = new TeamService();
         Team team = teamService.createTeam("Liverpool", null);
+        em.persist(team);
 
         TeamPlayer teamPlayer = teamPlayerService.createTeamPlayer("Filip", "Procházka", 185, 80, team);
-        em.persist(team);
+        em.persist(teamPlayer);
         em.flush();
         em.clear();
 
@@ -81,11 +88,11 @@ public class TeamPlayerFacadeTest extends AbstractTransactionalTestNGSpringConte
     @Test
     public void testChangeTeamPlayerSurname() throws Exception
     {
-        TeamService teamService = new TeamService();
         Team team = teamService.createTeam("Liverpool", null);
+        em.persist(team);
 
         TeamPlayer teamPlayer = teamPlayerService.createTeamPlayer("Filip", "Procházka", 185, 80, team);
-        em.persist(team);
+        em.persist(teamPlayer);
         em.flush();
         em.clear();
 
@@ -99,11 +106,11 @@ public class TeamPlayerFacadeTest extends AbstractTransactionalTestNGSpringConte
     @Test
     public void testChangeTeamPlayerHeight() throws Exception
     {
-        TeamService teamService = new TeamService();
         Team team = teamService.createTeam("Liverpool", null);
+        em.persist(team);
 
         TeamPlayer teamPlayer = teamPlayerService.createTeamPlayer("Filip", "Procházka", 185, 80, team);
-        em.persist(team);
+        em.persist(teamPlayer);
         em.flush();
         em.clear();
 
@@ -117,11 +124,11 @@ public class TeamPlayerFacadeTest extends AbstractTransactionalTestNGSpringConte
     @Test
     public void testChangeTeamPlayerWeight() throws Exception
     {
-        TeamService teamService = new TeamService();
         Team team = teamService.createTeam("Liverpool", null);
+        em.persist(team);
 
         TeamPlayer teamPlayer = teamPlayerService.createTeamPlayer("Filip", "Procházka", 185, 80, team);
-        em.persist(team);
+        em.persist(teamPlayer);
         em.flush();
         em.clear();
 

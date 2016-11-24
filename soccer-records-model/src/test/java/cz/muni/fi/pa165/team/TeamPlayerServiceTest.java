@@ -81,7 +81,7 @@ public class TeamPlayerServiceTest
         TeamPlayer newTeamPlayer = teamPlayerService.createTeamPlayer("Filip", "Procházka", 185, 80, null);
     }
 
-    @Test
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testCreateTeamPlayerWithNegativeHeight() throws Exception
     {
         TeamPlayerService teamPlayerService = new TeamPlayerService();
@@ -89,13 +89,10 @@ public class TeamPlayerServiceTest
         TeamService teamService = new TeamService();
         Team team = teamService.createTeam("Liverpool", null);
 
-        TeamPlayer newTeamPlayer = teamPlayerService.createTeamPlayer("Filip", "Procházka", -185, 80, team);
-
-        assertNotNull(newTeamPlayer);
-        assertTrue(newTeamPlayer.getHeight() < 0);
+        teamPlayerService.createTeamPlayer("Filip", "Procházka", -185, 80, team);
     }
 
-    @Test
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testCreateTeamPlayerWithNegativeWeight() throws Exception
     {
         TeamPlayerService teamPlayerService = new TeamPlayerService();
@@ -103,9 +100,6 @@ public class TeamPlayerServiceTest
         TeamService teamService = new TeamService();
         Team team = teamService.createTeam("Liverpool", null);
 
-        TeamPlayer newTeamPlayer = teamPlayerService.createTeamPlayer("Filip", "Procházka", 185, -80, team);
-
-        assertNotNull(newTeamPlayer);
-        assertTrue(newTeamPlayer.getWeight() < 0);
+        teamPlayerService.createTeamPlayer("Filip", "Procházka", 185, -80, team);
     }
 }

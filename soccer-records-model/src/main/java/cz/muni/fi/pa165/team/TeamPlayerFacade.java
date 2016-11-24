@@ -62,7 +62,7 @@ public class TeamPlayerFacade
         TeamPlayer teamPlayer = teamPlayerRepository.getTeamPlayerById(teamPlayerId);
 
         entityManager
-            .createQuery("DELETE FROM TeamMatchGoal tmg WHERE tmg.scorer = :tpid OR tmg.assistant = :tpid")
+            .createQuery("DELETE FROM TeamMatchGoal tmg WHERE tmg.scorer.id = :tpid OR tmg.assistant.id = :tpid")
             .setParameter("tpid", teamPlayer.getId())
             .executeUpdate();
 
