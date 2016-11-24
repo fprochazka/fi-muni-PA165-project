@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.team;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -25,22 +26,22 @@ interface TeamMatchGoalRepository
      * Retrieves the goal from the database according to
      * the given scorer.
      *
-     * @param playerId scorer whose goals should be retrieved from database
+     * @param scorerId scorer whose goals should be retrieved from database
      * @return collection of the goals which was scored by the scorer,
      * collection is empty if such goal does not exist
      */
-    Collection<TeamMatchGoal> findGoalByScorer(final UUID playerId);
+    Collection<TeamMatchGoal> findGoalByScorer(final UUID scorerId);
 
     /**
      * Retrieves the goal from the database according to
      * the given assistant.
      *
-     * @param playerId assistant of the found goal
+     * @param assistantId assistant of the found goal
      * @return collection of the goals associated with given assistant
      * as assistant of the goal, collection is empty if there is no such
      * goal
      */
-    Collection<TeamMatchGoal> findGoalByAssistant(final UUID playerId);
+    Collection<TeamMatchGoal> findGoalByAssistant(final UUID assistantId);
 
     /**
      * Retrieves the goal scored in the given match.
@@ -57,4 +58,15 @@ interface TeamMatchGoalRepository
      * @return collection of all stored goals in database
      */
     Collection<TeamMatchGoal> findAllGoals();
+
+    /**
+     * Search if there exists a goal which has the same paramaters as the given.
+     *
+     * @param matchId id of the match in which we want search same goal
+     * @param scorerId id of the scorer of goal
+     * @param assistantId id of the assistant of goal
+     * @param matchTime time of the match in which goal is scored
+     * @return found conflicting goal, null otherwise
+     */
+    TeamMatchGoal findConflictingGoal(final UUID matchId, final UUID scorerId, final UUID assistantId, final Date matchTime);
 }

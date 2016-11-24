@@ -7,6 +7,7 @@ import org.springframework.util.Assert;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -40,22 +41,22 @@ public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
     }
 
     @Override
-    public Collection<TeamMatchGoal> findGoalByScorer(final UUID playerId)
+    public Collection<TeamMatchGoal> findGoalByScorer(final UUID scorerId)
     {
-        Assert.notNull(playerId, "Cannot search for null scorer");
+        Assert.notNull(scorerId, "Cannot search for null scorer");
 
         return em.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.scorer.id = :scorerid", TeamMatchGoal.class)
-            .setParameter("scorerid", playerId)
+            .setParameter("scorerid", scorerId)
             .getResultList();
     }
 
     @Override
-    public Collection<TeamMatchGoal> findGoalByAssistant(final UUID playerId)
+    public Collection<TeamMatchGoal> findGoalByAssistant(final UUID assistantId)
     {
-        Assert.notNull(playerId, "Cannot search for null assistant");
+        Assert.notNull(assistantId, "Cannot search for null assistant");
 
         return em.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.assistant.id = :assistantid", TeamMatchGoal.class)
-            .setParameter("assistantid", playerId)
+            .setParameter("assistantid", assistantId)
             .getResultList();
     }
 
@@ -73,5 +74,28 @@ public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
     public Collection<TeamMatchGoal> findAllGoals()
     {
         return em.createQuery("SELECT g FROM TeamMatchGoal g", TeamMatchGoal.class).getResultList();
+    }
+
+    @Override
+    public TeamMatchGoal findConflictingGoal(final UUID matchId, final UUID scorerId, final UUID assistantId, final Date matchTime){
+        Assert.notNull(matchId, "Cannot search goal for a null match");
+        Assert.notNull(scorerId, "Cannot search goal for a null scorer");
+        Assert.notNull(assistantId, "Cannot search goal for a null assistant");
+        Assert.notNull(matchTime, "Cannot search goal for a null goal match time");
+
+        TeamMatchGoal conflictingGoal;
+        try{
+            conflictingGoal = em.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.match.id = :matchId AND " +
+                "g.scorer.id = :scorerId AND g.assistant.id = :assistantId AND g.matchTime = :matchTime", TeamMatchGoal.class)
+                .setParameter("matchId",matchId)
+                .setParameter("scorerId", scorerId)
+                .setParameter("assistantId", assistantId)
+                .setParameter("matchTime", matchTime)
+                .getSingleResult();
+        }catch(NoResultException ex){
+            return null;
+        }
+
+        return conflictingGoal;
     }
 }

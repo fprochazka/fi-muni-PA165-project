@@ -348,7 +348,7 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
 
         TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, new Date(time));
         TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, new Date(time + 15000));
-        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match2, new Date(time + 25000));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match2, new Date(time + 26000));
 
         em.persist(goal1);
         em.persist(goal2);
@@ -483,5 +483,297 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         Assert.assertTrue(dbGoals.contains(goal1));
         Assert.assertTrue(dbGoals.contains(goal2));
         Assert.assertTrue(dbGoals.contains(goal3));
+    }
+
+    @Test
+    public void testFindConflictingGoal()
+    {
+        long time = System.currentTimeMillis();
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer1 = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant1 = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Alex", "Franck", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Rob", "McRub", 179, 74, homeTeam);
+        em.persist(scorer1);
+        em.persist(assistant1);
+        em.persist(scorer2);
+        em.persist(assistant2);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time-10000));
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, new Date(time));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, new Date(time+12000));
+        em.persist(goal1);
+        em.persist(goal2);
+        em.flush();
+
+        TeamMatchGoal conflictingGoal = teamMatchGoalRepository.findConflictingGoal(
+            match.getId(),
+            scorer1.getId(),
+            assistant1.getId(),
+            new Date(time)
+        );
+
+        Assert.assertNotNull(conflictingGoal);
+        Assert.assertEquals(conflictingGoal.getScorer(), goal1.getScorer());
+        Assert.assertEquals(conflictingGoal.getAssistant(), goal1.getAssistant());
+        Assert.assertEquals(conflictingGoal.getMatch(), goal1.getMatch());
+        Assert.assertEquals(conflictingGoal.getMatchTime(), goal1.getMatchTime());
+    }
+
+    @Test
+    public void testFindConflictingGoalNotSameScorer()
+    {
+        long time = System.currentTimeMillis();
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer1 = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant1 = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Alex", "Franck", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Rob", "McRub", 179, 74, homeTeam);
+        em.persist(scorer1);
+        em.persist(assistant1);
+        em.persist(scorer2);
+        em.persist(assistant2);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time-10000));
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, new Date(time));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, new Date(time+12000));
+        em.persist(goal1);
+        em.persist(goal2);
+        em.flush();
+
+        TeamMatchGoal conflictingGoal = teamMatchGoalRepository.findConflictingGoal(
+            match.getId(),
+            scorer2.getId(),
+            assistant1.getId(),
+            new Date(time)
+        );
+
+        Assert.assertNull(conflictingGoal);
+    }
+
+    @Test
+    public void testFindConflictingGoalNotSameAssistant()
+    {
+        long time = System.currentTimeMillis();
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer1 = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant1 = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Alex", "Franck", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Rob", "McRub", 179, 74, homeTeam);
+        em.persist(scorer1);
+        em.persist(assistant1);
+        em.persist(scorer2);
+        em.persist(assistant2);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time-10000));
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, new Date(time));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, new Date(time+12000));
+        em.persist(goal1);
+        em.persist(goal2);
+        em.flush();
+
+        TeamMatchGoal conflictingGoal = teamMatchGoalRepository.findConflictingGoal(
+            match.getId(),
+            scorer1.getId(),
+            assistant2.getId(),
+            new Date(time)
+        );
+
+        Assert.assertNull(conflictingGoal);
+    }
+
+    @Test
+    public void testFindConflictingGoalNotSameMatchTime()
+    {
+        long time = System.currentTimeMillis();
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer1 = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant1 = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Alex", "Franck", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Rob", "McRub", 179, 74, homeTeam);
+        em.persist(scorer1);
+        em.persist(assistant1);
+        em.persist(scorer2);
+        em.persist(assistant2);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time-10000));
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, new Date(time));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, new Date(time+12000));
+        em.persist(goal1);
+        em.persist(goal2);
+        em.flush();
+
+        TeamMatchGoal conflictingGoal = teamMatchGoalRepository.findConflictingGoal(
+            match.getId(),
+            scorer1.getId(),
+            assistant1.getId(),
+            new Date(time+12000)
+        );
+
+        Assert.assertNull(conflictingGoal);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testFindConflictingGoalWithNullMatch()
+    {
+        long time = System.currentTimeMillis();
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer1 = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant1 = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Alex", "Franck", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Rob", "McRub", 179, 74, homeTeam);
+        em.persist(scorer1);
+        em.persist(assistant1);
+        em.persist(scorer2);
+        em.persist(assistant2);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time-10000));
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, new Date(time));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, new Date(time+12000));
+        em.persist(goal1);
+        em.persist(goal2);
+        em.flush();
+
+        TeamMatchGoal conflictingGoal = teamMatchGoalRepository.findConflictingGoal(
+            null,
+            scorer1.getId(),
+            assistant1.getId(),
+            new Date(time)
+        );
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testFindConflictingGoalWithNullScorer()
+    {
+        long time = System.currentTimeMillis();
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer1 = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant1 = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Alex", "Franck", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Rob", "McRub", 179, 74, homeTeam);
+        em.persist(scorer1);
+        em.persist(assistant1);
+        em.persist(scorer2);
+        em.persist(assistant2);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time-10000));
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, new Date(time));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, new Date(time+12000));
+        em.persist(goal1);
+        em.persist(goal2);
+        em.flush();
+
+        TeamMatchGoal conflictingGoal = teamMatchGoalRepository.findConflictingGoal(
+            match.getId(),
+            null,
+            assistant1.getId(),
+            new Date(time)
+        );
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testFindConflictingGoalWithNullAssistant()
+    {
+        long time = System.currentTimeMillis();
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer1 = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant1 = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Alex", "Franck", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Rob", "McRub", 179, 74, homeTeam);
+        em.persist(scorer1);
+        em.persist(assistant1);
+        em.persist(scorer2);
+        em.persist(assistant2);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time-10000));
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, new Date(time));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, new Date(time+12000));
+        em.persist(goal1);
+        em.persist(goal2);
+        em.flush();
+
+        TeamMatchGoal conflictingGoal = teamMatchGoalRepository.findConflictingGoal(
+            match.getId(),
+            scorer1.getId(),
+            null,
+            new Date(time)
+        );
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testFindConflictingGoalWithNullMatchTime()
+    {
+        long time = System.currentTimeMillis();
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer1 = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant1 = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Alex", "Franck", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Rob", "McRub", 179, 74, homeTeam);
+        em.persist(scorer1);
+        em.persist(assistant1);
+        em.persist(scorer2);
+        em.persist(assistant2);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time-10000));
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, new Date(time));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, new Date(time+12000));
+        em.persist(goal1);
+        em.persist(goal2);
+        em.flush();
+
+        TeamMatchGoal conflictingGoal = teamMatchGoalRepository.findConflictingGoal(
+            match.getId(),
+            scorer1.getId(),
+            assistant1.getId(),
+            null
+        );
     }
 }
