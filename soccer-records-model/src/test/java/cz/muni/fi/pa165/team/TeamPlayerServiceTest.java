@@ -3,8 +3,6 @@ package cz.muni.fi.pa165.team;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
 
 /**
  * @author Libor Mühlpachr <libor.muhl@seznam.cz>
@@ -37,7 +35,7 @@ public class TeamPlayerServiceTest
         TeamService teamService = new TeamService();
         Team team = teamService.createTeam("Liverpool", null);
 
-        TeamPlayer newTeamPlayer = teamPlayerService.createTeamPlayer(null, "Procházka", 185, 80, team);
+        teamPlayerService.createTeamPlayer(null, "Procházka", 185, 80, team);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -48,7 +46,7 @@ public class TeamPlayerServiceTest
         TeamService teamService = new TeamService();
         Team team = teamService.createTeam("Liverpool", null);
 
-        TeamPlayer newTeamPlayer = teamPlayerService.createTeamPlayer("Filip", null, 185, 80, team);
+        teamPlayerService.createTeamPlayer("Filip", null, 185, 80, team);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -59,7 +57,7 @@ public class TeamPlayerServiceTest
         TeamService teamService = new TeamService();
         Team team = teamService.createTeam("Liverpool", null);
 
-        TeamPlayer newTeamPlayer = teamPlayerService.createTeamPlayer("Filip", "Procházka", 0, 80, team);
+        teamPlayerService.createTeamPlayer("Filip", "Procházka", 0, 80, team);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -70,7 +68,7 @@ public class TeamPlayerServiceTest
         TeamService teamService = new TeamService();
         Team team = teamService.createTeam("Liverpool", null);
 
-        TeamPlayer newTeamPlayer = teamPlayerService.createTeamPlayer("Filip", "Procházka", 185, 0, team);
+        teamPlayerService.createTeamPlayer("Filip", "Procházka", 185, 0, team);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -78,7 +76,7 @@ public class TeamPlayerServiceTest
     {
         TeamPlayerService teamPlayerService = new TeamPlayerService();
 
-        TeamPlayer newTeamPlayer = teamPlayerService.createTeamPlayer("Filip", "Procházka", 185, 80, null);
+        teamPlayerService.createTeamPlayer("Filip", "Procházka", 185, 80, null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
