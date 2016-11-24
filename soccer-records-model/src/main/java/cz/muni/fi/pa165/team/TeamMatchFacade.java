@@ -99,7 +99,6 @@ public class TeamMatchFacade
      */
     public void changeMatchTime(UUID matchId, Date startTime, Date endTime)
     {
-
         TeamMatch teamMatch = teamMatchRepository.getMatchById(matchId);
         TeamMatch conflictingMatchForHomeTeam =
             teamMatchRepository.findConflictingMatchByTeamAndStartTime(teamMatch.getHomeTeam().getId(), startTime);
@@ -125,7 +124,6 @@ public class TeamMatchFacade
      */
     public void endMatch(UUID matchId, Date endTime)
     {
-
         TeamMatch teamMatch = teamMatchRepository.getMatchById(matchId);
 
         teamMatchService.endMatch(teamMatch, endTime);
@@ -175,9 +173,10 @@ public class TeamMatchFacade
      */
     public void deleteMatchGoal(UUID goalId)
     {
-
         TeamMatchGoal teamMatchGoal = teamMatchGoalRepository.getGoalById(goalId);
 
         entityManager.remove(teamMatchGoal);
+        entityManager.flush();
     }
+
 }
