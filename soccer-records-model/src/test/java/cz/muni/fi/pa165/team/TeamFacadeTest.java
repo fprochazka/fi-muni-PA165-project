@@ -4,10 +4,12 @@ import cz.muni.fi.pa165.config.ApplicationConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Date;
 import java.util.UUID;
 
 import static org.testng.Assert.assertEquals;
@@ -27,7 +29,7 @@ public class TeamFacadeTest extends AbstractTransactionalTestNGSpringContextTest
     public EntityManager em;
 
     @Test
-    public void testCreateUser() throws Exception
+    public void testCreateTeam() throws Exception
     {
         Team createdTeam = teamFacade.createTeam("ManCity");
         em.clear();
@@ -60,9 +62,43 @@ public class TeamFacadeTest extends AbstractTransactionalTestNGSpringContextTest
     public void testDeleteTeam() throws Exception
     {
         Team createdTeam = teamFacade.createTeam("FCB");
+        Team secondTeam = teamFacade.createTeam("RMA");
+        em.flush();
+
+        TeamPlayer player1 = new TeamPlayer("John", "Doe", 187, 85, createdTeam);
+        em.persist(player1);
+        em.flush();
+
+        TeamPlayer player2 = new TeamPlayer("Ctiziadoslav", "Tetrov", 187, 85, createdTeam);
+        em.persist(player2);
+        em.flush();
+
+        long time = System.currentTimeMillis();
+        TeamMatch match = new TeamMatch(createdTeam, secondTeam, new Date(time), new Date(time + 5520000));
+        em.persist(match);
+        em.flush();
+
+        TeamMatchGoal goal = new TeamMatchGoal(player1, player2, match, new Date(time));
+        em.persist(goal);
+        em.flush();
+
+        Assert.assertNotNull(em.find(TeamMatchGoal.class, goal.getId()));
+        Assert.assertNotNull(em.find(TeamMatch.class, match.getId()));
+        Assert.assertNotNull(em.find(Team.class, createdTeam.getId()));
+        Assert.assertNotNull(em.find(TeamPlayer.class, player1.getId()));
+        Assert.assertNotNull(em.find(TeamPlayer.class, player2.getId()));
+
         em.clear();
         UUID tmpId = createdTeam.getId();
         teamFacade.deleteTeam(createdTeam.getId());
         em.find(Team.class, tmpId);
+
+        Assert.assertNull(em.find(TeamMatchGoal.class, goal.getId()));
+        Assert.assertNull(em.find(TeamMatch.class, match.getId()));
+        Assert.assertNull(em.find(Team.class, createdTeam.getId()));
+        Assert.assertNull(em.find(TeamPlayer.class, player1.getId()));
+        Assert.assertNull(em.find(TeamPlayer.class, player2.getId()));
     }
+
+
 }
