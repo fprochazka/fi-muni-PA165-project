@@ -70,6 +70,10 @@ public class TeamMatch
      */
     public TeamMatch(Team homeTeam, Team awayTeam, Date startTime, Date endTime)
     {
+        Assert.notNull(homeTeam, "Cannot create match with a null home team");
+        Assert.notNull(awayTeam, "Cannot create match with a null away team");
+        validateMatchTimes(startTime, endTime);
+
         this.id = UUID.randomUUID();
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
@@ -118,7 +122,7 @@ public class TeamMatch
      */
     public void changeMatchTime(Date startTime, Date endTime)
     {
-        Assert.notNull(startTime, "Cannot change the match start time to null");
+        validateMatchTimes(startTime,endTime);
 
         this.startTime = new Date(startTime.getTime());
         this.endTime = (endTime == null ? null : new Date(endTime.getTime()));
@@ -133,6 +137,14 @@ public class TeamMatch
     {
         Assert.notNull(endTime, "Cannot end the match with a null end time");
 
+        validateMatchTimes(this.startTime, endTime);
+
         this.endTime = new Date(endTime.getTime());
+    }
+
+    private void validateMatchTimes(Date startTime, Date endTime)
+    {
+        Assert.notNull(startTime, "Match start time is null");
+        Assert.isTrue((endTime == null || endTime.after(startTime)), "Match end time is not after start time");
     }
 }
