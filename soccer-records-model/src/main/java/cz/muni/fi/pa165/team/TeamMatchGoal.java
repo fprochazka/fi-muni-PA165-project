@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.team;
 
 import org.hibernate.annotations.Type;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -51,6 +52,11 @@ public class TeamMatchGoal
      */
     public TeamMatchGoal(TeamPlayer scorer, TeamPlayer assistant, TeamMatch match, Date matchTime)
     {
+        Assert.notNull(match, "Cannot create goal for a null match");
+        Assert.notNull(scorer, "Cannot create goal for a null scorer");
+        Assert.notNull(assistant, "Cannot create goal for a null assistant");
+        validateGoalMatchTime(matchTime, match);
+
         this.id = UUID.randomUUID();
         this.scorer = scorer;
         this.assistant = assistant;
@@ -91,6 +97,14 @@ public class TeamMatchGoal
     public Date getMatchTime()
     {
         return matchTime == null ? null : new Date(matchTime.getTime());
+    }
+
+    private void validateGoalMatchTime(Date matchTime, TeamMatch match)
+    {
+        Assert.notNull(matchTime, "Given a null match time");
+        Assert.isTrue(matchTime.after(match.getStartTime()), "Goal match time is not after match start time");
+        Assert.isTrue(match.getEndTime() == null || matchTime.before(match.getEndTime()),
+            "Goal match time is not before match end time");
     }
 
 }

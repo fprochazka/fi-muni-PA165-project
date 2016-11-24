@@ -78,7 +78,7 @@ public class TeamFacadeTest extends AbstractTransactionalTestNGSpringContextTest
         em.persist(match);
         em.flush();
 
-        TeamMatchGoal goal = new TeamMatchGoal(player1, player2, match, new Date(time));
+        TeamMatchGoal goal = new TeamMatchGoal(player1, player2, match, new Date(time + 1));
         em.persist(goal);
         em.flush();
 

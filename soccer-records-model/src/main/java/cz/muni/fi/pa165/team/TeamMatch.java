@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.team;
 
 import org.hibernate.annotations.Type;
+import org.springframework.util.Assert;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -69,6 +70,10 @@ public class TeamMatch
      */
     public TeamMatch(Team homeTeam, Team awayTeam, Date startTime, Date endTime)
     {
+        Assert.notNull(homeTeam, "Cannot create match with a null home team");
+        Assert.notNull(awayTeam, "Cannot create match with a null away team");
+        validateMatchTimes(startTime, endTime);
+
         this.id = UUID.randomUUID();
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
@@ -104,19 +109,42 @@ public class TeamMatch
         return startTime == null ? null : new Date(startTime.getTime());
     }
 
-    public void setStartTime(Date startTime)
-    {
-        this.startTime = (startTime == null ? null : new Date(startTime.getTime()));
-    }
-
     public Date getEndTime()
     {
         return endTime == null ? null : new Date(endTime.getTime());
     }
 
-    public void setEndTime(Date endTime)
+    /**
+     * This method enables change the match start and end time.
+     *
+     * @param startTime new start time of the match, cannot be null
+     * @param endTime   new end time of the match, can be null
+     */
+    public void changeMatchTime(Date startTime, Date endTime)
     {
+        validateMatchTimes(startTime, endTime);
+
+        this.startTime = new Date(startTime.getTime());
         this.endTime = (endTime == null ? null : new Date(endTime.getTime()));
     }
 
+    /**
+     * Ends the match, respectively sets the new end time of the match.
+     *
+     * @param endTime new end time of the match, cannot be null
+     */
+    public void endMatch(Date endTime)
+    {
+        Assert.notNull(endTime, "Cannot end the match with a null end time");
+
+        validateMatchTimes(this.startTime, endTime);
+
+        this.endTime = new Date(endTime.getTime());
+    }
+
+    private void validateMatchTimes(Date startTime, Date endTime)
+    {
+        Assert.notNull(startTime, "Match start time is null");
+        Assert.isTrue((endTime == null || endTime.after(startTime)), "Match end time is not after start time");
+    }
 }
