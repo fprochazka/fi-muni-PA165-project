@@ -15,7 +15,7 @@
     </properties>
 
     <modules>
-        <module>soccer-records-model</module>
+        <module>model</module>
     </modules>
 
     <build>
