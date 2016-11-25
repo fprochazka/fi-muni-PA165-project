@@ -39,11 +39,10 @@ public class TeamMatchService
         Assert.notNull(awayTeam, "Match cannot be created with a null away team");
         Assert.isTrue(!homeTeam.equals(awayTeam), "Match cannot be created for home and away teams which are same");
 
-        if (conflictingMatchForHomeTeam != null) {
+        if (isMatchReallyConflicting(conflictingMatchForHomeTeam, homeTeam, startTime)){
             throw new MatchWithSameParametersAlreadyExistsException(homeTeam.getId(), startTime);
         }
-
-        if (conflictingMatchForAwayTeam != null) {
+        if (isMatchReallyConflicting(conflictingMatchForAwayTeam, awayTeam, startTime)){
             throw new MatchWithSameParametersAlreadyExistsException(awayTeam.getId(), startTime);
         }
 
@@ -73,7 +72,7 @@ public class TeamMatchService
     {
         Assert.notNull(match, "Cannot change match times of null match");
 
-        if (conflictingMatchForHomeTeam != null) {
+        if (isMatchReallyConflicting(conflictingMatchForHomeTeam, match.getHomeTeam(), startTime)){
             throw new MatchTimeCollisionException(
                 match.getId(),
                 conflictingMatchForHomeTeam.getId(),
@@ -82,7 +81,7 @@ public class TeamMatchService
             );
         }
 
-        if (conflictingMatchForAwayTeam != null) {
+        if (isMatchReallyConflicting(conflictingMatchForAwayTeam, match.getAwayTeam(), startTime)){
             throw new MatchTimeCollisionException(
                 match.getId(),
                 conflictingMatchForAwayTeam.getId(),
@@ -131,7 +130,12 @@ public class TeamMatchService
         Assert.notNull(assistant, "Cannot create new goal with a null assistant");
         Assert.isTrue(!scorer.equals(assistant), "Cannot create new goal with scorer and assistant who are the same player");
 
-        if (sameGoal != null) {
+        if (sameGoal != null
+            && sameGoal.getMatch().equals(match)
+            && sameGoal.getScorer().equals(scorer)
+            && sameGoal.getAssistant().equals(assistant)
+            && sameGoal.getMatchTime().equals(matchTime))
+        {
             throw new GoalWithSameParametersAlreadyExistsException(
                 scorer.getId(),
                 assistant.getId(),
@@ -141,5 +145,12 @@ public class TeamMatchService
         }
 
         return new TeamMatchGoal(scorer, assistant, match, matchTime);
+    }
+
+    private boolean isMatchReallyConflicting(TeamMatch conflictingMatch, Team team, Date startTime)
+    {
+        return (conflictingMatch != null
+            && conflictingMatch.getStartTime().equals(startTime)
+            && (conflictingMatch.getHomeTeam().equals(team) || conflictingMatch.getAwayTeam().equals(team)));
     }
 }
