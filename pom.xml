@@ -15,7 +15,9 @@
     </properties>
 
     <modules>
-        <module>soccer-records-model</module>
+        <module>model</module>
+        <module>rest-api</module>
+        <module>web</module>
     </modules>
 
     <build>
