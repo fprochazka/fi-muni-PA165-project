@@ -26,7 +26,12 @@ public class UserService
         String password
     )
     {
+        Assert.notNull(email, "Cannot create user with null email");
         Assert.notNull(password, "Cannot create user with null password");
+        Assert.isTrue(
+            sameEmailUser == null || email.equals(sameEmailUser.getEmail()),
+            "The given email and email of sameEmailUser do not match"
+        );
 
         if (sameEmailUser != null) {
             throw new UserWithSameEmailIsAlreadyRegisteredException(sameEmailUser.getEmail());

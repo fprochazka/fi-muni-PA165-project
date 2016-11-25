@@ -38,6 +38,18 @@ public class UserServiceTest
         }
     }
 
+    @Test(
+        expectedExceptions = IllegalArgumentException.class,
+        expectedExceptionsMessageRegExp = "The given email and email of sameEmailUser do not match"
+    )
+    public void testCreateUserWithAlreadyExistingUserWithDifferentEmailException() throws Exception
+    {
+        UserService userService = getUserService();
+
+        User sameEmailUser = userService.createUser("filip@prochazka.nejsu", null, "heslo");
+        userService.createUser("filip@prochazka.su", sameEmailUser, "heslo");
+    }
+
     private UserService getUserService()
     {
         return new UserService(new BCryptPasswordEncoder(13));
