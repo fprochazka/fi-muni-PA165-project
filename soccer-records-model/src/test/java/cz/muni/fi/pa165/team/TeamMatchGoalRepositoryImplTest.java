@@ -106,6 +106,7 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
 
         try{
             TeamMatchGoal dbGoal = teamMatchGoalRepository.getGoalById(badId);
+            Assert.fail("Expected exception GoalNotFoundException");
         }catch (GoalNotFoundException ex){
             Assert.assertEquals(badId, ex.getGoalId());
         }

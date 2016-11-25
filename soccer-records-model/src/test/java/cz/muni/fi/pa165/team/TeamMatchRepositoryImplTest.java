@@ -64,7 +64,7 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         TeamMatch dbMatch = teamMatchRepository.getMatchById(null);
     }
 
-    @Test(expectedExceptions = MatchNotFoundException.class)
+    @Test
     public void testGetMatchByNonexistentId()
     {
         Team homeTeam = new Team("HomeTeam");
@@ -80,7 +80,12 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         UUID badId = UUID.randomUUID();
         Assert.assertNotEquals(badId, teamMatch.getId());
 
-        teamMatchRepository.getMatchById(badId);
+        try{
+            teamMatchRepository.getMatchById(badId);
+            Assert.fail("Expected exception MatchNotFoundException");
+        }catch (MatchNotFoundException ex){
+            Assert.assertEquals(badId, ex.getMatchId());
+        }
     }
 
     @Test
