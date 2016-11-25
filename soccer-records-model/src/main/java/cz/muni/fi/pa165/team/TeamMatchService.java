@@ -39,19 +39,11 @@ public class TeamMatchService
         Assert.notNull(awayTeam, "Match cannot be created with a null away team");
         Assert.isTrue(!homeTeam.equals(awayTeam), "Match cannot be created for home and away teams which are same");
 
-        if (
-            conflictingMatchForHomeTeam != null
-            && conflictingMatchForHomeTeam.getStartTime().equals(startTime)
-            && conflictingMatchForHomeTeam.getHomeTeam() == homeTeam
-        ) {
+        if (conflictingMatchForHomeTeam != null) {
             throw new MatchWithSameParametersAlreadyExistsException(homeTeam.getId(), startTime);
         }
 
-        if (
-            conflictingMatchForAwayTeam != null
-            && conflictingMatchForAwayTeam.getStartTime().equals(startTime)
-            && conflictingMatchForAwayTeam.getAwayTeam() == awayTeam
-        ) {
+        if (conflictingMatchForAwayTeam != null) {
             throw new MatchWithSameParametersAlreadyExistsException(awayTeam.getId(), startTime);
         }
 

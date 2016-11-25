@@ -26,25 +26,25 @@ public class TeamMatchServiceTest
     {
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
-        Date startTime2 = new Date(time + 50000);
-        Date endTime2 = new Date(time + 5550000);
+        Date startTime = new Date(time + 50000);
+        Date endTime = new Date(time + 5550000);
         Team team1 = new Team("Team1");
-        Team team3 = new Team("Team3");
+        Team team2 = new Team("Team2");
 
         TeamMatch newMatch = teamMatchService.createMatch(
             null,
             null,
             team1,
-            team3,
-            startTime2,
-            endTime2
+            team2,
+            startTime,
+            endTime
         );
 
         assertNotNull(newMatch);
         assertEquals(team1.getId(), newMatch.getHomeTeam().getId());
-        assertEquals(team3.getId(), newMatch.getAwayTeam().getId());
-        assertEquals(startTime2, newMatch.getStartTime());
-        assertEquals(endTime2, newMatch.getEndTime());
+        assertEquals(team2.getId(), newMatch.getAwayTeam().getId());
+        assertEquals(startTime, newMatch.getStartTime());
+        assertEquals(endTime, newMatch.getEndTime());
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -52,8 +52,8 @@ public class TeamMatchServiceTest
     {
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
-        Date startTime2 = new Date(time + 50000);
-        Date endTime2 = new Date(time + 5550000);
+        Date startTime = new Date(time + 50000);
+        Date endTime = new Date(time + 5550000);
         Team team1 = new Team("Team1");
 
         TeamMatch newMatch = teamMatchService.createMatch(
@@ -61,8 +61,27 @@ public class TeamMatchServiceTest
             null,
             team1,
             null,
-            startTime2,
-            endTime2
+            startTime,
+            endTime
+        );
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testCreateMatchWithNullHomeTeam()
+    {
+        TeamMatchService teamMatchService = new TeamMatchService();
+        long time = System.currentTimeMillis();
+        Date startTime = new Date(time + 50000);
+        Date endTime = new Date(time + 5550000);
+        Team team1 = new Team("Team1");
+
+        TeamMatch newMatch = teamMatchService.createMatch(
+            null,
+            null,
+            null,
+            team1,
+            startTime,
+            endTime
         );
     }
 
@@ -71,23 +90,17 @@ public class TeamMatchServiceTest
     {
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date startTime2 = new Date(time + 50000);
-        Date endTime1 = new Date(time + 5500000);
-        Date endTime2 = new Date(time + 5550000);
+        Date startTime = new Date(time + 50000);
+        Date endTime = new Date(time + 5550000);
         Team team1 = new Team("Team1");
-        Team team2 = new Team("Team2");
-        TeamMatch match1 = new TeamMatch(team1, team2, startTime1, endTime1);
-        List<TeamMatch> allMatchesOfHomeTeam = Arrays.asList(match1);
-        List<TeamMatch> allMatchesOfAwayTeam = Arrays.asList(match1);
 
         TeamMatch newMatch = teamMatchService.createMatch(
             null,
             null,
             team1,
             team1,
-            startTime2,
-            endTime2
+            startTime,
+            endTime
         );
     }
 
@@ -96,23 +109,17 @@ public class TeamMatchServiceTest
     {
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date endTime1 = new Date(time + 5500000);
-        Date endTime2 = new Date(time + 5550000);
+        Date endTime = new Date(time + 5500000);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
-        Team team3 = new Team("Team3");
-        TeamMatch match1 = new TeamMatch(team1, team2, startTime1, endTime1);
-        List<TeamMatch> allMatchesOfHomeTeam = Arrays.asList(match1);
-        List<TeamMatch> allMatchesOfAwayTeam = new ArrayList<>();
 
         TeamMatch newMatch = teamMatchService.createMatch(
             null,
             null,
             team1,
-            team3,
+            team2,
             null,
-            endTime2
+            endTime
         );
     }
 
@@ -121,29 +128,23 @@ public class TeamMatchServiceTest
     {
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date startTime2 = new Date(time + 50000);
-        Date endTime1 = new Date(time + 5500000);
+        Date startTime = new Date(time);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
-        Team team3 = new Team("Team3");
-        TeamMatch match1 = new TeamMatch(team1, team2, startTime1, endTime1);
-        List<TeamMatch> allMatchesOfHomeTeam = Arrays.asList(match1);
-        List<TeamMatch> allMatchesOfAwayTeam = new ArrayList<>();
 
         TeamMatch newMatch = teamMatchService.createMatch(
             null,
             null,
             team1,
-            team3,
-            startTime2,
+            team2,
+            startTime,
             null
         );
 
         assertNotNull(newMatch);
         assertEquals(team1.getId(), newMatch.getHomeTeam().getId());
-        assertEquals(team3.getId(), newMatch.getAwayTeam().getId());
-        assertEquals(startTime2, newMatch.getStartTime());
+        assertEquals(team2.getId(), newMatch.getAwayTeam().getId());
+        assertEquals(startTime, newMatch.getStartTime());
         assertNull(newMatch.getEndTime());
     }
 
@@ -152,24 +153,18 @@ public class TeamMatchServiceTest
     {
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date startTime2 = new Date(time + 50000);
-        Date endTime1 = new Date(time + 5500000);
-        Date endTime2 = new Date(time + 49999);
+        Date startTime = new Date(time + 50000);
+        Date endTime = new Date(time + 49999);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
-        Team team3 = new Team("Team3");
-        TeamMatch match1 = new TeamMatch(team1, team2, startTime1, endTime1);
-        List<TeamMatch> allMatchesOfHomeTeam = Arrays.asList(match1);
-        List<TeamMatch> allMatchesOfAwayTeam = new ArrayList<>();
 
         TeamMatch newMatch = teamMatchService.createMatch(
             null,
             null,
             team1,
-            team3,
-            startTime2,
-            endTime2
+            team2,
+            startTime,
+            endTime
         );
     }
 
@@ -178,114 +173,73 @@ public class TeamMatchServiceTest
     {
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date startTime2 = new Date(time + 50000);
-        Date endTime1 = new Date(time + 5500000);
-        Date endTime2 = new Date(time + 50000);
+        Date startTime = new Date(time + 50000);
+        Date endTime = new Date(time + 50000);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
-        Team team3 = new Team("Team3");
-        TeamMatch match1 = new TeamMatch(team1, team2, startTime1, endTime1);
-        List<TeamMatch> allMatchesOfHomeTeam = Arrays.asList(match1);
-        List<TeamMatch> allMatchesOfAwayTeam = new ArrayList<>();
 
         TeamMatch newMatch = teamMatchService.createMatch(
             null,
             null,
             team1,
-            team3,
-            startTime2,
-            endTime2
+            team2,
+            startTime,
+            endTime
         );
     }
 
     @Test
-    public void testCreateMatchWithSomeHomeTeamMatchAndSameStartTime()
+    public void testCreateMatchWithConflictingMatchForHomeTeam()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date startTime2 = new Date(time);
+        Date startTime = new Date(time);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
-        TeamMatch match1 = new TeamMatch(team1, team2, startTime1);
+        TeamMatch match = new TeamMatch(team3, team1, startTime);
 
         try {
             TeamMatch newMatch = teamMatchService.createMatch(
-                match1,
+                match,
                 null,
                 team1,
-                team3,
-                startTime2,
+                team2,
+                startTime,
                 null
             );
             fail("Expected exception 'MatchWithSameParametersAlreadyExistsException'");
         } catch (MatchWithSameParametersAlreadyExistsException ex) {
-            assertEquals(startTime2, ex.getStartTime());
+            assertEquals(startTime, ex.getStartTime());
             assertEquals(team1.getId(), ex.getTeamId());
         }
     }
 
     @Test
-    public void testCreateMatchWithSomeAwayTeamMatchAndSameStartTime()
+    public void testCreateMatchWithConflictingMatchForAwayTeam()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date startTime2 = new Date(time);
+        Date startTime = new Date(time);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
-        TeamMatch match1 = new TeamMatch(team1, team2, startTime1);
+        TeamMatch match = new TeamMatch(team1, team2, startTime);
 
         try {
             teamMatchService.createMatch(
                 null,
-                match1,
+                match,
                 team3,
                 team2,
-                startTime2,
+                startTime,
                 null
             );
             fail("Expected exception 'MatchWithSameParametersAlreadyExistsException'");
         } catch (MatchWithSameParametersAlreadyExistsException ex) {
-            assertEquals(startTime2, ex.getStartTime());
+            assertEquals(startTime, ex.getStartTime());
             assertEquals(team2.getId(), ex.getTeamId());
         }
-    }
-
-    @Test
-    public void testCreateMatchWithNoSameHomeTeamMatches()
-    {
-        TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date startTime2 = new Date(time + 50000);
-        Date endTime1 = new Date(time + 5500000);
-        Date endTime2 = new Date(time + 5550000);
-        Team team1 = new Team("Team1");
-        Team team2 = new Team("Team2");
-        Team team3 = new Team("Team3");
-        Team team4 = new Team("Team4");
-        TeamMatch match1 = new TeamMatch(team1, team2, startTime1, endTime1);
-        List<TeamMatch> allMatchesOfHomeTeam = new ArrayList<>();
-        List<TeamMatch> allMatchesOfAwayTeam = new ArrayList<>();
-
-        TeamMatch newMatch = teamMatchService.createMatch(
-            null,
-            null,
-            team3,
-            team4,
-            startTime2,
-            endTime2
-        );
-
-        assertNotNull(newMatch);
-        assertEquals(team3.getId(), newMatch.getHomeTeam().getId());
-        assertEquals(team4.getId(), newMatch.getAwayTeam().getId());
-        assertEquals(startTime2, newMatch.getStartTime());
-        assertEquals(endTime2, newMatch.getEndTime());
     }
 
     @Test
@@ -299,22 +253,35 @@ public class TeamMatchServiceTest
         Date endTime2 = new Date(time + 5550000);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
-        Team team3 = new Team("Team3");
-        Team team4 = new Team("Team4");
-        TeamMatch match1 = new TeamMatch(team1, team2, startTime1, endTime1);
-        TeamMatch match2 = new TeamMatch(team3, team4, startTime1);
-        List<TeamMatch> sameStartTimeMatches = Arrays.asList(match1);
+        TeamMatch match = new TeamMatch(team1, team2, startTime1, endTime1);
 
         teamMatchService.changeMatchTime(
             null,
             null,
-            match2,
+            match,
             startTime2,
             endTime2
         );
 
-        assertEquals(startTime2, match2.getStartTime());
-        assertEquals(endTime2, match2.getEndTime());
+        assertEquals(startTime2, match.getStartTime());
+        assertEquals(endTime2, match.getEndTime());
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testChangeMatchTimeWithNullMatch()
+    {
+        TeamMatchService teamMatchService = new TeamMatchService();
+        long time = System.currentTimeMillis();
+        Date startTime = new Date(time + 50000);
+        Date endTime = new Date(time + 5500000);
+
+        teamMatchService.changeMatchTime(
+            null,
+            null,
+            null,
+            startTime,
+            endTime
+        );
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -322,19 +289,18 @@ public class TeamMatchServiceTest
     {
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date endTime2 = new Date(time + 5550000);
+        Date startTime = new Date(time);
+        Date endTime = new Date(time + 5550000);
         Team team3 = new Team("Team3");
         Team team4 = new Team("Team4");
-        TeamMatch match2 = new TeamMatch(team3, team4, startTime1);
-        List<TeamMatch> sameStartTimeMatches = new ArrayList<>();
+        TeamMatch match2 = new TeamMatch(team3, team4, startTime);
 
         teamMatchService.changeMatchTime(
             null,
             null,
             match2,
             null,
-            endTime2
+            endTime
         );
     }
 
@@ -345,25 +311,21 @@ public class TeamMatchServiceTest
         long time = System.currentTimeMillis();
         Date startTime1 = new Date(time);
         Date startTime2 = new Date(time + 50000);
-        Date endTime1 = new Date(time + 5500000);
+        Date endTime = new Date(time + 5500000);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
-        Team team3 = new Team("Team3");
-        Team team4 = new Team("Team4");
-        TeamMatch match1 = new TeamMatch(team1, team2, startTime1, endTime1);
-        TeamMatch match2 = new TeamMatch(team3, team4, startTime1);
-        List<TeamMatch> sameStartTimeMatches = Arrays.asList(match1);
+        TeamMatch match = new TeamMatch(team1, team2, startTime1, endTime);
 
         teamMatchService.changeMatchTime(
             null,
             null,
-            match2,
+            match,
             startTime2,
             null
         );
 
-        assertEquals(startTime2, match2.getStartTime());
-        assertNull(match2.getEndTime());
+        assertEquals(startTime2, match.getStartTime());
+        assertNull(match.getEndTime());
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -377,16 +339,12 @@ public class TeamMatchServiceTest
         Date endTime2 = new Date(time + 49999);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
-        Team team3 = new Team("Team3");
-        Team team4 = new Team("Team4");
-        TeamMatch match1 = new TeamMatch(team1, team2, startTime1, endTime1);
-        TeamMatch match2 = new TeamMatch(team3, team4, startTime1);
-        List<TeamMatch> sameStartTimeMatches = Arrays.asList(match1);
+        TeamMatch match = new TeamMatch(team1, team2, startTime1, endTime1);
 
         teamMatchService.changeMatchTime(
             null,
             null,
-            match2,
+            match,
             startTime2,
             endTime2
         );
@@ -403,23 +361,19 @@ public class TeamMatchServiceTest
         Date endTime2 = new Date(time + 50000);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
-        Team team3 = new Team("Team3");
-        Team team4 = new Team("Team4");
-        TeamMatch match1 = new TeamMatch(team1, team2, startTime1, endTime1);
-        TeamMatch match2 = new TeamMatch(team3, team4, startTime1);
-        List<TeamMatch> sameStartTimeMatches = Arrays.asList(match1);
+        TeamMatch match = new TeamMatch(team1, team2, startTime1, endTime1);
 
         teamMatchService.changeMatchTime(
             null,
             null,
-            match2,
+            match,
             startTime2,
             endTime2
         );
     }
 
     @Test
-    public void testChangeMatchTimeWithSameHomeTeamAndSameStartTime1()
+    public void testChangeMatchTimeWithConflictingMatchForMatchHomeTeam()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
@@ -451,39 +405,7 @@ public class TeamMatchServiceTest
     }
 
     @Test
-    public void testChangeMatchTimeWithSameHomeTeamAndSameStartTime2()
-    {
-        TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date startTime2 = new Date(time + 50000);
-        Date endTime1 = new Date(time + 5500000);
-        Date endTime2 = new Date(time + 5550000);
-        Team team1 = new Team("Team1");
-        Team team2 = new Team("Team2");
-        Team team3 = new Team("Team3");
-        TeamMatch match1 = new TeamMatch(team1, team2, startTime2, endTime1);
-        TeamMatch match2 = new TeamMatch(team2, team3, startTime1);
-
-        try {
-            teamMatchService.changeMatchTime(
-                match1,
-                null,
-                match2,
-                startTime2,
-                endTime2
-            );
-            fail("Expected exception MatchTimeCollisionException");
-        } catch (MatchTimeCollisionException ex) {
-            assertEquals(match2.getId(), ex.getMatchPlannedToBeChangedId());
-            assertEquals(match1.getId(), ex.getCollidingMatchId());
-            assertEquals(startTime2, ex.getStartTime());
-            assertEquals(team2.getId(), ex.getTeamId());
-        }
-    }
-
-    @Test
-    public void testChangeMatchTimeWithSameAwayTeamAndSameStartTime()
+    public void testChangeMatchTimeWithConflictingMatchForMatchAwayTeam()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
@@ -515,60 +437,6 @@ public class TeamMatchServiceTest
     }
 
     @Test
-    public void testChangeMatchTimeWithNoSameStartTimeMatches()
-    {
-        TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date startTime2 = new Date(time + 50000);
-        Date endTime1 = new Date(time + 5500000);
-        Date endTime2 = new Date(time + 5550000);
-        Team team1 = new Team("Team1");
-        Team team2 = new Team("Team2");
-        Team team3 = new Team("Team3");
-        TeamMatch match1 = new TeamMatch(team1, team2, startTime2, endTime1);
-        TeamMatch match2 = new TeamMatch(team3, team2, startTime1);
-
-        try {
-            teamMatchService.changeMatchTime(
-                match1,
-                null,
-                match2,
-                startTime2,
-                endTime2
-            );
-            fail("Expected exception MatchTimeCollisionException");
-        } catch (MatchTimeCollisionException ex) {
-            assertEquals(match2.getId(), ex.getMatchPlannedToBeChangedId());
-            assertEquals(match1.getId(), ex.getCollidingMatchId());
-            assertEquals(startTime2, ex.getStartTime());
-            assertEquals(team3.getId(), ex.getTeamId());
-        }
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testChangeMatchTimeWithNullMatch()
-    {
-        TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time + 50000);
-        Date endTime1 = new Date(time + 5500000);
-        Date endTime2 = new Date(time + 5550000);
-        Team team1 = new Team("Team1");
-        Team team2 = new Team("Team2");
-        TeamMatch match1 = new TeamMatch(team1, team2, startTime1, endTime1);
-        List<TeamMatch> sameStartTimeMatches = new ArrayList<>();
-
-        teamMatchService.changeMatchTime(
-            null,
-            null,
-            null,
-            startTime1,
-            endTime2
-        );
-    }
-
-    @Test
     public void testEndMatch()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
@@ -587,16 +455,13 @@ public class TeamMatchServiceTest
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testEndMatchWithNullStartTime()
+    public void testEndMatchWithNullMatch()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
         Date endTime = new Date(time + 5000000);
-        Team team1 = new Team("Team1");
-        Team team2 = new Team("Team2");
-        TeamMatch match = new TeamMatch(team1, team2, null);
 
-        teamMatchService.endMatch(match, endTime);
+        teamMatchService.endMatch(null, endTime);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -655,47 +520,32 @@ public class TeamMatchServiceTest
         teamMatchService.endMatch(match, endTime);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testEndMatchWithNullMatch()
-    {
-        TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date endTime = new Date(time + 5000000);
-
-        teamMatchService.endMatch(null, endTime);
-    }
-
     @Test
     public void testAddNewScoredGoal()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
         Date startTime = new Date(time);
-        Date goalMatchTime1 = new Date(time + 15000);
-        Date goalMatchTime2 = new Date(time + 31254);
+        Date goalMatchTime = new Date(time + 15000);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
-        TeamPlayer scorer1 = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
-        TeamPlayer scorer2 = new TeamPlayer("Jack", "Smith", 178, 84, homeTeam);
-        TeamPlayer assistant1 = new TeamPlayer("Alex", "Collina", 187, 90, homeTeam);
-        TeamPlayer assistant2 = new TeamPlayer("Radan", "Spock", 186, 78, homeTeam);
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, goalMatchTime1);
-        List<TeamMatchGoal> goalsInActualMatch = Arrays.asList(goal1);
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Smith", 178, 84, homeTeam);
 
         TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
-            scorer2,
-            assistant2,
+            scorer,
+            assistant,
             match,
-            goalMatchTime2,
+            goalMatchTime,
             null
         );
 
         assertNotNull(newGoal);
-        assertEquals(scorer2.getId(), newGoal.getScorer().getId());
-        assertEquals(assistant2.getId(), newGoal.getAssistant().getId());
+        assertEquals(scorer.getId(), newGoal.getScorer().getId());
+        assertEquals(assistant.getId(), newGoal.getAssistant().getId());
         assertEquals(match.getId(), newGoal.getMatch().getId());
-        assertEquals(goalMatchTime2, newGoal.getMatchTime());
+        assertEquals(goalMatchTime, newGoal.getMatchTime());
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -704,22 +554,17 @@ public class TeamMatchServiceTest
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
         Date startTime = new Date(time);
-        Date goalMatchTime1 = new Date(time + 15000);
-        Date goalMatchTime2 = new Date(time + 31254);
+        Date goalMatchTime = new Date(time + 15000);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
-        TeamPlayer scorer1 = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
-        TeamPlayer assistant1 = new TeamPlayer("Alex", "Collina", 187, 90, homeTeam);
-        TeamPlayer assistant2 = new TeamPlayer("Radan", "Spock", 186, 78, homeTeam);
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, goalMatchTime1);
-        List<TeamMatchGoal> goalsInActualMatch = Arrays.asList(goal1);
+        TeamPlayer assistant = new TeamPlayer("Alex", "Collina", 187, 90, homeTeam);
 
         TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
             null,
-            assistant2,
+            assistant,
             match,
-            goalMatchTime2,
+            goalMatchTime,
             null
         );
     }
@@ -730,22 +575,17 @@ public class TeamMatchServiceTest
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
         Date startTime = new Date(time);
-        Date goalMatchTime1 = new Date(time + 15000);
-        Date goalMatchTime2 = new Date(time + 31254);
+        Date goalMatchTime = new Date(time + 15000);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
-        TeamPlayer scorer1 = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
-        TeamPlayer scorer2 = new TeamPlayer("Jack", "Smith", 178, 84, homeTeam);
-        TeamPlayer assistant1 = new TeamPlayer("Alex", "Collina", 187, 90, homeTeam);
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, goalMatchTime1);
-        List<TeamMatchGoal> goalsInActualMatch = Arrays.asList(goal1);
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
 
         TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
-            scorer2,
+            scorer,
             null,
             match,
-            goalMatchTime2,
+            goalMatchTime,
             null
         );
     }
@@ -756,22 +596,17 @@ public class TeamMatchServiceTest
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
         Date startTime = new Date(time);
-        Date goalMatchTime1 = new Date(time + 15000);
-        Date goalMatchTime2 = new Date(time + 31254);
+        Date goalMatchTime = new Date(time + 15000);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
-        TeamPlayer scorer1 = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
-        TeamPlayer scorer2 = new TeamPlayer("Jack", "Smith", 178, 84, homeTeam);
-        TeamPlayer assistant1 = new TeamPlayer("Alex", "Collina", 187, 90, homeTeam);
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, goalMatchTime1);
-        List<TeamMatchGoal> goalsInActualMatch = Arrays.asList(goal1);
+        TeamPlayer player = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
 
         TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
-            scorer2,
-            scorer2,
+            player,
+            player,
             match,
-            goalMatchTime2,
+            goalMatchTime,
             null
         );
     }
@@ -782,20 +617,15 @@ public class TeamMatchServiceTest
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
         Date startTime = new Date(time);
-        Date goalMatchTime1 = new Date(time + 15000);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
-        TeamPlayer scorer1 = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
-        TeamPlayer scorer2 = new TeamPlayer("Jack", "Smith", 178, 84, homeTeam);
-        TeamPlayer assistant1 = new TeamPlayer("Alex", "Collina", 187, 90, homeTeam);
-        TeamPlayer assistant2 = new TeamPlayer("Radan", "Spock", 186, 78, homeTeam);
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, goalMatchTime1);
-        List<TeamMatchGoal> goalsInActualMatch = Arrays.asList(goal1);
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Alex", "Collina", 187, 90, homeTeam);
 
         TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
-            scorer2,
-            assistant2,
+            scorer,
+            assistant,
             match,
             null,
             null
@@ -808,23 +638,18 @@ public class TeamMatchServiceTest
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
         Date startTime = new Date(time);
-        Date goalMatchTime1 = new Date(time + 15000);
-        Date goalMatchTime2 = new Date(time - 1);
+        Date goalMatchTime = new Date(time - 1);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
-        TeamPlayer scorer1 = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
-        TeamPlayer scorer2 = new TeamPlayer("Jack", "Smith", 178, 84, homeTeam);
-        TeamPlayer assistant1 = new TeamPlayer("Alex", "Collina", 187, 90, homeTeam);
-        TeamPlayer assistant2 = new TeamPlayer("Radan", "Spock", 186, 78, homeTeam);
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, goalMatchTime1);
-        List<TeamMatchGoal> goalsInActualMatch = Arrays.asList(goal1);
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Radan", "Spock", 186, 78, homeTeam);
 
         TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
-            scorer2,
-            assistant2,
+            scorer,
+            assistant,
             match,
-            goalMatchTime2,
+            goalMatchTime,
             null
         );
     }
@@ -835,109 +660,96 @@ public class TeamMatchServiceTest
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
         Date startTime = new Date(time);
-        Date goalMatchTime1 = new Date(time + 15000);
-        Date goalMatchTime2 = new Date(time);
+        Date goalMatchTime = new Date(time);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
-        TeamPlayer scorer1 = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
-        TeamPlayer scorer2 = new TeamPlayer("Jack", "Smith", 178, 84, homeTeam);
-        TeamPlayer assistant1 = new TeamPlayer("Alex", "Collina", 187, 90, homeTeam);
-        TeamPlayer assistant2 = new TeamPlayer("Radan", "Spock", 186, 78, homeTeam);
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, goalMatchTime1);
-        List<TeamMatchGoal> goalsInActualMatch = Arrays.asList(goal1);
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Radan", "Spock", 186, 78, homeTeam);
 
         TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
-            scorer2,
-            assistant2,
+            scorer,
+            assistant,
             match,
-            goalMatchTime2,
+            goalMatchTime,
             null
         );
     }
 
-    @Test
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAddNewScoredGoalWithGoalMatchTimeAfterMatchEndTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
         Date startTime = new Date(time);
-        Date goalMatchTime1 = new Date(time + 15000);
-        Date goalMatchTime2 = new Date(time + 5500001);
+        Date endTime = new Date(time + 5500000);
+        Date goalMatchTime = new Date(time + 5500001);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
-        TeamPlayer scorer1 = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
-        TeamPlayer scorer2 = new TeamPlayer("Jack", "Smith", 178, 84, homeTeam);
-        TeamPlayer assistant1 = new TeamPlayer("Alex", "Collina", 187, 90, homeTeam);
-        TeamPlayer assistant2 = new TeamPlayer("Radan", "Spock", 186, 78, homeTeam);
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, goalMatchTime1);
-        List<TeamMatchGoal> goalsInActualMatch = Arrays.asList(goal1);
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime, endTime);
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Alex", "Collina", 187, 90, homeTeam);
 
         TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
-            scorer2,
-            assistant2,
+            scorer,
+            assistant,
             match,
-            goalMatchTime2,
+            goalMatchTime,
             null
         );
     }
 
-    @Test
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testAddNewScoredGoalWithGoalMatchTimeEqualToMatchEndTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
         Date startTime = new Date(time);
-        Date goalMatchTime1 = new Date(time + 15000);
-        Date goalMatchTime2 = new Date(time + 5500000);
+        Date endTime = new Date(time + 5500000);
+        Date goalMatchTime = new Date(time + 5500000);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
-        TeamPlayer scorer1 = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
-        TeamPlayer scorer2 = new TeamPlayer("Jack", "Smith", 178, 84, homeTeam);
-        TeamPlayer assistant1 = new TeamPlayer("Alex", "Collina", 187, 90, homeTeam);
-        TeamPlayer assistant2 = new TeamPlayer("Radan", "Spock", 186, 78, homeTeam);
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, goalMatchTime1);
-        List<TeamMatchGoal> goalsInActualMatch = Arrays.asList(goal1);
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime, endTime);
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Alex", "Collina", 187, 90, homeTeam);
 
         TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
-            scorer2,
-            assistant2,
+            scorer,
+            assistant,
             match,
-            goalMatchTime2,
+            goalMatchTime,
             null
         );
     }
 
     @Test
-    public void testAddNewScoredGoalWithAlreadyExistingGoal()
+    public void testAddNewScoredGoalWithSameGoal()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
         long time = System.currentTimeMillis();
         Date startTime = new Date(time);
-        Date goalMatchTime1 = new Date(time + 15000);
+        Date goalMatchTime = new Date(time + 15000);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
-        TeamPlayer scorer1 = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
-        TeamPlayer assistant1 = new TeamPlayer("Alex", "Collina", 187, 90, homeTeam);
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, goalMatchTime1);
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Alex", "Collina", 187, 90, homeTeam);
+        TeamMatchGoal goal = new TeamMatchGoal(scorer, assistant, match, goalMatchTime);
 
         try {
             teamMatchService.addNewScoredGoal(
-                scorer1,
-                assistant1,
+                scorer,
+                assistant,
                 match,
-                goalMatchTime1,
-                goal1
+                goalMatchTime,
+                goal
             );
             fail("Expected exception GoalWithSameParametersAlreadyExistsException");
         } catch (GoalWithSameParametersAlreadyExistsException ex) {
-            assertEquals(scorer1.getId(), ex.getScorerId());
-            assertEquals(assistant1.getId(), ex.getAssistantId());
+            assertEquals(scorer.getId(), ex.getScorerId());
+            assertEquals(assistant.getId(), ex.getAssistantId());
             assertEquals(match.getId(), ex.getMatchId());
-            assertEquals(goalMatchTime1, ex.getMatchTime());
+            assertEquals(goalMatchTime, ex.getMatchTime());
         }
     }
 }
