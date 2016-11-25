@@ -16,6 +16,7 @@
 
     <modules>
         <module>model</module>
+        <module>rest-api</module>
     </modules>
 
     <build>
