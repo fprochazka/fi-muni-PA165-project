@@ -101,7 +101,7 @@ public class TeamMatchGoal
 
     private void validateGoalMatchTime(Date matchTime, TeamMatch match)
     {
-        Assert.notNull(matchTime, "Given a null match time");
+        Assert.notNull(matchTime, "Given a null goal match time");
         Assert.isTrue(matchTime.after(match.getStartTime()), "Goal match time is not after match start time");
         Assert.isTrue(match.getEndTime() == null || matchTime.before(match.getEndTime()),
             "Goal match time is not before match end time");

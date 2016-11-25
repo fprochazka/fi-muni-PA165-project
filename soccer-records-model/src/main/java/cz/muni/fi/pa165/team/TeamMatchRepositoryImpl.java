@@ -114,7 +114,7 @@ public class TeamMatchRepositoryImpl implements TeamMatchRepository
     @Override
     public Collection<TeamMatch> findAllMatchesOfTeam(final UUID teamId)
     {
-        Assert.notNull(teamId, "Cannot search all planned matches for a null team");
+        Assert.notNull(teamId, "Cannot search all matches for a null team");
 
         return em.createQuery("SELECT m FROM TeamMatch m WHERE m.homeTeam.id = :teamId " +
             "OR m.awayTeam.id = :teamId", TeamMatch.class)

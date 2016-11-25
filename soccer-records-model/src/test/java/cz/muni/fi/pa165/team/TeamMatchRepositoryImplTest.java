@@ -48,7 +48,8 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         Assert.assertEquals(dbMatch.getEndTime(), teamMatch.getEndTime());
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = { IllegalArgumentException.class },
+          expectedExceptionsMessageRegExp = "Cannot search for a null match id")
     public void testGetMatchByNullId()
     {
         Team homeTeam = new Team("HomeTeam");
@@ -64,7 +65,7 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         TeamMatch dbMatch = teamMatchRepository.getMatchById(null);
     }
 
-    @Test(expectedExceptions = MatchNotFoundException.class)
+    @Test
     public void testGetMatchByNonexistentId()
     {
         Team homeTeam = new Team("HomeTeam");
@@ -80,7 +81,12 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         UUID badId = UUID.randomUUID();
         Assert.assertNotEquals(badId, teamMatch.getId());
 
-        teamMatchRepository.getMatchById(badId);
+        try {
+            teamMatchRepository.getMatchById(badId);
+            Assert.fail("Expected exception MatchNotFoundException");
+        } catch (MatchNotFoundException ex) {
+            Assert.assertEquals(badId, ex.getMatchId());
+        }
     }
 
     @Test
@@ -113,7 +119,8 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         Assert.assertFalse(dbMatches.contains(teamMatch2));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = { IllegalArgumentException.class },
+          expectedExceptionsMessageRegExp = "Cannot search for null match home team")
     public void testFindMatchByHomeTeamNull()
     {
         long time = System.currentTimeMillis();
@@ -195,7 +202,8 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         Assert.assertFalse(dbMatches.contains(teamMatch3));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = { IllegalArgumentException.class },
+          expectedExceptionsMessageRegExp = "Cannot search for null match away team")
     public void testFindMatchByAwayTeamNull()
     {
         long time = System.currentTimeMillis();
@@ -277,7 +285,8 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         Assert.assertFalse(dbMatches.contains(teamMatch1));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = { IllegalArgumentException.class },
+          expectedExceptionsMessageRegExp = "Cannot search for null match start time")
     public void testFindMatchByStartTimeNull()
     {
         long time = System.currentTimeMillis();
@@ -425,7 +434,8 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         Assert.assertFalse(dbMatches.contains(teamMatch3));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = { IllegalArgumentException.class },
+          expectedExceptionsMessageRegExp = "Cannot search all played matches for a null team")
     public void testFindAllPlayedMatchesOfNullTeam()
     {
         long time = System.currentTimeMillis();
@@ -514,7 +524,8 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         Assert.assertFalse(dbMatches.contains(teamMatch3));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = { IllegalArgumentException.class },
+          expectedExceptionsMessageRegExp = "Cannot search all planned matches for a null team")
     public void testFindAllPlannedMatchesOfNullTeam()
     {
         long time = System.currentTimeMillis();
@@ -603,7 +614,8 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         Assert.assertFalse(dbMatches.contains(teamMatch3));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = { IllegalArgumentException.class },
+          expectedExceptionsMessageRegExp = "Cannot search all matches for a null team")
     public void testFindAllMatchesOfNullTeam()
     {
         long time = System.currentTimeMillis();
@@ -627,7 +639,7 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(teamMatch4);
         em.flush();
 
-        Collection<TeamMatch> dbMatches = teamMatchRepository.findAllPlannedMatchesOfTeam(null);
+        Collection<TeamMatch> dbMatches = teamMatchRepository.findAllMatchesOfTeam(null);
     }
 
     @Test
@@ -673,7 +685,7 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team4);
 
         TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time+15000));
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time + 15000));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -701,18 +713,18 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team4);
 
         TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time+15000));
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time + 15000));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
         em.flush();
 
         TeamMatch conflictingMatch =
-            teamMatchRepository.findConflictingMatchByTeamAndStartTime(team3.getId(), new Date(time+15000));
+            teamMatchRepository.findConflictingMatchByTeamAndStartTime(team3.getId(), new Date(time + 15000));
 
         Assert.assertNotNull(conflictingMatch);
         Assert.assertEquals(conflictingMatch.getHomeTeam(), team3);
-        Assert.assertEquals(conflictingMatch.getStartTime(), new Date(time+15000));
+        Assert.assertEquals(conflictingMatch.getStartTime(), new Date(time + 15000));
     }
 
     @Test
@@ -729,14 +741,14 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team4);
 
         TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time+15000));
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time + 15000));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
         em.flush();
 
         TeamMatch conflictingMatch =
-            teamMatchRepository.findConflictingMatchByTeamAndStartTime(new Team("Team5").getId(), new Date(time+15000));
+            teamMatchRepository.findConflictingMatchByTeamAndStartTime(new Team("Team5").getId(), new Date(time + 15000));
 
         Assert.assertNull(conflictingMatch);
     }
@@ -755,7 +767,7 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team4);
 
         TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time+15000));
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time + 15000));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -767,7 +779,8 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         Assert.assertNull(conflictingMatch);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = { IllegalArgumentException.class },
+          expectedExceptionsMessageRegExp = "Cannot search for conflicting match with a null team")
     public void testFindConflictingMatchByNullTeamAndStartTime()
     {
         long time = System.currentTimeMillis();
@@ -781,7 +794,7 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team4);
 
         TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time+15000));
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time + 15000));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -791,7 +804,8 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
             teamMatchRepository.findConflictingMatchByTeamAndStartTime(null, new Date(time));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = { IllegalArgumentException.class },
+          expectedExceptionsMessageRegExp = "Cannot search for conflicting match with a null match start time")
     public void testFindConflictingMatchByTeamAndNullStartTime()
     {
         long time = System.currentTimeMillis();
@@ -805,7 +819,7 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team4);
 
         TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time+15000));
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time + 15000));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
