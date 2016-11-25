@@ -5,10 +5,7 @@ import cz.muni.fi.pa165.team.exceptions.MatchTimeCollisionException;
 import cz.muni.fi.pa165.team.exceptions.MatchWithSameParametersAlreadyExistsException;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;

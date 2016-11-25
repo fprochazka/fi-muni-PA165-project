@@ -80,10 +80,10 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         UUID badId = UUID.randomUUID();
         Assert.assertNotEquals(badId, teamMatch.getId());
 
-        try{
+        try {
             teamMatchRepository.getMatchById(badId);
             Assert.fail("Expected exception MatchNotFoundException");
-        }catch (MatchNotFoundException ex){
+        } catch (MatchNotFoundException ex) {
             Assert.assertEquals(badId, ex.getMatchId());
         }
     }
@@ -678,7 +678,7 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team4);
 
         TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time+15000));
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time + 15000));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -706,18 +706,18 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team4);
 
         TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time+15000));
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time + 15000));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
         em.flush();
 
         TeamMatch conflictingMatch =
-            teamMatchRepository.findConflictingMatchByTeamAndStartTime(team3.getId(), new Date(time+15000));
+            teamMatchRepository.findConflictingMatchByTeamAndStartTime(team3.getId(), new Date(time + 15000));
 
         Assert.assertNotNull(conflictingMatch);
         Assert.assertEquals(conflictingMatch.getHomeTeam(), team3);
-        Assert.assertEquals(conflictingMatch.getStartTime(), new Date(time+15000));
+        Assert.assertEquals(conflictingMatch.getStartTime(), new Date(time + 15000));
     }
 
     @Test
@@ -734,14 +734,14 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team4);
 
         TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time+15000));
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time + 15000));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
         em.flush();
 
         TeamMatch conflictingMatch =
-            teamMatchRepository.findConflictingMatchByTeamAndStartTime(new Team("Team5").getId(), new Date(time+15000));
+            teamMatchRepository.findConflictingMatchByTeamAndStartTime(new Team("Team5").getId(), new Date(time + 15000));
 
         Assert.assertNull(conflictingMatch);
     }
@@ -760,7 +760,7 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team4);
 
         TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time+15000));
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time + 15000));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -786,7 +786,7 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team4);
 
         TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time+15000));
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time + 15000));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -810,7 +810,7 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team4);
 
         TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time+15000));
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time + 15000));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);

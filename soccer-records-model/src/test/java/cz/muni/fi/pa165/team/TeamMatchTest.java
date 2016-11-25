@@ -64,7 +64,8 @@ public class TeamMatchTest
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testChangeMatchTimeWithEndTimeBeforeStartTime(){
+    public void testChangeMatchTimeWithEndTimeBeforeStartTime()
+    {
         long time = System.currentTimeMillis();
         TeamMatch teamMatch = getTeamMatch(time, new Date(time + 1500000));
         Date newStartTime = new Date(time + 1000);
@@ -78,7 +79,8 @@ public class TeamMatchTest
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testChangeMatchTimeWithEndTimeEqualToStartTime(){
+    public void testChangeMatchTimeWithEndTimeEqualToStartTime()
+    {
         long time = System.currentTimeMillis();
         TeamMatch teamMatch = getTeamMatch(time, new Date(time + 1500000));
         Date newStartTime = new Date(time + 1000);
@@ -131,7 +133,7 @@ public class TeamMatchTest
 
         assertEquals(new Date(time + 150000), teamMatch.getEndTime());
 
-        teamMatch.endMatch(new Date(time-1));
+        teamMatch.endMatch(new Date(time - 1));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -146,7 +148,8 @@ public class TeamMatchTest
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testCreatingMatchWithNullHomeTeam(){
+    public void testCreatingMatchWithNullHomeTeam()
+    {
         TeamMatch teamMatch = new TeamMatch(
             null,
             new Team("AwayTeam"),
@@ -156,7 +159,8 @@ public class TeamMatchTest
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testCreatingMatchWithNullAwayTeam(){
+    public void testCreatingMatchWithNullAwayTeam()
+    {
         TeamMatch teamMatch = new TeamMatch(
             new Team("HomeTeam"),
             null,
@@ -166,7 +170,8 @@ public class TeamMatchTest
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testCreatingMatchWithNullStartTime(){
+    public void testCreatingMatchWithNullStartTime()
+    {
         TeamMatch teamMatch = new TeamMatch(
             new Team("HomeTeam"),
             new Team("AwayTeam"),
@@ -176,7 +181,8 @@ public class TeamMatchTest
     }
 
     @Test
-    public void testCreatingMatchWithNullEndTime(){
+    public void testCreatingMatchWithNullEndTime()
+    {
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         Date startTime = new Date(15);
@@ -196,7 +202,8 @@ public class TeamMatchTest
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testCreatingMatchWithEndTimeBeforeStartTime(){
+    public void testCreatingMatchWithEndTimeBeforeStartTime()
+    {
         TeamMatch teamMatch = new TeamMatch(
             new Team("HomeTeam"),
             new Team("AwayTeam"),
@@ -206,7 +213,8 @@ public class TeamMatchTest
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testCreatingMatchWithEndTimeEqualToStartTime(){
+    public void testCreatingMatchWithEndTimeEqualToStartTime()
+    {
         TeamMatch teamMatch = new TeamMatch(
             new Team("HomeTeam"),
             new Team("AwayTeam"),
