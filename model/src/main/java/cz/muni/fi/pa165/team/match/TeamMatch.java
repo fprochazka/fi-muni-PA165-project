@@ -1,14 +1,11 @@
-package cz.muni.fi.pa165.team;
+package cz.muni.fi.pa165.team.match;
 
+import cz.muni.fi.pa165.team.Team;
 import org.hibernate.annotations.Type;
 import org.springframework.util.Assert;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.persistence.JoinColumn;
 import java.util.Date;
 import java.util.UUID;
 

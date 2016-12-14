@@ -1,16 +1,15 @@
-package cz.muni.fi.pa165.team;
+package cz.muni.fi.pa165.team.match;
 
-import cz.muni.fi.pa165.team.exceptions.GoalWithSameParametersAlreadyExistsException;
-import cz.muni.fi.pa165.team.exceptions.MatchTimeCollisionException;
-import cz.muni.fi.pa165.team.exceptions.MatchWithSameParametersAlreadyExistsException;
+import cz.muni.fi.pa165.team.Team;
+import cz.muni.fi.pa165.team.TeamPlayer;
+import cz.muni.fi.pa165.team.match.exceptions.GoalWithSameParametersAlreadyExistsException;
+import cz.muni.fi.pa165.team.match.exceptions.MatchTimeCollisionException;
+import cz.muni.fi.pa165.team.match.exceptions.MatchWithSameParametersAlreadyExistsException;
 import org.testng.annotations.Test;
 
 import java.util.Date;
 
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.fail;
+import static org.testng.Assert.*;
 
 /**
  * @author Tomas Smid <smid.thomas@gmail.com>

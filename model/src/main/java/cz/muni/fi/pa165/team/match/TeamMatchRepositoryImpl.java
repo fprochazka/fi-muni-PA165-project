@@ -1,6 +1,6 @@
-package cz.muni.fi.pa165.team;
+package cz.muni.fi.pa165.team.match;
 
-import cz.muni.fi.pa165.team.exceptions.MatchNotFoundException;
+import cz.muni.fi.pa165.team.match.exceptions.MatchNotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 

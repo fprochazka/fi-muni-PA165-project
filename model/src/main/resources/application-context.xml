@@ -8,8 +8,8 @@
 
     <bean class="cz.muni.fi.pa165.team.TeamFacade" autowire="constructor"/>
     <bean class="cz.muni.fi.pa165.team.TeamService" autowire="constructor"/>
-    <bean class="cz.muni.fi.pa165.team.TeamMatchFacade" autowire="constructor"/>
-    <bean class="cz.muni.fi.pa165.team.TeamMatchService" autowire="constructor"/>
+    <bean class="cz.muni.fi.pa165.team.match.TeamMatchFacade" autowire="constructor"/>
+    <bean class="cz.muni.fi.pa165.team.match.TeamMatchService" autowire="constructor"/>
     <bean class="cz.muni.fi.pa165.team.TeamPlayerFacade" autowire="constructor"/>
     <bean class="cz.muni.fi.pa165.team.TeamPlayerService" autowire="constructor"/>
     <bean class="cz.muni.fi.pa165.user.UserFacade" autowire="constructor"/>

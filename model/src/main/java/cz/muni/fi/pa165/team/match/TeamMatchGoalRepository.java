@@ -1,4 +1,4 @@
-package cz.muni.fi.pa165.team;
+package cz.muni.fi.pa165.team.match;
 
 import java.util.Collection;
 import java.util.Date;

@@ -1,7 +1,7 @@
 package cz.muni.fi.pa165.team;
 
-import org.springframework.stereotype.Repository;
 import cz.muni.fi.pa165.team.exceptions.TeamPlayerNotFoundException;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;

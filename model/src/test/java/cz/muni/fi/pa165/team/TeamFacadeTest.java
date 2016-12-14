@@ -1,6 +1,8 @@
 package cz.muni.fi.pa165.team;
 
 import cz.muni.fi.pa165.config.ApplicationConfig;
+import cz.muni.fi.pa165.team.match.TeamMatch;
+import cz.muni.fi.pa165.team.match.TeamMatchGoal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;

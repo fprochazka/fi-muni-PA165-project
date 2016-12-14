@@ -9,7 +9,6 @@ import org.testng.annotations.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import java.util.Collection;
 import java.util.UUID;
 

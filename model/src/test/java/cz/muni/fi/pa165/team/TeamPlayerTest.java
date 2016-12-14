@@ -1,8 +1,8 @@
 package cz.muni.fi.pa165.team;
 
-import static org.testng.Assert.assertEquals;
-
 import org.testng.annotations.Test;
+
+import static org.testng.Assert.assertEquals;
 
 /**
  * @author Libor Mühlpachr <libor.muhl@seznam.cz>
