@@ -1,11 +1,15 @@
 package cz.muni.fi.pa165.team;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import javax.persistence.EntityManager;
 import java.util.UUID;
 
 /**
  * @author Libor Mühlpachr <libor.muhl@seznam.cz>
  */
+@Service
 public class TeamPlayerFacade
 {
 
@@ -15,6 +19,7 @@ public class TeamPlayerFacade
 
     private EntityManager entityManager;
 
+    @Autowired
     public TeamPlayerFacade(
         TeamPlayerService teamPlayerService,
         TeamPlayerRepository teamPlayerRepository,

@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.team.match;
 
 import cz.muni.fi.pa165.team.match.exceptions.MatchNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
@@ -21,6 +22,7 @@ public class TeamMatchRepositoryImpl implements TeamMatchRepository
 
     private EntityManager em;
 
+    @Autowired
     public TeamMatchRepositoryImpl(EntityManager em)
     {
         this.em = em;

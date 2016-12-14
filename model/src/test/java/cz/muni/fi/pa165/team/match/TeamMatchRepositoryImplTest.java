@@ -1,6 +1,6 @@
 package cz.muni.fi.pa165.team.match;
 
-import cz.muni.fi.pa165.config.ApplicationConfig;
+import cz.muni.fi.pa165.config.ModelConfig;
 import cz.muni.fi.pa165.team.Team;
 import cz.muni.fi.pa165.team.match.exceptions.MatchNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.util.UUID;
 /**
  * @author Filip Procházka <filip@prochazka.su>
  */
-@ContextConfiguration(classes = ApplicationConfig.class)
+@ContextConfiguration(classes = ModelConfig.class)
 public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpringContextTests
 {
 

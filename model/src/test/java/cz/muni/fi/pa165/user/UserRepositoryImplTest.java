@@ -1,6 +1,6 @@
 package cz.muni.fi.pa165.user;
 
-import cz.muni.fi.pa165.config.ApplicationConfig;
+import cz.muni.fi.pa165.config.ModelConfig;
 import cz.muni.fi.pa165.user.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -17,7 +17,7 @@ import static org.testng.Assert.*;
 /**
  * @author Libor Muhlpachr <libor.muhl@seznam.cz>
  */
-@ContextConfiguration(classes=ApplicationConfig.class)
+@ContextConfiguration(classes= ModelConfig.class)
 public class UserRepositoryImplTest extends AbstractTransactionalTestNGSpringContextTests
 {
 

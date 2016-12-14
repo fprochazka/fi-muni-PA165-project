@@ -1,6 +1,6 @@
 package cz.muni.fi.pa165.team;
 
-import cz.muni.fi.pa165.config.ApplicationConfig;
+import cz.muni.fi.pa165.config.ModelConfig;
 import cz.muni.fi.pa165.team.exceptions.TeamNotFoundException;
 import cz.muni.fi.pa165.team.match.TeamMatch;
 import cz.muni.fi.pa165.team.match.TeamMatchGoal;
@@ -22,7 +22,7 @@ import static org.testng.Assert.*;
 /**
  * @author Libor Mühlpachr <libor.muhl@seznam.cz>
  */
-@ContextConfiguration(classes = ApplicationConfig.class)
+@ContextConfiguration(classes = ModelConfig.class)
 public class TeamRepositoryImplTest extends AbstractTransactionalTestNGSpringContextTests
 {
 

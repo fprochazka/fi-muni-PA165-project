@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.user;
 
 import cz.muni.fi.pa165.user.exceptions.UserNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
@@ -17,8 +18,9 @@ import java.util.UUID;
 public class UserRepositoryImpl implements UserRepository
 {
 
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
+    @Autowired
     public UserRepositoryImpl(EntityManager entityManager)
     {
         this.entityManager = entityManager;

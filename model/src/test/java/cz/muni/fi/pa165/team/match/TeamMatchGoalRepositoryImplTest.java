@@ -1,6 +1,6 @@
 package cz.muni.fi.pa165.team.match;
 
-import cz.muni.fi.pa165.config.ApplicationConfig;
+import cz.muni.fi.pa165.config.ModelConfig;
 import cz.muni.fi.pa165.team.Team;
 import cz.muni.fi.pa165.team.TeamPlayer;
 import cz.muni.fi.pa165.team.match.exceptions.GoalNotFoundException;
@@ -19,7 +19,7 @@ import java.util.UUID;
 /**
  * @author Denis Galajda <galajda.denis@gmail.com>
  */
-@ContextConfiguration(classes = ApplicationConfig.class)
+@ContextConfiguration(classes = ModelConfig.class)
 public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNGSpringContextTests
 {
 

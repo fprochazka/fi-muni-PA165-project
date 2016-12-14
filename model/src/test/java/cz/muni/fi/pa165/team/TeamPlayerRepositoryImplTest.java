@@ -1,6 +1,6 @@
 package cz.muni.fi.pa165.team;
 
-import cz.muni.fi.pa165.config.ApplicationConfig;
+import cz.muni.fi.pa165.config.ModelConfig;
 import cz.muni.fi.pa165.team.exceptions.TeamPlayerNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -17,7 +17,7 @@ import static org.testng.Assert.*;
 /**
  * @author Tomas Smid <smid.thomas@gmail.com>
  */
-@ContextConfiguration(classes = ApplicationConfig.class)
+@ContextConfiguration(classes = ModelConfig.class)
 public class TeamPlayerRepositoryImplTest extends AbstractTransactionalTestNGSpringContextTests
 {
 

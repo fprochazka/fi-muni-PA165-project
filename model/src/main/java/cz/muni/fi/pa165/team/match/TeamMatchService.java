@@ -5,6 +5,7 @@ import cz.muni.fi.pa165.team.TeamPlayer;
 import cz.muni.fi.pa165.team.match.exceptions.GoalWithSameParametersAlreadyExistsException;
 import cz.muni.fi.pa165.team.match.exceptions.MatchTimeCollisionException;
 import cz.muni.fi.pa165.team.match.exceptions.MatchWithSameParametersAlreadyExistsException;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.Date;
 /**
  * @author Tomas Smid <smid.thomas@gmail.com>
  */
+@Service
 public class TeamMatchService
 {
 

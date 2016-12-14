@@ -4,6 +4,8 @@ import cz.muni.fi.pa165.team.Team;
 import cz.muni.fi.pa165.team.TeamPlayer;
 import cz.muni.fi.pa165.team.TeamPlayerRepository;
 import cz.muni.fi.pa165.team.TeamRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
@@ -12,6 +14,7 @@ import java.util.UUID;
 /**
  * @author Tomas Smid <smid.thomas@gmail.com>
  */
+@Service
 public class TeamMatchFacade
 {
 
@@ -27,6 +30,7 @@ public class TeamMatchFacade
 
     private EntityManager entityManager;
 
+    @Autowired
     public TeamMatchFacade(
         TeamMatchService teamMatchService,
         TeamMatchRepository teamMatchRepository,

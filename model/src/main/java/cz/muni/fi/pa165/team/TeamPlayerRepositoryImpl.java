@@ -1,6 +1,7 @@
 package cz.muni.fi.pa165.team;
 
 import cz.muni.fi.pa165.team.exceptions.TeamPlayerNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
@@ -21,6 +22,7 @@ public class TeamPlayerRepositoryImpl implements TeamPlayerRepository
 
     private EntityManager em;
 
+    @Autowired
     public TeamPlayerRepositoryImpl(EntityManager em)
     {
         this.em = em;

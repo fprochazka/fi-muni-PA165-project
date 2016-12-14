@@ -1,10 +1,12 @@
 package cz.muni.fi.pa165.team;
 
 import cz.muni.fi.pa165.team.exceptions.TeamWithSameNameAlreadyExistsException;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Denis Galajda <galajda.denis@gmail.com>
  */
+@Service
 public class TeamService
 {
 
