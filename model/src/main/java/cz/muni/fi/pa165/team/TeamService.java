@@ -7,6 +7,7 @@ import cz.muni.fi.pa165.team.exceptions.TeamWithSameNameAlreadyExistsException;
  */
 public class TeamService
 {
+
     /**
      * Create a team.
      */
