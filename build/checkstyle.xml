@@ -6,7 +6,7 @@
     <!--<property name="fileExtensions" value="java, xml, properties"/>-->
 
     <module name="SuppressionFilter">
-        <property name="file" value="build/suppressions.xml"/>
+        <property name="file" value="${checkstyle.config.path}/suppressions.xml"/>
     </module>
 
     <!-- Checks for whitespace                               -->
