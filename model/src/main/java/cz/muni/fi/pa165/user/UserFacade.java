@@ -1,20 +1,27 @@
 package cz.muni.fi.pa165.user;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.EntityManager;
 import java.util.UUID;
 
 /**
  * @author Filip Prochazka <filip@prochazka.su>
  */
+@Service
+@Transactional
 public class UserFacade
 {
 
-    private UserService userService;
+    private final UserService userService;
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
+    @Autowired
     public UserFacade(
         UserService userService,
         UserRepository userRepository,

@@ -1,11 +1,12 @@
-package cz.muni.fi.pa165.team;
+package cz.muni.fi.pa165.team.match;
 
-import cz.muni.fi.pa165.team.exceptions.GoalNotFoundException;
+import cz.muni.fi.pa165.team.match.exceptions.GoalNotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
@@ -19,11 +20,12 @@ import java.util.UUID;
 public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
 {
 
-    private EntityManager em;
+    private EntityManager entityManager;
 
-    public TeamMatchGoalRepositoryImpl(EntityManager em)
+    @PersistenceContext
+    public void setEntityManager(EntityManager entityManager)
     {
-        this.em = em;
+        this.entityManager = entityManager;
     }
 
     @Override
@@ -32,7 +34,7 @@ public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
         Assert.notNull(goalId, "Cannot search for a null goal id");
 
         try {
-            return em.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.id = :goalId", TeamMatchGoal.class)
+            return entityManager.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.id = :goalId", TeamMatchGoal.class)
                 .setParameter("goalId", goalId)
                 .getSingleResult();
         } catch (NoResultException ex) {
@@ -45,7 +47,7 @@ public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
     {
         Assert.notNull(scorerId, "Cannot search for null scorer");
 
-        return em.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.scorer.id = :scorerid", TeamMatchGoal.class)
+        return entityManager.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.scorer.id = :scorerid", TeamMatchGoal.class)
             .setParameter("scorerid", scorerId)
             .getResultList();
     }
@@ -55,7 +57,7 @@ public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
     {
         Assert.notNull(assistantId, "Cannot search for null assistant");
 
-        return em.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.assistant.id = :assistantid", TeamMatchGoal.class)
+        return entityManager.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.assistant.id = :assistantid", TeamMatchGoal.class)
             .setParameter("assistantid", assistantId)
             .getResultList();
     }
@@ -65,7 +67,7 @@ public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
     {
         Assert.notNull(matchId, "Cannot search for null match");
 
-        return em.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.match.id = :matchid", TeamMatchGoal.class)
+        return entityManager.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.match.id = :matchid", TeamMatchGoal.class)
             .setParameter("matchid", matchId)
             .getResultList();
     }
@@ -73,7 +75,7 @@ public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
     @Override
     public Collection<TeamMatchGoal> findAllGoals()
     {
-        return em.createQuery("SELECT g FROM TeamMatchGoal g", TeamMatchGoal.class).getResultList();
+        return entityManager.createQuery("SELECT g FROM TeamMatchGoal g", TeamMatchGoal.class).getResultList();
     }
 
     @Override
@@ -85,7 +87,7 @@ public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
         Assert.notNull(matchTime, "Cannot search goal for a null goal match time");
 
         try {
-            return em.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.match.id = :matchId AND " +
+            return entityManager.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.match.id = :matchId AND " +
                 "g.scorer.id = :scorerId AND g.assistant.id = :assistantId AND g.matchTime = :matchTime", TeamMatchGoal.class)
                 .setParameter("matchId", matchId)
                 .setParameter("scorerId", scorerId)

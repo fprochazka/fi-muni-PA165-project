@@ -1,4 +1,4 @@
-package cz.muni.fi.pa165.team.exceptions;
+package cz.muni.fi.pa165.team.match.exceptions;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

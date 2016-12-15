@@ -1,6 +1,6 @@
 package cz.muni.fi.pa165.user;
 
-import cz.muni.fi.pa165.config.ApplicationConfig;
+import cz.muni.fi.pa165.config.ModelConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
@@ -15,7 +15,7 @@ import static org.testng.Assert.assertNotNull;
 /**
  * @author Filip Prochazka <filip@prochazka.su>
  */
-@ContextConfiguration(classes=ApplicationConfig.class)
+@ContextConfiguration(classes= ModelConfig.class)
 public class UserFacadeTest extends AbstractTransactionalTestNGSpringContextTests
 {
 

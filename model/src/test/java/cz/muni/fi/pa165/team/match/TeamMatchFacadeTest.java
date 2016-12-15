@@ -1,6 +1,8 @@
-package cz.muni.fi.pa165.team;
+package cz.muni.fi.pa165.team.match;
 
-import cz.muni.fi.pa165.config.ApplicationConfig;
+import cz.muni.fi.pa165.config.ModelConfig;
+import cz.muni.fi.pa165.team.Team;
+import cz.muni.fi.pa165.team.TeamPlayer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
@@ -10,14 +12,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Date;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
+import static org.testng.Assert.*;
 
 /**
  * @author Tomas Smid <smid.thomas@gmail.com>
  */
-@ContextConfiguration(classes = ApplicationConfig.class)
+@ContextConfiguration(classes = ModelConfig.class)
 public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContextTests
 {
 

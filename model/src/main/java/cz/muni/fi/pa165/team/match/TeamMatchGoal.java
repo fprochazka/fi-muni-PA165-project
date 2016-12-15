@@ -1,5 +1,6 @@
-package cz.muni.fi.pa165.team;
+package cz.muni.fi.pa165.team.match;
 
+import cz.muni.fi.pa165.team.TeamPlayer;
 import org.hibernate.annotations.Type;
 import org.springframework.util.Assert;
 

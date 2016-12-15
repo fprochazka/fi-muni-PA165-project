@@ -1,6 +1,6 @@
 package cz.muni.fi.pa165.team;
 
-import cz.muni.fi.pa165.config.ApplicationConfig;
+import cz.muni.fi.pa165.config.ModelConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
@@ -14,7 +14,7 @@ import static org.testng.Assert.*;
 /**
  * @author Libor Mühlpachr <libor.muhl@seznam.cz>
  */
-@ContextConfiguration(classes=ApplicationConfig.class)
+@ContextConfiguration(classes= ModelConfig.class)
 public class TeamPlayerFacadeTest extends AbstractTransactionalTestNGSpringContextTests
 {
 

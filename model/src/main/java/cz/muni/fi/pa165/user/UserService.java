@@ -1,17 +1,21 @@
 package cz.muni.fi.pa165.user;
 
 import cz.muni.fi.pa165.user.exceptions.UserWithSameEmailIsAlreadyRegisteredException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 /**
  * @author Filip Prochazka <filip@prochazka.su>
  */
+@Service
 public class UserService
 {
 
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
+    @Autowired
     public UserService(PasswordEncoder passwordEncoder)
     {
         this.passwordEncoder = passwordEncoder;
@@ -56,4 +60,5 @@ public class UserService
     {
         user.promoteToModerator();
     }
+
 }
