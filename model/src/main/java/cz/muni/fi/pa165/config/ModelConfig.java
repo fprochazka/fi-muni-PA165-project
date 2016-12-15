@@ -1,6 +1,5 @@
 package cz.muni.fi.pa165.config;
 
-import cz.muni.fi.pa165.hibernate.ProxyEntityManager;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -97,15 +96,6 @@ public class ModelConfig
     {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
         return builder.setType(EmbeddedDatabaseType.HSQL).build();
-    }
-
-    /**
-     * Hacky proxy manager to allow injecting EntityManager interface directly while maintaining thread safety.
-     */
-    @Bean
-    public ProxyEntityManager proxyEntityManager()
-    {
-        return new ProxyEntityManager();
     }
 
 

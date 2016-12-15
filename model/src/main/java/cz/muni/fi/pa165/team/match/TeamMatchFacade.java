@@ -6,8 +6,10 @@ import cz.muni.fi.pa165.team.TeamPlayerRepository;
 import cz.muni.fi.pa165.team.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Date;
 import java.util.UUID;
 
@@ -15,6 +17,7 @@ import java.util.UUID;
  * @author Tomas Smid <smid.thomas@gmail.com>
  */
 @Service
+@Transactional
 public class TeamMatchFacade
 {
 
@@ -36,8 +39,7 @@ public class TeamMatchFacade
         TeamMatchRepository teamMatchRepository,
         TeamMatchGoalRepository teamMatchGoalRepository,
         TeamRepository teamRepository,
-        TeamPlayerRepository teamPlayerRepository,
-        EntityManager entityManager
+        TeamPlayerRepository teamPlayerRepository
     )
     {
         this.teamMatchService = teamMatchService;
@@ -45,6 +47,11 @@ public class TeamMatchFacade
         this.teamMatchGoalRepository = teamMatchGoalRepository;
         this.teamRepository = teamRepository;
         this.teamPlayerRepository = teamPlayerRepository;
+    }
+
+    @PersistenceContext
+    public void setEntityManager(EntityManager entityManager)
+    {
         this.entityManager = entityManager;
     }
 

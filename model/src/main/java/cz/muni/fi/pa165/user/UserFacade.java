@@ -11,6 +11,7 @@ import java.util.UUID;
  * @author Filip Prochazka <filip@prochazka.su>
  */
 @Service
+@Transactional
 public class UserFacade
 {
 

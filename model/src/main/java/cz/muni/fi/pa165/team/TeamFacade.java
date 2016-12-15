@@ -2,14 +2,17 @@ package cz.muni.fi.pa165.team;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.UUID;
 
 /**
  * @author Denis Galajda <galajda.denis@gmail.com>
  */
 @Service
+@Transactional
 public class TeamFacade
 {
 
@@ -22,12 +25,16 @@ public class TeamFacade
     @Autowired
     public TeamFacade(
         TeamService teamService,
-        TeamRepository teamRepository,
-        EntityManager entityManager
+        TeamRepository teamRepository
     )
     {
         this.teamService = teamService;
         this.teamRepository = teamRepository;
+    }
+
+    @PersistenceContext
+    public void setEntityManager(EntityManager entityManager)
+    {
         this.entityManager = entityManager;
     }
 

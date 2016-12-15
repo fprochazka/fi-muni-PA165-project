@@ -1,12 +1,12 @@
 package cz.muni.fi.pa165.team;
 
 import cz.muni.fi.pa165.team.exceptions.TeamPlayerNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
 import java.util.UUID;
@@ -20,12 +20,12 @@ import java.util.UUID;
 public class TeamPlayerRepositoryImpl implements TeamPlayerRepository
 {
 
-    private EntityManager em;
+    private EntityManager entityManager;
 
-    @Autowired
-    public TeamPlayerRepositoryImpl(EntityManager em)
+    @PersistenceContext
+    public void setEntityManager(EntityManager entityManager)
     {
-        this.em = em;
+        this.entityManager = entityManager;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class TeamPlayerRepositoryImpl implements TeamPlayerRepository
             throw new IllegalArgumentException("Cannot search for null firstname");
         }
 
-        TypedQuery<TeamPlayer> query = em.createQuery("SELECT tp FROM TeamPlayer tp WHERE tp.firstname = :firstname", TeamPlayer.class)
+        TypedQuery<TeamPlayer> query = entityManager.createQuery("SELECT tp FROM TeamPlayer tp WHERE tp.firstname = :firstname", TeamPlayer.class)
             .setParameter("firstname", firstname);
         return query.getResultList();
     }
@@ -46,7 +46,7 @@ public class TeamPlayerRepositoryImpl implements TeamPlayerRepository
         if (surname == null || surname.isEmpty()) {
             throw new IllegalArgumentException("Cannot search for null surname");
         }
-        TypedQuery<TeamPlayer> query = em.createQuery("SELECT tp FROM TeamPlayer tp WHERE tp.surname = :surname", TeamPlayer.class)
+        TypedQuery<TeamPlayer> query = entityManager.createQuery("SELECT tp FROM TeamPlayer tp WHERE tp.surname = :surname", TeamPlayer.class)
             .setParameter("surname", surname);
         return query.getResultList();
     }
@@ -58,7 +58,7 @@ public class TeamPlayerRepositoryImpl implements TeamPlayerRepository
             throw new IllegalArgumentException("Cannot search for null team");
         }
 
-        TypedQuery<TeamPlayer> query = em.createQuery("SELECT tp FROM TeamPlayer tp WHERE tp.team = :tid", TeamPlayer.class)
+        TypedQuery<TeamPlayer> query = entityManager.createQuery("SELECT tp FROM TeamPlayer tp WHERE tp.team = :tid", TeamPlayer.class)
             .setParameter("tid", team);
         return query.getResultList();
     }
@@ -69,7 +69,7 @@ public class TeamPlayerRepositoryImpl implements TeamPlayerRepository
         Assert.notNull(teamPlayerId, "Cannot search for null teamPlayerId");
 
         try {
-            return em
+            return entityManager
                 .createQuery("SELECT tp FROM TeamPlayer tp WHERE tp.id = :teamPlayerId", TeamPlayer.class)
                 .setParameter("teamPlayerId", teamPlayerId)
                 .getSingleResult();
@@ -82,7 +82,7 @@ public class TeamPlayerRepositoryImpl implements TeamPlayerRepository
     @Override
     public Collection<TeamPlayer> findAllTeamPlayers()
     {
-        TypedQuery<TeamPlayer> query = em.createQuery("SELECT tp FROM TeamPlayer tp", TeamPlayer.class);
+        TypedQuery<TeamPlayer> query = entityManager.createQuery("SELECT tp FROM TeamPlayer tp", TeamPlayer.class);
         return query.getResultList();
     }
 }
