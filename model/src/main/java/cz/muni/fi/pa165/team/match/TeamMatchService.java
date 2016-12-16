@@ -8,7 +8,7 @@ import cz.muni.fi.pa165.team.match.exceptions.MatchWithSameParametersAlreadyExis
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * @author Tomas Smid <smid.thomas@gmail.com>
@@ -35,8 +35,8 @@ public class TeamMatchService
         TeamMatch conflictingMatchForAwayTeam,
         Team homeTeam,
         Team awayTeam,
-        Date startTime,
-        Date endTime
+        LocalDateTime startTime,
+        LocalDateTime endTime
     )
     {
         Assert.notNull(homeTeam, "Match cannot be created with a null home team");
@@ -70,8 +70,8 @@ public class TeamMatchService
         TeamMatch conflictingMatchForHomeTeam,
         TeamMatch conflictingMatchForAwayTeam,
         TeamMatch match,
-        Date startTime,
-        Date endTime
+        LocalDateTime startTime,
+        LocalDateTime endTime
     )
     {
         Assert.notNull(match, "Cannot change match times of null match");
@@ -103,7 +103,7 @@ public class TeamMatchService
      * @param match   match which end time should be updated
      * @param endTime new end time of the match
      */
-    public void endMatch(TeamMatch match, Date endTime)
+    public void endMatch(TeamMatch match, LocalDateTime endTime)
     {
         Assert.notNull(match, "Cannot end the null match");
         Assert.isNull(match.getEndTime(), "Cannot end already ended match");
@@ -126,7 +126,7 @@ public class TeamMatchService
         TeamPlayer scorer,
         TeamPlayer assistant,
         TeamMatch match,
-        Date matchTime,
+        LocalDateTime matchTime,
         TeamMatchGoal sameGoal
     )
     {
@@ -136,11 +136,11 @@ public class TeamMatchService
 
         if (
             sameGoal != null
-            && sameGoal.getMatch().equals(match)
-            && sameGoal.getScorer().equals(scorer)
-            && sameGoal.getAssistant().equals(assistant)
-            && sameGoal.getMatchTime().equals(matchTime)
-        ) {
+                && sameGoal.getMatch().equals(match)
+                && sameGoal.getScorer().equals(scorer)
+                && sameGoal.getAssistant().equals(assistant)
+                && sameGoal.getMatchTime().equals(matchTime)
+            ) {
             throw new GoalWithSameParametersAlreadyExistsException(
                 scorer.getId(),
                 assistant.getId(),
@@ -152,7 +152,7 @@ public class TeamMatchService
         return new TeamMatchGoal(scorer, assistant, match, matchTime);
     }
 
-    private boolean isMatchReallyConflicting(TeamMatch conflictingMatch, Team team, Date startTime)
+    private boolean isMatchReallyConflicting(TeamMatch conflictingMatch, Team team, LocalDateTime startTime)
     {
         return (conflictingMatch != null
             && conflictingMatch.getStartTime().equals(startTime)

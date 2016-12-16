@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.testng.Assert.assertEquals;
@@ -23,6 +23,8 @@ import static org.testng.Assert.assertNotNull;
 @ContextConfiguration(classes = ModelConfig.class)
 public class TeamFacadeTest extends AbstractTransactionalTestNGSpringContextTests
 {
+
+    private LocalDateTime now = LocalDateTime.now();
 
     @Autowired
     public TeamFacade teamFacade;
@@ -76,11 +78,11 @@ public class TeamFacadeTest extends AbstractTransactionalTestNGSpringContextTest
         em.flush();
 
         long time = System.currentTimeMillis();
-        TeamMatch match = new TeamMatch(createdTeam, secondTeam, new Date(time), new Date(time + 5520000));
+        TeamMatch match = new TeamMatch(createdTeam, secondTeam, now, now.plusMinutes(15));
         em.persist(match);
         em.flush();
 
-        TeamMatchGoal goal = new TeamMatchGoal(player1, player2, match, new Date(time + 1));
+        TeamMatchGoal goal = new TeamMatchGoal(player1, player2, match, now.plusSeconds(1));
         em.persist(goal);
         em.flush();
 

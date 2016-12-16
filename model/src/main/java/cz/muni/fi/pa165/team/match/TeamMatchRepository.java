@@ -1,7 +1,7 @@
 package cz.muni.fi.pa165.team.match;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -48,7 +48,7 @@ public interface TeamMatchRepository
      * @return collection of all matches which start in the given
      * start time, collection is empty if such match does not exist
      */
-    Collection<TeamMatch> findMatchByStartTime(final Date startTime);
+    Collection<TeamMatch> findMatchByStartTime(final LocalDateTime startTime);
 
     /**
      * Retrieves all matches stored in tha database.
@@ -108,5 +108,5 @@ public interface TeamMatchRepository
      * @param startTime start time of both conflicting matches
      * @return found conflicting match if exists, null otherwise
      */
-    TeamMatch findConflictingMatchByTeamAndStartTime(final UUID teamId, final Date startTime);
+    TeamMatch findConflictingMatchByTeamAndStartTime(final UUID teamId, final LocalDateTime startTime);
 }

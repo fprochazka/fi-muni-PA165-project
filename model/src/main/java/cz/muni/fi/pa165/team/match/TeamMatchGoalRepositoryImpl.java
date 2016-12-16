@@ -7,8 +7,8 @@ import org.springframework.util.Assert;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -79,7 +79,7 @@ public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
     }
 
     @Override
-    public TeamMatchGoal findConflictingGoal(final UUID matchId, final UUID scorerId, final UUID assistantId, final Date matchTime)
+    public TeamMatchGoal findConflictingGoal(final UUID matchId, final UUID scorerId, final UUID assistantId, final LocalDateTime matchTime)
     {
         Assert.notNull(matchId, "Cannot search goal for a null match");
         Assert.notNull(scorerId, "Cannot search goal for a null scorer");

@@ -11,19 +11,13 @@
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>soccer-records-rest-api</artifactId>
+    <artifactId>soccer-records-sample-data</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>soccer-records-model</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>soccer-records-sample-data</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
     </dependencies>

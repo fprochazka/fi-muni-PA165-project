@@ -1,7 +1,6 @@
 package cz.muni.fi.pa165.team.match.exceptions;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -14,7 +13,7 @@ public class MatchTimeCollisionException extends RuntimeException
 
     private final UUID teamId;
 
-    private final Date startTime;
+    private final LocalDateTime startTime;
 
     private final UUID collidingMatchId;
 
@@ -22,20 +21,20 @@ public class MatchTimeCollisionException extends RuntimeException
         UUID matchPlannedToBeChangedId,
         UUID collidingMatchId,
         UUID teamId,
-        Date startTime
+        LocalDateTime startTime
     )
     {
         super(String.format("There cannot be changed the start time of the match %s with teamId %s to new value %s, " +
                 "because there already exists another match %s with that same start time and same teamId",
             matchPlannedToBeChangedId.toString(),
             teamId.toString(),
-            new SimpleDateFormat("dd/MM/YYYY hh:mm:ss").format(startTime),
+            startTime.toString(),
             collidingMatchId));
 
         this.matchPlannedToBeChangedId = matchPlannedToBeChangedId;
         this.collidingMatchId = collidingMatchId;
         this.teamId = teamId;
-        this.startTime = new Date(startTime.getTime());
+        this.startTime = startTime;
     }
 
     public UUID getMatchPlannedToBeChangedId()
@@ -53,8 +52,8 @@ public class MatchTimeCollisionException extends RuntimeException
         return teamId;
     }
 
-    public Date getStartTime()
+    public LocalDateTime getStartTime()
     {
-        return new Date(startTime.getTime());
+        return startTime;
     }
 }

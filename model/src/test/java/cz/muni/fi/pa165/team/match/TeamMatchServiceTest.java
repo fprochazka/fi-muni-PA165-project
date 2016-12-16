@@ -7,7 +7,7 @@ import cz.muni.fi.pa165.team.match.exceptions.MatchTimeCollisionException;
 import cz.muni.fi.pa165.team.match.exceptions.MatchWithSameParametersAlreadyExistsException;
 import org.testng.annotations.Test;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import static org.testng.Assert.*;
 
@@ -17,13 +17,15 @@ import static org.testng.Assert.*;
 public class TeamMatchServiceTest
 {
 
+    private LocalDateTime now = LocalDateTime.now();
+
     @Test
     public void testCreateMatch()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time + 50000);
-        Date endTime = new Date(time + 5550000);
+
+        LocalDateTime startTime = now.plusMinutes(5);
+        LocalDateTime endTime = now.plusMinutes(55);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
 
@@ -48,9 +50,9 @@ public class TeamMatchServiceTest
     public void testCreateMatchWithNullAwayTeam()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time + 50000);
-        Date endTime = new Date(time + 5550000);
+
+        LocalDateTime startTime = now.plusMinutes(5);
+        LocalDateTime endTime = now.plusMinutes(55);
         Team team1 = new Team("Team1");
 
         TeamMatch newMatch = teamMatchService.createMatch(
@@ -68,9 +70,9 @@ public class TeamMatchServiceTest
     public void testCreateMatchWithNullHomeTeam()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time + 50000);
-        Date endTime = new Date(time + 5550000);
+
+        LocalDateTime startTime = now.plusMinutes(5);
+        LocalDateTime endTime = now.plusMinutes(55);
         Team team1 = new Team("Team1");
 
         TeamMatch newMatch = teamMatchService.createMatch(
@@ -88,9 +90,9 @@ public class TeamMatchServiceTest
     public void testCreateMatchWithSameHomeAndAwayTeam()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time + 50000);
-        Date endTime = new Date(time + 5550000);
+
+        LocalDateTime startTime = now.plusMinutes(5);
+        LocalDateTime endTime = now.plusMinutes(55);
         Team team1 = new Team("Team1");
 
         TeamMatch newMatch = teamMatchService.createMatch(
@@ -108,8 +110,8 @@ public class TeamMatchServiceTest
     public void testCreateMatchWithNullStartTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date endTime = new Date(time + 5500000);
+
+        LocalDateTime endTime = now.plusMinutes(55);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
 
@@ -127,8 +129,8 @@ public class TeamMatchServiceTest
     public void testCreateMatchWithNullEndTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
+
+        LocalDateTime startTime = now;
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
 
@@ -153,9 +155,9 @@ public class TeamMatchServiceTest
     public void testCreateMatchWithEndTimeBeforeStartTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time + 50000);
-        Date endTime = new Date(time + 49999);
+
+        LocalDateTime startTime = now.plusMinutes(5);
+        LocalDateTime endTime = now.plusMinutes(4);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
 
@@ -174,9 +176,9 @@ public class TeamMatchServiceTest
     public void testCreateMatchWithStartTimeEqualToEndTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time + 50000);
-        Date endTime = new Date(time + 50000);
+
+        LocalDateTime startTime = now.plusMinutes(5);
+        LocalDateTime endTime = now.plusMinutes(5);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
 
@@ -194,8 +196,8 @@ public class TeamMatchServiceTest
     public void testCreateMatchWithConflictingMatchForHomeTeam()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
+
+        LocalDateTime startTime = now;
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -221,8 +223,8 @@ public class TeamMatchServiceTest
     public void testCreateMatchWithConflictingMatchForAwayTeam()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
+
+        LocalDateTime startTime = now;
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -248,8 +250,8 @@ public class TeamMatchServiceTest
     public void testCreateMatchWithNotNullConflictingMatchButNoRealConflictOnlySameStartTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
+
+        LocalDateTime startTime = now;
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -278,9 +280,9 @@ public class TeamMatchServiceTest
     public void testCreateMatchWithNotNullConflictingMatchButNoRealConflictOnlySameOneTeam()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date startTime2 = new Date(time+1500);
+
+        LocalDateTime startTime1 = now;
+        LocalDateTime startTime2 = now.plusMinutes(15);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -308,9 +310,9 @@ public class TeamMatchServiceTest
     public void testCreateMatchWithNotNullConflictingMatchButNoRealConflictOnlySameBothTeam()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date startTime2 = new Date(time+1500);
+
+        LocalDateTime startTime1 = now;
+        LocalDateTime startTime2 = now.plusMinutes(15);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         TeamMatch match = new TeamMatch(team1, team2, startTime1);
@@ -337,11 +339,11 @@ public class TeamMatchServiceTest
     public void testChangeMatchTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date startTime2 = new Date(time + 50000);
-        Date endTime1 = new Date(time + 5500000);
-        Date endTime2 = new Date(time + 5550000);
+
+        LocalDateTime startTime1 = now;
+        LocalDateTime startTime2 = now.plusMinutes(5);
+        LocalDateTime endTime1 = now.plusMinutes(50);
+        LocalDateTime endTime2 = now.plusMinutes(55);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         TeamMatch match = new TeamMatch(team1, team2, startTime1, endTime1);
@@ -363,9 +365,9 @@ public class TeamMatchServiceTest
     public void testChangeMatchTimeWithNullMatch()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time + 50000);
-        Date endTime = new Date(time + 5500000);
+
+        LocalDateTime startTime = now.plusMinutes(5);
+        LocalDateTime endTime = now.plusMinutes(55);
 
         teamMatchService.changeMatchTime(
             null,
@@ -381,9 +383,9 @@ public class TeamMatchServiceTest
     public void testChangeMatchTimeWithNullStartTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
-        Date endTime = new Date(time + 5550000);
+
+        LocalDateTime startTime = now;
+        LocalDateTime endTime = now.plusMinutes(55);
         Team team3 = new Team("Team3");
         Team team4 = new Team("Team4");
         TeamMatch match2 = new TeamMatch(team3, team4, startTime);
@@ -401,10 +403,10 @@ public class TeamMatchServiceTest
     public void testChangeMatchTimeWithNullEndTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date startTime2 = new Date(time + 50000);
-        Date endTime = new Date(time + 5500000);
+
+        LocalDateTime startTime1 = now;
+        LocalDateTime startTime2 = now.plusMinutes(5);
+        LocalDateTime endTime = now.plusMinutes(55);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         TeamMatch match = new TeamMatch(team1, team2, startTime1, endTime);
@@ -426,11 +428,11 @@ public class TeamMatchServiceTest
     public void testChangeMatchTimeWithEndTimeBeforeStartTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date startTime2 = new Date(time + 50000);
-        Date endTime1 = new Date(time + 5500000);
-        Date endTime2 = new Date(time + 49999);
+
+        LocalDateTime startTime1 = now;
+        LocalDateTime startTime2 = now.plusMinutes(5);
+        LocalDateTime endTime1 = now.plusMinutes(55);
+        LocalDateTime endTime2 = now.plusMinutes(4);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         TeamMatch match = new TeamMatch(team1, team2, startTime1, endTime1);
@@ -449,11 +451,11 @@ public class TeamMatchServiceTest
     public void testChangeMatchTimeWithEndTimeEqualToStartTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date startTime2 = new Date(time + 50000);
-        Date endTime1 = new Date(time + 5500000);
-        Date endTime2 = new Date(time + 50000);
+
+        LocalDateTime startTime1 = now;
+        LocalDateTime startTime2 = now.plusMinutes(5);
+        LocalDateTime endTime1 = now.plusMinutes(55);
+        LocalDateTime endTime2 = now.plusMinutes(5);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         TeamMatch match = new TeamMatch(team1, team2, startTime1, endTime1);
@@ -471,11 +473,11 @@ public class TeamMatchServiceTest
     public void testChangeMatchTimeWithConflictingMatchForMatchHomeTeam()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date startTime2 = new Date(time + 50000);
-        Date endTime1 = new Date(time + 5500000);
-        Date endTime2 = new Date(time + 5550000);
+
+        LocalDateTime startTime1 = now;
+        LocalDateTime startTime2 = now.plusMinutes(5);
+        LocalDateTime endTime1 = now.plusMinutes(50);
+        LocalDateTime endTime2 = now.plusMinutes(55);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -503,11 +505,11 @@ public class TeamMatchServiceTest
     public void testChangeMatchTimeWithConflictingMatchForMatchAwayTeam()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date startTime2 = new Date(time + 50000);
-        Date endTime1 = new Date(time + 5500000);
-        Date endTime2 = new Date(time + 5550000);
+
+        LocalDateTime startTime1 = now;
+        LocalDateTime startTime2 = now.plusMinutes(5);
+        LocalDateTime endTime1 = now.plusMinutes(50);
+        LocalDateTime endTime2 = now.plusMinutes(55);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -535,10 +537,10 @@ public class TeamMatchServiceTest
     public void testChangeMatchTimeWithNotNullConflictingMatchButNoRealConflictOnlySameStartTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
-        Date endTime1 = new Date(time + 5500000);
-        Date endTime2 = new Date(time + 5550000);
+
+        LocalDateTime startTime = now;
+        LocalDateTime endTime1 = now.plusMinutes(50);
+        LocalDateTime endTime2 = now.plusMinutes(55);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -563,11 +565,11 @@ public class TeamMatchServiceTest
     public void testChangeMatchTimeWithNotNullConflictingMatchButNoRealConflictOnlySameOneTeam()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date startTime2 = new Date(time+1500);
-        Date endTime1 = new Date(time + 5500000);
-        Date endTime2 = new Date(time + 5550000);
+
+        LocalDateTime startTime1 = now;
+        LocalDateTime startTime2 = now.plusMinutes(1);
+        LocalDateTime endTime1 = now.plusMinutes(50);
+        LocalDateTime endTime2 = now.plusMinutes(55);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -591,11 +593,11 @@ public class TeamMatchServiceTest
     public void testChangeMatchTimeWithNotNullConflictingMatchButNoRealConflictOnlySameBothTeam()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date startTime2 = new Date(time+1500);
-        Date endTime1 = new Date(time + 5500000);
-        Date endTime2 = new Date(time + 5550000);
+
+        LocalDateTime startTime1 = now;
+        LocalDateTime startTime2 = now.plusMinutes(1);
+        LocalDateTime endTime1 = now.plusMinutes(50);
+        LocalDateTime endTime2 = now.plusMinutes(55);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         TeamMatch match1 = new TeamMatch(team1, team2, startTime1, endTime1);
@@ -618,9 +620,9 @@ public class TeamMatchServiceTest
     public void testEndMatch()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
-        Date endTime = new Date(time + 5000000);
+
+        LocalDateTime startTime = now;
+        LocalDateTime endTime = now.plusMinutes(50);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         TeamMatch match = new TeamMatch(team1, team2, startTime);
@@ -637,8 +639,8 @@ public class TeamMatchServiceTest
     public void testEndMatchWithNullMatch()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date endTime = new Date(time + 5000000);
+
+        LocalDateTime endTime = now.plusMinutes(50);
 
         teamMatchService.endMatch(null, endTime);
     }
@@ -648,8 +650,8 @@ public class TeamMatchServiceTest
     public void testEndMatchWithNullEndTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
+
+        LocalDateTime startTime = now;
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         TeamMatch match = new TeamMatch(team1, team2, startTime);
@@ -662,10 +664,10 @@ public class TeamMatchServiceTest
     public void testEndMatchWithAlreadyEndedMatch()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
-        Date endTime = new Date(time + 5000000);
-        Date endTime2 = new Date(time + 1);
+
+        LocalDateTime startTime = now;
+        LocalDateTime endTime = now.plusMinutes(50);
+        LocalDateTime endTime2 = now.plusSeconds(1);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         TeamMatch match = new TeamMatch(team1, team2, startTime, endTime);
@@ -678,9 +680,9 @@ public class TeamMatchServiceTest
     public void testEndMatchWithEndTimeBeforeStartTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
-        Date endTime = new Date(time - 1);
+
+        LocalDateTime startTime = now;
+        LocalDateTime endTime = now.minusSeconds(1);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         TeamMatch match = new TeamMatch(team1, team2, startTime);
@@ -693,9 +695,9 @@ public class TeamMatchServiceTest
     public void testEndMatchWithEndTimeEqualToStartTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
-        Date endTime = new Date(time);
+
+        LocalDateTime startTime = now;
+        LocalDateTime endTime = now;
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         TeamMatch match = new TeamMatch(team1, team2, startTime);
@@ -707,9 +709,9 @@ public class TeamMatchServiceTest
     public void testAddNewScoredGoal()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
-        Date goalMatchTime = new Date(time + 15000);
+
+        LocalDateTime startTime = now;
+        LocalDateTime goalMatchTime = now.plusMinutes(15);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
@@ -736,9 +738,9 @@ public class TeamMatchServiceTest
     public void testAddNewScoredGoalWithNullScorer()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
-        Date goalMatchTime = new Date(time + 15000);
+
+        LocalDateTime startTime = now;
+        LocalDateTime goalMatchTime = now.plusMinutes(15);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
@@ -758,9 +760,9 @@ public class TeamMatchServiceTest
     public void testAddNewScoredGoalWithNullAssistant()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
-        Date goalMatchTime = new Date(time + 15000);
+
+        LocalDateTime startTime = now;
+        LocalDateTime goalMatchTime = now.plusMinutes(15);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
@@ -780,9 +782,9 @@ public class TeamMatchServiceTest
     public void testAddNewScoredGoalWithSameScorerAndAssistant()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
-        Date goalMatchTime = new Date(time + 15000);
+
+        LocalDateTime startTime = now;
+        LocalDateTime goalMatchTime = now.plusMinutes(15);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
@@ -802,8 +804,8 @@ public class TeamMatchServiceTest
     public void testAddNewScoredGoalWithNullGoalMatchTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
+
+        LocalDateTime startTime = now;
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
@@ -824,9 +826,9 @@ public class TeamMatchServiceTest
     public void testAddNewScoredGoalWithGoalMatchTimeBeforeMatchStartTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
-        Date goalMatchTime = new Date(time - 1);
+
+        LocalDateTime startTime = now;
+        LocalDateTime goalMatchTime = now.minusSeconds(1);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
@@ -847,9 +849,9 @@ public class TeamMatchServiceTest
     public void testAddNewScoredGoalWithGoalMatchTimeEqualToMatchStartTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
-        Date goalMatchTime = new Date(time);
+
+        LocalDateTime startTime = now;
+        LocalDateTime goalMatchTime = now;
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
@@ -870,10 +872,10 @@ public class TeamMatchServiceTest
     public void testAddNewScoredGoalWithGoalMatchTimeAfterMatchEndTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
-        Date endTime = new Date(time + 5500000);
-        Date goalMatchTime = new Date(time + 5500001);
+
+        LocalDateTime startTime = now;
+        LocalDateTime endTime = now.plusMinutes(55);
+        LocalDateTime goalMatchTime = now.plusMinutes(55).plusSeconds(1);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime, endTime);
@@ -894,10 +896,10 @@ public class TeamMatchServiceTest
     public void testAddNewScoredGoalWithGoalMatchTimeEqualToMatchEndTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
-        Date endTime = new Date(time + 5500000);
-        Date goalMatchTime = new Date(time + 5500000);
+
+        LocalDateTime startTime = now;
+        LocalDateTime endTime = now.plusMinutes(55);
+        LocalDateTime goalMatchTime = now.plusMinutes(55);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime, endTime);
@@ -917,9 +919,9 @@ public class TeamMatchServiceTest
     public void testAddNewScoredGoalWithSameGoal()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
-        Date goalMatchTime = new Date(time + 15000);
+
+        LocalDateTime startTime = now;
+        LocalDateTime goalMatchTime = now.plusMinutes(15);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
@@ -948,10 +950,10 @@ public class TeamMatchServiceTest
     public void testAddNewScoredGoalWithNotNullSameGoalButDifferentMatch()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime1 = new Date(time);
-        Date startTime2 = new Date(time+10000);
-        Date goalMatchTime = new Date(time + 15000);
+
+        LocalDateTime startTime1 = now;
+        LocalDateTime startTime2 = now.plusMinutes(10);
+        LocalDateTime goalMatchTime = now.plusMinutes(15);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match1 = new TeamMatch(homeTeam, awayTeam, startTime1);
@@ -980,9 +982,9 @@ public class TeamMatchServiceTest
     public void testAddNewScoredGoalWithNotNullSameGoalButDifferentScorer()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
-        Date goalMatchTime = new Date(time + 15000);
+
+        LocalDateTime startTime = now;
+        LocalDateTime goalMatchTime = now.plusMinutes(15);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
@@ -1011,9 +1013,9 @@ public class TeamMatchServiceTest
     public void testAddNewScoredGoalWithNotNullSameGoalButDifferentAssistant()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
-        Date goalMatchTime = new Date(time + 15000);
+
+        LocalDateTime startTime = now;
+        LocalDateTime goalMatchTime = now.plusMinutes(15);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
@@ -1042,10 +1044,10 @@ public class TeamMatchServiceTest
     public void testAddNewScoredGoalWithNotNullSameGoalButDifferentGoalMatchTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
-        Date goalMatchTime1 = new Date(time + 15000);
-        Date goalMatchTime2 = new Date(time + 15001);
+
+        LocalDateTime startTime = now;
+        LocalDateTime goalMatchTime1 = now.plusMinutes(15);
+        LocalDateTime goalMatchTime2 = now.plusMinutes(15).plusSeconds(1);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);

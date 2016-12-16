@@ -12,8 +12,8 @@ import org.testng.annotations.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -22,6 +22,8 @@ import java.util.UUID;
 @ContextConfiguration(classes = ModelConfig.class)
 public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNGSpringContextTests
 {
+
+    private LocalDateTime now = LocalDateTime.now();
 
     @Autowired
     public TeamMatchGoalRepositoryImpl teamMatchGoalRepository;
@@ -32,7 +34,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
     @Test
     public void testGetGoalById()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         em.persist(homeTeam);
@@ -43,10 +44,10 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(scorer);
         em.persist(assistant);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
         em.persist(match);
 
-        TeamMatchGoal goal = new TeamMatchGoal(scorer, assistant, match, new Date(time));
+        TeamMatchGoal goal = new TeamMatchGoal(scorer, assistant, match, now);
         em.persist(goal);
         em.flush();
 
@@ -62,7 +63,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
           expectedExceptionsMessageRegExp = "Cannot search for a null goal id")
     public void testGetGoalByNullId()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         em.persist(homeTeam);
@@ -73,10 +73,10 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(scorer);
         em.persist(assistant);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
         em.persist(match);
 
-        TeamMatchGoal goal = new TeamMatchGoal(scorer, assistant, match, new Date(time));
+        TeamMatchGoal goal = new TeamMatchGoal(scorer, assistant, match, now);
         em.persist(goal);
         em.flush();
 
@@ -86,7 +86,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
     @Test
     public void testFindGoalByNonexistentId()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         em.persist(homeTeam);
@@ -97,10 +96,10 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(scorer);
         em.persist(assistant);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
         em.persist(match);
 
-        TeamMatchGoal goal = new TeamMatchGoal(scorer, assistant, match, new Date(time));
+        TeamMatchGoal goal = new TeamMatchGoal(scorer, assistant, match, now);
         em.persist(goal);
         em.flush();
 
@@ -118,7 +117,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
     @Test
     public void testFindMatchByScorer()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         em.persist(homeTeam);
@@ -133,12 +131,12 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(scorer2);
         em.persist(assistant2);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
         em.persist(match);
 
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, new Date(time));
-        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, new Date(time + 15000));
-        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match, new Date(time + 25000));
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now);
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, now.plusMinutes(15));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match, now.plusMinutes(25));
 
         em.persist(goal1);
         em.persist(goal2);
@@ -157,7 +155,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
           expectedExceptionsMessageRegExp = "Cannot search for null scorer")
     public void testFindGoalByScorerNull()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         em.persist(homeTeam);
@@ -172,12 +169,12 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(scorer2);
         em.persist(assistant2);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
         em.persist(match);
 
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, new Date(time));
-        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, new Date(time + 15000));
-        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match, new Date(time + 25000));
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now);
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, now.plusMinutes(15));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match, now.plusMinutes(25));
 
         em.persist(goal1);
         em.persist(goal2);
@@ -190,7 +187,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
     @Test
     public void testFindGoalByScorerNonexistent()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         em.persist(homeTeam);
@@ -205,12 +201,12 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(scorer2);
         em.persist(assistant2);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
         em.persist(match);
 
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, new Date(time));
-        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, new Date(time + 15000));
-        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match, new Date(time + 25000));
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now);
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, now.plusMinutes(15));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match, now.plusMinutes(25));
 
         em.persist(goal1);
         em.persist(goal2);
@@ -226,7 +222,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
     @Test
     public void testFindGoalByAssistant()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         em.persist(homeTeam);
@@ -241,12 +236,12 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(scorer2);
         em.persist(assistant2);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
         em.persist(match);
 
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, new Date(time));
-        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, new Date(time + 15000));
-        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match, new Date(time + 25000));
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now);
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, now.plusMinutes(15));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match, now.plusMinutes(25));
 
         em.persist(goal1);
         em.persist(goal2);
@@ -265,7 +260,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
           expectedExceptionsMessageRegExp = "Cannot search for null assistant")
     public void testFindGoalByAssistantNull()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         em.persist(homeTeam);
@@ -280,12 +274,12 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(scorer2);
         em.persist(assistant2);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
         em.persist(match);
 
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, new Date(time));
-        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, new Date(time + 15000));
-        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match, new Date(time + 25000));
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now);
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, now.plusMinutes(15));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match, now.plusMinutes(25));
 
         em.persist(goal1);
         em.persist(goal2);
@@ -298,7 +292,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
     @Test
     public void testFindGoalByAssistantNonexistent()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         em.persist(homeTeam);
@@ -313,12 +306,12 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(scorer2);
         em.persist(assistant2);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
         em.persist(match);
 
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, new Date(time));
-        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, new Date(time + 15000));
-        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match, new Date(time + 25000));
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now);
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, now.plusMinutes(15));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match, now.plusMinutes(25));
 
         em.persist(goal1);
         em.persist(goal2);
@@ -334,7 +327,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
     @Test
     public void testFindGoalByMatch()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         Team awayTeam2 = new Team("awayTeam2");
@@ -351,14 +343,14 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(scorer2);
         em.persist(assistant2);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
-        TeamMatch match2 = new TeamMatch(homeTeam, awayTeam2, new Date(time + 25000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
+        TeamMatch match2 = new TeamMatch(homeTeam, awayTeam2, now.plusMinutes(25));
         em.persist(match);
         em.persist(match2);
 
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, new Date(time));
-        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, new Date(time + 15000));
-        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match2, new Date(time + 26000));
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now);
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, now.plusMinutes(15));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match2, now.plusMinutes(26));
 
         em.persist(goal1);
         em.persist(goal2);
@@ -377,7 +369,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
           expectedExceptionsMessageRegExp = "Cannot search for null match")
     public void testFindGoalByMatchNull()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         Team awayTeam2 = new Team("awayTeam2");
@@ -394,14 +385,14 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(scorer2);
         em.persist(assistant2);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
-        TeamMatch match2 = new TeamMatch(homeTeam, awayTeam2, new Date(time + 25000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
+        TeamMatch match2 = new TeamMatch(homeTeam, awayTeam2, now.plusMinutes(25));
         em.persist(match);
         em.persist(match2);
 
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, new Date(time));
-        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, new Date(time + 15000));
-        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match2, new Date(time + 26000));
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now);
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, now.plusMinutes(15));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match2, now.plusMinutes(26));
 
         em.persist(goal1);
         em.persist(goal2);
@@ -414,7 +405,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
     @Test
     public void testFindGoalByMatchNonexistent()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         Team awayTeam2 = new Team("awayTeam2");
@@ -433,21 +423,21 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(scorer2);
         em.persist(assistant2);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
-        TeamMatch match2 = new TeamMatch(homeTeam, awayTeam2, new Date(time + 5000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
+        TeamMatch match2 = new TeamMatch(homeTeam, awayTeam2, now.plusMinutes(5));
         em.persist(match);
         em.persist(match2);
 
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, new Date(time));
-        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, new Date(time + 15000));
-        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match2, new Date(time + 25000));
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now);
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, now.plusMinutes(15));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match2, now.plusMinutes(25));
 
         em.persist(goal1);
         em.persist(goal2);
         em.persist(goal3);
         em.flush();
 
-        TeamMatch match3 = new TeamMatch(homeTeam, awayTeam3, new Date(time + 10000));
+        TeamMatch match3 = new TeamMatch(homeTeam, awayTeam3, now.plusMinutes(10));
 
         Collection<TeamMatchGoal> dbGoals = teamMatchGoalRepository.findGoalByMatch(match3.getId());
 
@@ -457,7 +447,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
     @Test
     public void testFindAllGoals()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         Team awayTeam2 = new Team("awayTeam2");
@@ -474,14 +463,14 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(scorer2);
         em.persist(assistant2);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
-        TeamMatch match2 = new TeamMatch(homeTeam, awayTeam2, new Date(time + 5000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
+        TeamMatch match2 = new TeamMatch(homeTeam, awayTeam2, now.plusMinutes(5));
         em.persist(match);
         em.persist(match2);
 
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, new Date(time));
-        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, new Date(time + 15000));
-        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match2, new Date(time + 25000));
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now);
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, now.plusMinutes(15));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match2, now.plusMinutes(25));
 
         em.persist(goal1);
         em.persist(goal2);
@@ -499,7 +488,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
     @Test
     public void testFindConflictingGoal()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         em.persist(homeTeam);
@@ -514,11 +502,11 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(scorer2);
         em.persist(assistant2);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
         em.persist(match);
 
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, new Date(time));
-        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, new Date(time + 12000));
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, now);
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(12));
         em.persist(goal1);
         em.persist(goal2);
         em.flush();
@@ -527,7 +515,7 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
             match.getId(),
             scorer1.getId(),
             assistant1.getId(),
-            new Date(time)
+            now
         );
 
         Assert.assertNotNull(conflictingGoal);
@@ -540,7 +528,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
     @Test
     public void testFindConflictingGoalNotSameScorer()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         em.persist(homeTeam);
@@ -555,11 +542,11 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(scorer2);
         em.persist(assistant2);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
         em.persist(match);
 
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, new Date(time));
-        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, new Date(time + 12000));
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, now);
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(12));
         em.persist(goal1);
         em.persist(goal2);
         em.flush();
@@ -568,7 +555,7 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
             match.getId(),
             scorer2.getId(),
             assistant1.getId(),
-            new Date(time)
+            now
         );
 
         Assert.assertNull(conflictingGoal);
@@ -577,7 +564,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
     @Test
     public void testFindConflictingGoalNotSameAssistant()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         em.persist(homeTeam);
@@ -592,11 +578,11 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(scorer2);
         em.persist(assistant2);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
         em.persist(match);
 
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, new Date(time));
-        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, new Date(time + 12000));
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, now);
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(12));
         em.persist(goal1);
         em.persist(goal2);
         em.flush();
@@ -605,7 +591,7 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
             match.getId(),
             scorer1.getId(),
             assistant2.getId(),
-            new Date(time)
+            now
         );
 
         Assert.assertNull(conflictingGoal);
@@ -614,7 +600,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
     @Test
     public void testFindConflictingGoalNotSameMatchTime()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         em.persist(homeTeam);
@@ -629,11 +614,11 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(scorer2);
         em.persist(assistant2);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
         em.persist(match);
 
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, new Date(time));
-        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, new Date(time + 12000));
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, now);
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(12));
         em.persist(goal1);
         em.persist(goal2);
         em.flush();
@@ -642,7 +627,7 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
             match.getId(),
             scorer1.getId(),
             assistant1.getId(),
-            new Date(time + 12000)
+            now.plusMinutes(12)
         );
 
         Assert.assertNull(conflictingGoal);
@@ -652,7 +637,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
           expectedExceptionsMessageRegExp = "Cannot search goal for a null match")
     public void testFindConflictingGoalWithNullMatch()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         em.persist(homeTeam);
@@ -667,11 +651,11 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(scorer2);
         em.persist(assistant2);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
         em.persist(match);
 
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, new Date(time));
-        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, new Date(time + 12000));
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, now);
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(12));
         em.persist(goal1);
         em.persist(goal2);
         em.flush();
@@ -680,7 +664,7 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
             null,
             scorer1.getId(),
             assistant1.getId(),
-            new Date(time)
+            now
         );
     }
 
@@ -688,7 +672,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
           expectedExceptionsMessageRegExp = "Cannot search goal for a null scorer")
     public void testFindConflictingGoalWithNullScorer()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         em.persist(homeTeam);
@@ -703,11 +686,11 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(scorer2);
         em.persist(assistant2);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
         em.persist(match);
 
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, new Date(time));
-        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, new Date(time + 12000));
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, now);
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(12));
         em.persist(goal1);
         em.persist(goal2);
         em.flush();
@@ -716,7 +699,7 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
             match.getId(),
             null,
             assistant1.getId(),
-            new Date(time)
+            now
         );
     }
 
@@ -724,7 +707,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
           expectedExceptionsMessageRegExp = "Cannot search goal for a null assistant")
     public void testFindConflictingGoalWithNullAssistant()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         em.persist(homeTeam);
@@ -739,11 +721,11 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(scorer2);
         em.persist(assistant2);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
         em.persist(match);
 
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, new Date(time));
-        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, new Date(time + 12000));
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, now);
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(12));
         em.persist(goal1);
         em.persist(goal2);
         em.flush();
@@ -752,7 +734,7 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
             match.getId(),
             scorer1.getId(),
             null,
-            new Date(time)
+            now
         );
     }
 
@@ -760,7 +742,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
           expectedExceptionsMessageRegExp = "Cannot search goal for a null goal match time")
     public void testFindConflictingGoalWithNullMatchTime()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         em.persist(homeTeam);
@@ -775,11 +756,11 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.persist(scorer2);
         em.persist(assistant2);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
         em.persist(match);
 
-        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, new Date(time));
-        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, new Date(time + 12000));
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer1, assistant1, match, now);
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(12));
         em.persist(goal1);
         em.persist(goal2);
         em.flush();

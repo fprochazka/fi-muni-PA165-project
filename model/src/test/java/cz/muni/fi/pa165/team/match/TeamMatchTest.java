@@ -3,7 +3,7 @@ package cz.muni.fi.pa165.team.match;
 import cz.muni.fi.pa165.team.Team;
 import org.testng.annotations.Test;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import static org.testng.Assert.*;
 
@@ -13,12 +13,14 @@ import static org.testng.Assert.*;
 public class TeamMatchTest
 {
 
+    private LocalDateTime now = LocalDateTime.now();
+
     @Test
     public void testChangeMatchTime()
     {
-        TeamMatch teamMatch = getTeamMatch(0l);
-        Date newStartTime = new Date(teamMatch.getStartTime().getTime() + 15000);
-        Date newEndTime = new Date(newStartTime.getTime() + 5420000);
+        TeamMatch teamMatch = new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), now);
+        LocalDateTime newStartTime = now.plusMinutes(15);
+        LocalDateTime newEndTime = now.plusMinutes(75);
 
         teamMatch.changeMatchTime(newStartTime, newEndTime);
 
@@ -30,8 +32,8 @@ public class TeamMatchTest
           expectedExceptionsMessageRegExp = "Match start time is null")
     public void testChangeMatchTimeNullStartTime()
     {
-        TeamMatch teamMatch = getTeamMatch(0l);
-        Date newEndTime = new Date(teamMatch.getStartTime().getTime() + 50000);
+        TeamMatch teamMatch = new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), now);
+        LocalDateTime newEndTime = now.plusMinutes(5);
 
         teamMatch.changeMatchTime(null, newEndTime);
     }
@@ -39,8 +41,8 @@ public class TeamMatchTest
     @Test
     public void testChangeMatchTimeNullEndTime()
     {
-        TeamMatch teamMatch = getTeamMatch(0l);
-        Date newStartTime = new Date(teamMatch.getStartTime().getTime() + 2000);
+        TeamMatch teamMatch = new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), now);
+        LocalDateTime newStartTime = now.plusMinutes(5);
 
         teamMatch.changeMatchTime(newStartTime, null);
 
@@ -51,11 +53,10 @@ public class TeamMatchTest
     @Test
     public void testChangeMatchTimeValidEndTimeToNullEndTime()
     {
-        long time = System.currentTimeMillis();
-        TeamMatch teamMatch = getTeamMatch(time, new Date(time + 1500000));
-        Date newStartTime = new Date();
+        TeamMatch teamMatch = new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), now, now.plusMinutes(15));
+        LocalDateTime newStartTime = now;
 
-        assertEquals(new Date(time + 1500000), teamMatch.getEndTime());
+        assertEquals(now.plusMinutes(15), teamMatch.getEndTime());
 
         teamMatch.changeMatchTime(newStartTime, null);
 
@@ -67,13 +68,12 @@ public class TeamMatchTest
           expectedExceptionsMessageRegExp = "Match end time is not after start time")
     public void testChangeMatchTimeWithEndTimeBeforeStartTime()
     {
-        long time = System.currentTimeMillis();
-        TeamMatch teamMatch = getTeamMatch(time, new Date(time + 1500000));
-        Date newStartTime = new Date(time + 1000);
+        TeamMatch teamMatch = new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), now, now.plusMinutes(15));
+        LocalDateTime newStartTime = now.plusMinutes(1);
 
-        assertEquals(new Date(time + 1500000), teamMatch.getEndTime());
+        assertEquals(now.plusMinutes(15), teamMatch.getEndTime());
 
-        teamMatch.changeMatchTime(newStartTime, new Date(time));
+        teamMatch.changeMatchTime(newStartTime, now);
 
         assertEquals(newStartTime, teamMatch.getStartTime());
         assertNull(teamMatch.getEndTime());
@@ -83,13 +83,12 @@ public class TeamMatchTest
           expectedExceptionsMessageRegExp = "Match end time is not after start time")
     public void testChangeMatchTimeWithEndTimeEqualToStartTime()
     {
-        long time = System.currentTimeMillis();
-        TeamMatch teamMatch = getTeamMatch(time, new Date(time + 1500000));
-        Date newStartTime = new Date(time + 1000);
+        TeamMatch teamMatch = new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), now, now.plusMinutes(15));
+        LocalDateTime newStartTime = now.plusMinutes(1);
 
-        assertEquals(new Date(time + 1500000), teamMatch.getEndTime());
+        assertEquals(now.plusMinutes(15), teamMatch.getEndTime());
 
-        teamMatch.changeMatchTime(newStartTime, new Date(time + 1000));
+        teamMatch.changeMatchTime(newStartTime, now.plusMinutes(1));
 
         assertEquals(newStartTime, teamMatch.getStartTime());
         assertNull(teamMatch.getEndTime());
@@ -98,8 +97,8 @@ public class TeamMatchTest
     @Test
     public void testEndMatch()
     {
-        TeamMatch teamMatch = getTeamMatch(0l);
-        Date newEndTime = new Date(teamMatch.getStartTime().getTime() + 5400000);
+        TeamMatch teamMatch = new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), now);
+        LocalDateTime newEndTime = now.plusMinutes(55);
 
         assertNull(teamMatch.getEndTime());
 
@@ -112,7 +111,7 @@ public class TeamMatchTest
           expectedExceptionsMessageRegExp = "Cannot end the match with a null end time")
     public void testEndMatchNullEndTimeToNullEndTime()
     {
-        TeamMatch teamMatch = getTeamMatch(0l);
+        TeamMatch teamMatch = new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), now);
 
         teamMatch.endMatch(null);
     }
@@ -121,10 +120,9 @@ public class TeamMatchTest
           expectedExceptionsMessageRegExp = "Cannot end the match with a null end time")
     public void testEndMatchValidEndTimeToNullEndTime()
     {
-        long time = System.currentTimeMillis();
-        TeamMatch teamMatch = getTeamMatch(time, new Date(time + 150000));
+        TeamMatch teamMatch = new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), now, now.plusMinutes(15));
 
-        assertEquals(new Date(time + 150000), teamMatch.getEndTime());
+        assertEquals(now.plusMinutes(15), teamMatch.getEndTime());
 
         teamMatch.endMatch(null);
     }
@@ -133,24 +131,22 @@ public class TeamMatchTest
           expectedExceptionsMessageRegExp = "Match end time is not after start time")
     public void testEndMatchWithEndTimeBeforeStartTime()
     {
-        long time = System.currentTimeMillis();
-        TeamMatch teamMatch = getTeamMatch(time, new Date(time + 150000));
+        TeamMatch teamMatch = new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), now, now.plusMinutes(15));
 
-        assertEquals(new Date(time + 150000), teamMatch.getEndTime());
+        assertEquals(now.plusMinutes(15), teamMatch.getEndTime());
 
-        teamMatch.endMatch(new Date(time - 1));
+        teamMatch.endMatch(now.minusSeconds(1));
     }
 
     @Test(expectedExceptions = { IllegalArgumentException.class },
           expectedExceptionsMessageRegExp = "Match end time is not after start time")
     public void testEndMatchWithEndTimeEqualToStartTime()
     {
-        long time = System.currentTimeMillis();
-        TeamMatch teamMatch = getTeamMatch(time, new Date(time + 150000));
+        TeamMatch teamMatch = new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), now, now.plusMinutes(15));
 
-        assertEquals(new Date(time + 150000), teamMatch.getEndTime());
+        assertEquals(now.plusMinutes(15), teamMatch.getEndTime());
 
-        teamMatch.endMatch(new Date(time));
+        teamMatch.endMatch(now);
     }
 
     @Test(expectedExceptions = { IllegalArgumentException.class },
@@ -160,8 +156,8 @@ public class TeamMatchTest
         TeamMatch teamMatch = new TeamMatch(
             null,
             new Team("AwayTeam"),
-            new Date(15),
-            new Date(1500)
+            now.plusSeconds(1),
+            now.plusSeconds(15)
         );
     }
 
@@ -172,8 +168,8 @@ public class TeamMatchTest
         TeamMatch teamMatch = new TeamMatch(
             new Team("HomeTeam"),
             null,
-            new Date(15),
-            new Date(1500)
+            now.plusSeconds(1),
+            now.plusSeconds(15)
         );
     }
 
@@ -185,7 +181,7 @@ public class TeamMatchTest
             new Team("HomeTeam"),
             new Team("AwayTeam"),
             null,
-            new Date(1500)
+            now.plusSeconds(15)
         );
     }
 
@@ -194,7 +190,7 @@ public class TeamMatchTest
     {
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
-        Date startTime = new Date(15);
+        LocalDateTime startTime = now.plusSeconds(1);
 
         TeamMatch teamMatch = new TeamMatch(
             homeTeam,
@@ -217,8 +213,8 @@ public class TeamMatchTest
         TeamMatch teamMatch = new TeamMatch(
             new Team("HomeTeam"),
             new Team("AwayTeam"),
-            new Date(1501),
-            new Date(1500)
+            now.plusSeconds(16),
+            now.plusSeconds(15)
         );
     }
 
@@ -229,20 +225,8 @@ public class TeamMatchTest
         TeamMatch teamMatch = new TeamMatch(
             new Team("HomeTeam"),
             new Team("AwayTeam"),
-            new Date(1500),
-            new Date(1500)
+            now.plusSeconds(15),
+            now.plusSeconds(15)
         );
-    }
-
-    private TeamMatch getTeamMatch(long millis)
-    {
-        return getTeamMatch(millis, null);
-    }
-
-    private TeamMatch getTeamMatch(long millis, Date endTime)
-    {
-        return (endTime == null ?
-            new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), new Date(millis)) :
-            new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), new Date(millis), new Date(endTime.getTime())));
     }
 }
