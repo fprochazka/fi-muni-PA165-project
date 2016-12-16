@@ -7,4 +7,6 @@
     <suppress files=".*[\\/]src[\\/]test[\\/]java[\\/].*" id="VisibilityModifierCode" />
     <suppress files=".*[\\/]src[\\/]main[\\/]java[\\/].*Controller" id="JavadocMethodCode" />
     <suppress files=".*[\\/]src[\\/]main[\\/]java[\\/].*Request" id="VisibilityModifierCode" />
+    <suppress files=".*[\\/]src[\\/]main[\\/]java[\\/].*ResponseFactory" id="JavadocMethodCode" />
+    <suppress files=".*[\\/]src[\\/]main[\\/]java[\\/].*ResponseFactory" id="VisibilityModifierCode" />
 </suppressions>

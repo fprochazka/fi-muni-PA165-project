@@ -25,7 +25,7 @@
                 <version>2.5</version>
                 <configuration>
                     <warSourceDirectory>src/main/webapp</warSourceDirectory>
-                    <warName>pa165</warName>
+                    <warName>pa165-web</warName>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
