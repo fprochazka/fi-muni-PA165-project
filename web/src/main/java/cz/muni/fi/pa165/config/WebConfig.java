@@ -1,5 +1,6 @@
 package cz.muni.fi.pa165.config;
 
+import cz.muni.fi.pa165.SampleDataConfig;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -21,7 +22,7 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 @Configuration
 @ComponentScan(basePackages = "cz.muni.fi.pa165")
-@Import({ModelConfig.class, WebSecurityConfig.class})
+@Import({ModelConfig.class, WebSecurityConfig.class, SampleDataConfig.class})
 public class WebConfig extends WebMvcConfigurerAdapter
 {
 

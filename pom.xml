@@ -19,6 +19,7 @@
         <module>model</module>
         <module>rest-api</module>
         <module>web</module>
+        <module>sample-data</module>
     </modules>
 
     <build>
