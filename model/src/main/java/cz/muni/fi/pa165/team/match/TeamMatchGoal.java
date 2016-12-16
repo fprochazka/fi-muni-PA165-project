@@ -6,7 +6,7 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -41,7 +41,7 @@ public class TeamMatchGoal
 
     @Column(nullable = false)
     @NotNull
-    private Date matchTime;
+    private LocalDateTime matchTime;
 
     /**
      * First constructor which takes 4 parameters for attributes set up.
@@ -51,7 +51,7 @@ public class TeamMatchGoal
      * @param match     match in which the goal was scored
      * @param matchTime time in which the goal was scored
      */
-    public TeamMatchGoal(TeamPlayer scorer, TeamPlayer assistant, TeamMatch match, Date matchTime)
+    public TeamMatchGoal(TeamPlayer scorer, TeamPlayer assistant, TeamMatch match, LocalDateTime matchTime)
     {
         Assert.notNull(match, "Cannot create goal for a null match");
         Assert.notNull(scorer, "Cannot create goal for a null scorer");
@@ -62,7 +62,7 @@ public class TeamMatchGoal
         this.scorer = scorer;
         this.assistant = assistant;
         this.match = match;
-        this.matchTime = matchTime == null ? null : new Date(matchTime.getTime());
+        this.matchTime = matchTime;
     }
 
     /**
@@ -95,16 +95,16 @@ public class TeamMatchGoal
         return match;
     }
 
-    public Date getMatchTime()
+    public LocalDateTime getMatchTime()
     {
-        return matchTime == null ? null : new Date(matchTime.getTime());
+        return matchTime;
     }
 
-    private void validateGoalMatchTime(Date matchTime, TeamMatch match)
+    private void validateGoalMatchTime(LocalDateTime matchTime, TeamMatch match)
     {
         Assert.notNull(matchTime, "Given a null goal match time");
-        Assert.isTrue(matchTime.after(match.getStartTime()), "Goal match time is not after match start time");
-        Assert.isTrue(match.getEndTime() == null || matchTime.before(match.getEndTime()),
+        Assert.isTrue(matchTime.isAfter(match.getStartTime()), "Goal match time is not after match start time");
+        Assert.isTrue(match.getEndTime() == null || matchTime.isBefore(match.getEndTime()),
             "Goal match time is not before match end time");
     }
 

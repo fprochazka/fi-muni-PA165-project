@@ -11,8 +11,8 @@ import org.testng.annotations.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -21,6 +21,8 @@ import java.util.UUID;
 @ContextConfiguration(classes = ModelConfig.class)
 public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpringContextTests
 {
+
+    private LocalDateTime now = LocalDateTime.now();
 
     @Autowired
     public TeamMatchRepositoryImpl teamMatchRepository;
@@ -36,7 +38,7 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(homeTeam);
         em.persist(awayTeam);
 
-        TeamMatch teamMatch = new TeamMatch(homeTeam, awayTeam, new Date());
+        TeamMatch teamMatch = new TeamMatch(homeTeam, awayTeam, now);
 
         em.persist(teamMatch);
         em.flush();
@@ -58,7 +60,7 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(homeTeam);
         em.persist(awayTeam);
 
-        TeamMatch teamMatch = new TeamMatch(homeTeam, awayTeam, new Date());
+        TeamMatch teamMatch = new TeamMatch(homeTeam, awayTeam, now);
 
         em.persist(teamMatch);
         em.flush();
@@ -74,7 +76,7 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(homeTeam);
         em.persist(awayTeam);
 
-        TeamMatch teamMatch = new TeamMatch(homeTeam, awayTeam, new Date());
+        TeamMatch teamMatch = new TeamMatch(homeTeam, awayTeam, now);
 
         em.persist(teamMatch);
         em.flush();
@@ -93,7 +95,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     @Test
     public void testFindMatchByHomeTeam()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam1 = new Team("HomeTeam1");
         Team awayTeam1 = new Team("AwayTeam1");
         Team homeTeam2 = new Team("HomeTeam2");
@@ -103,9 +104,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(homeTeam2);
         em.persist(awayTeam2);
 
-        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, new Date(time + 1000));
-        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, new Date(time + 2500));
+        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, now);
+        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, now.plusMinutes(1));
+        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, now.plusMinutes(2));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -124,7 +125,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
           expectedExceptionsMessageRegExp = "Cannot search for null match home team")
     public void testFindMatchByHomeTeamNull()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam1 = new Team("HomeTeam1");
         Team awayTeam1 = new Team("AwayTeam1");
         Team homeTeam2 = new Team("HomeTeam2");
@@ -134,9 +134,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(homeTeam2);
         em.persist(awayTeam2);
 
-        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, new Date(time + 1000));
-        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, new Date(time + 2500));
+        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, now);
+        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, now.plusMinutes(1));
+        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, now.plusMinutes(2));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -149,7 +149,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     @Test
     public void testFindMatchByHomeTeamNonexistent()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam1 = new Team("HomeTeam1");
         Team awayTeam1 = new Team("AwayTeam1");
         Team homeTeam2 = new Team("HomeTeam2");
@@ -159,9 +158,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(homeTeam2);
         em.persist(awayTeam2);
 
-        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, new Date(time + 1000));
-        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, new Date(time + 2500));
+        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, now);
+        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, now.plusMinutes(1));
+        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, now.plusMinutes(2));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -176,7 +175,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     @Test
     public void testFindMatchByAwayTeam()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam1 = new Team("HomeTeam1");
         Team awayTeam1 = new Team("AwayTeam1");
         Team homeTeam2 = new Team("HomeTeam2");
@@ -186,9 +184,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(homeTeam2);
         em.persist(awayTeam2);
 
-        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, new Date(time + 1000));
-        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, new Date(time + 2500));
+        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, now);
+        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, now.plusMinutes(1));
+        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, now.plusMinutes(2));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -207,7 +205,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
           expectedExceptionsMessageRegExp = "Cannot search for null match away team")
     public void testFindMatchByAwayTeamNull()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam1 = new Team("HomeTeam1");
         Team awayTeam1 = new Team("AwayTeam1");
         Team homeTeam2 = new Team("HomeTeam2");
@@ -217,9 +214,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(homeTeam2);
         em.persist(awayTeam2);
 
-        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, new Date(time + 1000));
-        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, new Date(time + 2500));
+        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, now);
+        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, now.plusMinutes(1));
+        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, now.plusMinutes(2));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -232,7 +229,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     @Test
     public void testFindMatchByAwayTeamNonexistent()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam1 = new Team("HomeTeam1");
         Team awayTeam1 = new Team("AwayTeam1");
         Team homeTeam2 = new Team("HomeTeam2");
@@ -242,9 +238,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(homeTeam2);
         em.persist(awayTeam2);
 
-        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, new Date(time + 1000));
-        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, new Date(time + 2500));
+        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, now);
+        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, now.plusMinutes(1));
+        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, now.plusMinutes(2));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -259,7 +255,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     @Test
     public void testFindMatchByStartTime()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam1 = new Team("HomeTeam1");
         Team awayTeam1 = new Team("AwayTeam1");
         Team homeTeam2 = new Team("HomeTeam2");
@@ -269,16 +264,16 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(homeTeam2);
         em.persist(awayTeam2);
 
-        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, new Date(time + 1000));
-        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, new Date(time + 1000));
+        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, now);
+        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, now.plusMinutes(1));
+        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, now.plusMinutes(1));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
         em.persist(teamMatch3);
         em.flush();
 
-        Collection<TeamMatch> dbMatches = teamMatchRepository.findMatchByStartTime(new Date(time + 1000));
+        Collection<TeamMatch> dbMatches = teamMatchRepository.findMatchByStartTime(now.plusMinutes(1));
 
         Assert.assertEquals(dbMatches.size(), 2);
         Assert.assertTrue(dbMatches.contains(teamMatch2));
@@ -290,7 +285,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
           expectedExceptionsMessageRegExp = "Cannot search for null match start time")
     public void testFindMatchByStartTimeNull()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam1 = new Team("HomeTeam1");
         Team awayTeam1 = new Team("AwayTeam1");
         Team homeTeam2 = new Team("HomeTeam2");
@@ -300,9 +294,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(homeTeam2);
         em.persist(awayTeam2);
 
-        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, new Date(time + 1000));
-        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, new Date(time + 1000));
+        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, now);
+        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, now.plusMinutes(1));
+        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, now.plusMinutes(1));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -315,7 +309,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     @Test
     public void testFindAllMatches()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam1 = new Team("HomeTeam1");
         Team awayTeam1 = new Team("AwayTeam1");
         Team homeTeam2 = new Team("HomeTeam2");
@@ -325,9 +318,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(homeTeam2);
         em.persist(awayTeam2);
 
-        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, new Date(time + 1000));
-        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, new Date(time + 2500));
+        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, now);
+        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, now.plusMinutes(1));
+        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, now.plusMinutes(2));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -345,7 +338,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     @Test
     public void testFindAllPlayedMatches()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam1 = new Team("HomeTeam1");
         Team awayTeam1 = new Team("AwayTeam1");
         Team homeTeam2 = new Team("HomeTeam2");
@@ -355,9 +347,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(homeTeam2);
         em.persist(awayTeam2);
 
-        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, new Date(time), new Date(time + 5400000));
-        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, new Date(time + 1000));
-        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, new Date(time + 2500), new Date(time + 5520000));
+        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, now, now.plusMinutes(60));
+        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, now.plusMinutes(1));
+        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, now.plusMinutes(2), now.plusMinutes(62));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -375,7 +367,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     @Test
     public void testFindAllPlannedMatches()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam1 = new Team("HomeTeam1");
         Team awayTeam1 = new Team("AwayTeam1");
         Team homeTeam2 = new Team("HomeTeam2");
@@ -385,9 +376,9 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(homeTeam2);
         em.persist(awayTeam2);
 
-        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, new Date(time), new Date(time + 5400000));
-        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, new Date(time + 1000));
-        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, new Date(time + 2500), new Date(time + 5520000));
+        TeamMatch teamMatch1 = new TeamMatch(homeTeam1, awayTeam1, now, now.plusMinutes(60));
+        TeamMatch teamMatch2 = new TeamMatch(homeTeam2, awayTeam1, now.plusMinutes(1));
+        TeamMatch teamMatch3 = new TeamMatch(homeTeam1, awayTeam2, now.plusMinutes(2), now.plusMinutes(62));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -405,7 +396,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     @Test
     public void testFindAllPlayedMatchesOfTeam()
     {
-        long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -415,10 +405,10 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team3);
         em.persist(team4);
 
-        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time), new Date(time + 5400000));
-        TeamMatch teamMatch2 = new TeamMatch(team2, team3, new Date(time + 1000));
-        TeamMatch teamMatch3 = new TeamMatch(team3, team4, new Date(time + 2500), new Date(time + 5520000));
-        TeamMatch teamMatch4 = new TeamMatch(team2, team1, new Date(time + 60000), new Date(time + 5920000));
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, now, now.plusMinutes(60));
+        TeamMatch teamMatch2 = new TeamMatch(team2, team3, now.plusMinutes(1));
+        TeamMatch teamMatch3 = new TeamMatch(team3, team4, now.plusMinutes(2), now.plusMinutes(62));
+        TeamMatch teamMatch4 = new TeamMatch(team2, team1, now.plusMinutes(6), now.plusMinutes(66));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -439,7 +429,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
           expectedExceptionsMessageRegExp = "Cannot search all played matches for a null team")
     public void testFindAllPlayedMatchesOfNullTeam()
     {
-        long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -449,10 +438,10 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team3);
         em.persist(team4);
 
-        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time), new Date(time + 5400000));
-        TeamMatch teamMatch2 = new TeamMatch(team2, team3, new Date(time + 1000));
-        TeamMatch teamMatch3 = new TeamMatch(team3, team4, new Date(time + 2500), new Date(time + 5520000));
-        TeamMatch teamMatch4 = new TeamMatch(team2, team1, new Date(time + 60000), new Date(time + 5920000));
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, now, now.plusMinutes(60));
+        TeamMatch teamMatch2 = new TeamMatch(team2, team3, now.plusMinutes(1));
+        TeamMatch teamMatch3 = new TeamMatch(team3, team4, now.plusMinutes(2), now.plusMinutes(62));
+        TeamMatch teamMatch4 = new TeamMatch(team2, team1, now.plusMinutes(6), now.plusMinutes(66));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -466,7 +455,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     @Test
     public void testFindAllPlayedMatchesOfNonexistentTeam()
     {
-        long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -476,10 +464,10 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team3);
         em.persist(team4);
 
-        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time), new Date(time + 5400000));
-        TeamMatch teamMatch2 = new TeamMatch(team2, team3, new Date(time + 1000));
-        TeamMatch teamMatch3 = new TeamMatch(team3, team4, new Date(time + 2500), new Date(time + 5520000));
-        TeamMatch teamMatch4 = new TeamMatch(team2, team1, new Date(time + 60000), new Date(time + 5920000));
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, now, now.plusMinutes(60));
+        TeamMatch teamMatch2 = new TeamMatch(team2, team3, now.plusMinutes(1));
+        TeamMatch teamMatch3 = new TeamMatch(team3, team4, now.plusMinutes(2), now.plusMinutes(62));
+        TeamMatch teamMatch4 = new TeamMatch(team2, team1, now.plusMinutes(6), now.plusMinutes(66));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -495,7 +483,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     @Test
     public void testFindAllPlannedMatchesOfTeam()
     {
-        long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -505,10 +492,10 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team3);
         em.persist(team4);
 
-        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time), new Date(time + 5400000));
-        TeamMatch teamMatch2 = new TeamMatch(team2, team3, new Date(time + 1000));
-        TeamMatch teamMatch3 = new TeamMatch(team3, team4, new Date(time + 2500), new Date(time + 5520000));
-        TeamMatch teamMatch4 = new TeamMatch(team2, team1, new Date(time + 60000));
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, now, now.plusMinutes(60));
+        TeamMatch teamMatch2 = new TeamMatch(team2, team3, now.plusMinutes(1));
+        TeamMatch teamMatch3 = new TeamMatch(team3, team4, now.plusMinutes(2), now.plusMinutes(62));
+        TeamMatch teamMatch4 = new TeamMatch(team2, team1, now.plusMinutes(6));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -529,7 +516,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
           expectedExceptionsMessageRegExp = "Cannot search all planned matches for a null team")
     public void testFindAllPlannedMatchesOfNullTeam()
     {
-        long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -539,10 +525,10 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team3);
         em.persist(team4);
 
-        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time), new Date(time + 5400000));
-        TeamMatch teamMatch2 = new TeamMatch(team2, team3, new Date(time + 1000));
-        TeamMatch teamMatch3 = new TeamMatch(team3, team4, new Date(time + 2500), new Date(time + 5520000));
-        TeamMatch teamMatch4 = new TeamMatch(team2, team1, new Date(time + 60000));
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, now, now.plusMinutes(60));
+        TeamMatch teamMatch2 = new TeamMatch(team2, team3, now.plusMinutes(1));
+        TeamMatch teamMatch3 = new TeamMatch(team3, team4, now.plusMinutes(2), now.plusMinutes(62));
+        TeamMatch teamMatch4 = new TeamMatch(team2, team1, now.plusMinutes(6));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -556,7 +542,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     @Test
     public void testFindAllPlannedMatchesOfNonexistentTeam()
     {
-        long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -566,10 +551,10 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team3);
         em.persist(team4);
 
-        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time), new Date(time + 5400000));
-        TeamMatch teamMatch2 = new TeamMatch(team2, team3, new Date(time + 1000));
-        TeamMatch teamMatch3 = new TeamMatch(team3, team4, new Date(time + 2500), new Date(time + 5520000));
-        TeamMatch teamMatch4 = new TeamMatch(team2, team1, new Date(time + 60000));
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, now, now.plusMinutes(60));
+        TeamMatch teamMatch2 = new TeamMatch(team2, team3, now.plusMinutes(1));
+        TeamMatch teamMatch3 = new TeamMatch(team3, team4, now.plusMinutes(2), now.plusMinutes(62));
+        TeamMatch teamMatch4 = new TeamMatch(team2, team1, now.plusMinutes(6));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -585,7 +570,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     @Test
     public void testFindAllMatchesOfTeam()
     {
-        long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -595,10 +579,10 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team3);
         em.persist(team4);
 
-        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time), new Date(time + 5400000));
-        TeamMatch teamMatch2 = new TeamMatch(team2, team3, new Date(time + 1000));
-        TeamMatch teamMatch3 = new TeamMatch(team3, team4, new Date(time + 2500), new Date(time + 5520000));
-        TeamMatch teamMatch4 = new TeamMatch(team2, team1, new Date(time + 60000));
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, now, now.plusMinutes(60));
+        TeamMatch teamMatch2 = new TeamMatch(team2, team3, now.plusMinutes(1));
+        TeamMatch teamMatch3 = new TeamMatch(team3, team4, now.plusMinutes(2), now.plusMinutes(62));
+        TeamMatch teamMatch4 = new TeamMatch(team2, team1, now.plusMinutes(6));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -619,7 +603,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
           expectedExceptionsMessageRegExp = "Cannot search all matches for a null team")
     public void testFindAllMatchesOfNullTeam()
     {
-        long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -629,10 +612,10 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team3);
         em.persist(team4);
 
-        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time), new Date(time + 5400000));
-        TeamMatch teamMatch2 = new TeamMatch(team2, team3, new Date(time + 1000));
-        TeamMatch teamMatch3 = new TeamMatch(team3, team4, new Date(time + 2500), new Date(time + 5520000));
-        TeamMatch teamMatch4 = new TeamMatch(team2, team1, new Date(time + 60000));
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, now, now.plusMinutes(60));
+        TeamMatch teamMatch2 = new TeamMatch(team2, team3, now.plusMinutes(1));
+        TeamMatch teamMatch3 = new TeamMatch(team3, team4, now.plusMinutes(2), now.plusMinutes(62));
+        TeamMatch teamMatch4 = new TeamMatch(team2, team1, now.plusMinutes(6));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -646,7 +629,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     @Test
     public void testFindAllMatchesOfNonexistentTeam()
     {
-        long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -656,10 +638,10 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team3);
         em.persist(team4);
 
-        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time), new Date(time + 5400000));
-        TeamMatch teamMatch2 = new TeamMatch(team2, team3, new Date(time + 1000));
-        TeamMatch teamMatch3 = new TeamMatch(team3, team4, new Date(time + 2500), new Date(time + 5520000));
-        TeamMatch teamMatch4 = new TeamMatch(team2, team1, new Date(time + 60000));
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, now, now.plusMinutes(60));
+        TeamMatch teamMatch2 = new TeamMatch(team2, team3, now.plusMinutes(1));
+        TeamMatch teamMatch3 = new TeamMatch(team3, team4, now.plusMinutes(2), now.plusMinutes(62));
+        TeamMatch teamMatch4 = new TeamMatch(team2, team1, now.plusMinutes(6));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
@@ -675,7 +657,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     @Test
     public void testFindConflictingMatchByTeamAndStartTimeAsAwayTeam()
     {
-        long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -685,25 +666,24 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team3);
         em.persist(team4);
 
-        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time + 15000));
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, now);
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, now.plusMinutes(15));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
         em.flush();
 
         TeamMatch conflictingMatch =
-            teamMatchRepository.findConflictingMatchByTeamAndStartTime(team2.getId(), new Date(time));
+            teamMatchRepository.findConflictingMatchByTeamAndStartTime(team2.getId(), now);
 
         Assert.assertNotNull(conflictingMatch);
         Assert.assertEquals(conflictingMatch.getAwayTeam(), team2);
-        Assert.assertEquals(conflictingMatch.getStartTime(), new Date(time));
+        Assert.assertEquals(conflictingMatch.getStartTime(), now);
     }
 
     @Test
     public void testFindConflictingMatchByTeamAndStartTimeAsHomeTeam()
     {
-        long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -713,25 +693,24 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team3);
         em.persist(team4);
 
-        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time + 15000));
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, now);
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, now.plusMinutes(15));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
         em.flush();
 
         TeamMatch conflictingMatch =
-            teamMatchRepository.findConflictingMatchByTeamAndStartTime(team3.getId(), new Date(time + 15000));
+            teamMatchRepository.findConflictingMatchByTeamAndStartTime(team3.getId(), now.plusMinutes(15));
 
         Assert.assertNotNull(conflictingMatch);
         Assert.assertEquals(conflictingMatch.getHomeTeam(), team3);
-        Assert.assertEquals(conflictingMatch.getStartTime(), new Date(time + 15000));
+        Assert.assertEquals(conflictingMatch.getStartTime(), now.plusMinutes(15));
     }
 
     @Test
     public void testFindConflictingMatchByTeamAndStartTimeNoConflictWithTeam()
     {
-        long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -741,15 +720,15 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team3);
         em.persist(team4);
 
-        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time + 15000));
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, now);
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, now.plusMinutes(15));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
         em.flush();
 
         TeamMatch conflictingMatch =
-            teamMatchRepository.findConflictingMatchByTeamAndStartTime(new Team("Team5").getId(), new Date(time + 15000));
+            teamMatchRepository.findConflictingMatchByTeamAndStartTime(new Team("Team5").getId(), now.plusMinutes(15));
 
         Assert.assertNull(conflictingMatch);
     }
@@ -757,7 +736,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
     @Test
     public void testFindConflictingMatchByTeamAndStartTimeNoConflictWithTime()
     {
-        long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -767,15 +745,15 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team3);
         em.persist(team4);
 
-        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time + 15000));
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, now);
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, now.plusMinutes(15));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
         em.flush();
 
         TeamMatch conflictingMatch =
-            teamMatchRepository.findConflictingMatchByTeamAndStartTime(team4.getId(), new Date(time));
+            teamMatchRepository.findConflictingMatchByTeamAndStartTime(team4.getId(), now);
 
         Assert.assertNull(conflictingMatch);
     }
@@ -784,7 +762,6 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
           expectedExceptionsMessageRegExp = "Cannot search for conflicting match with a null team")
     public void testFindConflictingMatchByNullTeamAndStartTime()
     {
-        long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -794,22 +771,21 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team3);
         em.persist(team4);
 
-        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time + 15000));
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, now);
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, now.plusMinutes(15));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);
         em.flush();
 
         TeamMatch conflictingMatch =
-            teamMatchRepository.findConflictingMatchByTeamAndStartTime(null, new Date(time));
+            teamMatchRepository.findConflictingMatchByTeamAndStartTime(null, now);
     }
 
     @Test(expectedExceptions = { IllegalArgumentException.class },
           expectedExceptionsMessageRegExp = "Cannot search for conflicting match with a null match start time")
     public void testFindConflictingMatchByTeamAndNullStartTime()
     {
-        long time = System.currentTimeMillis();
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
         Team team3 = new Team("Team3");
@@ -819,8 +795,8 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
         em.persist(team3);
         em.persist(team4);
 
-        TeamMatch teamMatch1 = new TeamMatch(team1, team2, new Date(time));
-        TeamMatch teamMatch2 = new TeamMatch(team3, team4, new Date(time + 15000));
+        TeamMatch teamMatch1 = new TeamMatch(team1, team2, now);
+        TeamMatch teamMatch2 = new TeamMatch(team3, team4, now.plusMinutes(15));
 
         em.persist(teamMatch1);
         em.persist(teamMatch2);

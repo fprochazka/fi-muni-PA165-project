@@ -4,13 +4,15 @@ import cz.muni.fi.pa165.team.Team;
 import cz.muni.fi.pa165.team.TeamPlayer;
 import org.testng.annotations.Test;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * @author Tomas Smid <smid.thomas@gmail.com>
  */
 public class TeamMatchGoalTest
 {
+
+    private LocalDateTime now = LocalDateTime.now();
 
     @Test(expectedExceptions = { IllegalArgumentException.class },
           expectedExceptionsMessageRegExp = "Cannot create goal for a null match")
@@ -21,7 +23,7 @@ public class TeamMatchGoalTest
             new TeamPlayer("John", "Doe", 187, 90, team),
             new TeamPlayer("John", "Smith", 179, 84, team),
             null,
-            new Date(1500)
+            now.plusMinutes(1)
         );
     }
 
@@ -33,8 +35,8 @@ public class TeamMatchGoalTest
         TeamMatchGoal teamMatchGoal = new TeamMatchGoal(
             null,
             new TeamPlayer("John", "Smith", 179, 84, team),
-            new TeamMatch(team, new Team("Team2"), new Date(0)),
-            new Date(1500)
+            new TeamMatch(team, new Team("Team2"), now.minusMinutes(1)),
+            now.plusMinutes(1)
         );
     }
 
@@ -46,8 +48,8 @@ public class TeamMatchGoalTest
         TeamMatchGoal teamMatchGoal = new TeamMatchGoal(
             new TeamPlayer("John", "Smith", 179, 84, team),
             null,
-            new TeamMatch(team, new Team("Team2"), new Date(0)),
-            new Date(1500)
+            new TeamMatch(team, new Team("Team2"), now.minusMinutes(1)),
+            now.plusMinutes(1)
         );
     }
 
@@ -59,7 +61,7 @@ public class TeamMatchGoalTest
         TeamMatchGoal teamMatchGoal = new TeamMatchGoal(
             new TeamPlayer("John", "Doe", 187, 90, team),
             new TeamPlayer("John", "Smith", 179, 84, team),
-            new TeamMatch(team, new Team("Team2"), new Date(0)),
+            new TeamMatch(team, new Team("Team2"), now.minusMinutes(1)),
             null
         );
     }
@@ -72,8 +74,8 @@ public class TeamMatchGoalTest
         TeamMatchGoal teamMatchGoal = new TeamMatchGoal(
             new TeamPlayer("John", "Doe", 187, 90, team),
             new TeamPlayer("John", "Smith", 179, 84, team),
-            new TeamMatch(team, new Team("Team2"), new Date(1)),
-            new Date(0)
+            new TeamMatch(team, new Team("Team2"), now.plusMinutes(1)),
+            now
         );
     }
 
@@ -85,8 +87,8 @@ public class TeamMatchGoalTest
         TeamMatchGoal teamMatchGoal = new TeamMatchGoal(
             new TeamPlayer("John", "Doe", 187, 90, team),
             new TeamPlayer("John", "Smith", 179, 84, team),
-            new TeamMatch(team, new Team("Team2"), new Date(1)),
-            new Date(1)
+            new TeamMatch(team, new Team("Team2"), now.minusMinutes(1)),
+            now.minusMinutes(1)
         );
     }
 
@@ -98,8 +100,8 @@ public class TeamMatchGoalTest
         TeamMatchGoal teamMatchGoal = new TeamMatchGoal(
             new TeamPlayer("John", "Doe", 187, 90, team),
             new TeamPlayer("John", "Smith", 179, 84, team),
-            new TeamMatch(team, new Team("Team2"), new Date(1), new Date(10000)),
-            new Date(10001)
+            new TeamMatch(team, new Team("Team2"), now.minusMinutes(1), now.plusMinutes(59)),
+            now.plusMinutes(60)
         );
     }
 }

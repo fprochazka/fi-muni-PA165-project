@@ -7,8 +7,8 @@ import org.springframework.util.Assert;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -64,7 +64,7 @@ public class TeamMatchRepositoryImpl implements TeamMatchRepository
 
 
     @Override
-    public Collection<TeamMatch> findMatchByStartTime(final Date startTime)
+    public Collection<TeamMatch> findMatchByStartTime(final LocalDateTime startTime)
     {
         Assert.notNull(startTime, "Cannot search for null match start time");
 
@@ -125,7 +125,7 @@ public class TeamMatchRepositoryImpl implements TeamMatchRepository
     }
 
     @Override
-    public TeamMatch findConflictingMatchByTeamAndStartTime(final UUID teamId, final Date startTime)
+    public TeamMatch findConflictingMatchByTeamAndStartTime(final UUID teamId, final LocalDateTime startTime)
     {
         Assert.notNull(teamId, "Cannot search for conflicting match with a null team");
         Assert.notNull(startTime, "Cannot search for conflicting match with a null match start time");

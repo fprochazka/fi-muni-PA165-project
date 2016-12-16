@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import static org.testng.Assert.*;
 
@@ -21,6 +21,8 @@ import static org.testng.Assert.*;
 public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContextTests
 {
 
+    private LocalDateTime now = LocalDateTime.now();
+
     @Autowired
     public TeamMatchFacade teamMatchFacade;
 
@@ -30,9 +32,6 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
     @Test
     public void testCreateMatch()
     {
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
-        Date endTime = new Date(time + 5520000);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         em.persist(homeTeam);
@@ -42,8 +41,8 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
         TeamMatch teamMatch = teamMatchFacade.createMatch(
             homeTeam.getId(),
             awayTeam.getId(),
-            startTime,
-            endTime
+            now,
+            now.plusMinutes(60)
         );
         em.clear();
 
@@ -52,15 +51,13 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
         assertNotNull(dbMatch);
         assertEquals(homeTeam.getId(), dbMatch.getHomeTeam().getId());
         assertEquals(awayTeam.getId(), dbMatch.getAwayTeam().getId());
-        assertEquals(startTime, dbMatch.getStartTime());
-        assertEquals(endTime, dbMatch.getEndTime());
+        assertEquals(teamMatch.getStartTime(), dbMatch.getStartTime());
+        assertEquals(teamMatch.getEndTime(), dbMatch.getEndTime());
     }
 
     @Test
     public void testDeleteMatch()
     {
-        long time = System.currentTimeMillis();
-
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         em.persist(homeTeam);
@@ -73,9 +70,9 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
         em.persist(scorer2);
         em.persist(assistant);
 
-        TeamMatch teamMatch = new TeamMatch(homeTeam, awayTeam, new Date(time));
-        TeamMatchGoal teamMatchGoal1 = new TeamMatchGoal(scorer1, assistant, teamMatch, new Date(time + 15000));
-        TeamMatchGoal teamMatchGoal2 = new TeamMatchGoal(scorer2, assistant, teamMatch, new Date(time + 25000));
+        TeamMatch teamMatch = new TeamMatch(homeTeam, awayTeam, now);
+        TeamMatchGoal teamMatchGoal1 = new TeamMatchGoal(scorer1, assistant, teamMatch, now.plusMinutes(15));
+        TeamMatchGoal teamMatchGoal2 = new TeamMatchGoal(scorer2, assistant, teamMatch, now.plusMinutes(25));
 
         em.persist(teamMatch);
         em.persist(teamMatchGoal1);
@@ -102,7 +99,6 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
     @Test
     public void testAddNewScoredGoal()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         em.persist(homeTeam);
@@ -113,7 +109,7 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
         em.persist(scorer);
         em.persist(assistant);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
         em.persist(match);
         em.flush();
 
@@ -121,7 +117,7 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
             scorer.getId(),
             assistant.getId(),
             match.getId(),
-            new Date(time)
+            now
         );
         em.clear();
 
@@ -137,7 +133,6 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
     @Test
     public void testDeleteMatchGoal()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         em.persist(homeTeam);
@@ -148,10 +143,10 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
         em.persist(scorer);
         em.persist(assistant);
 
-        TeamMatch match = new TeamMatch(homeTeam, awayTeam, new Date(time - 10000));
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now.minusMinutes(10));
         em.persist(match);
 
-        TeamMatchGoal goal = new TeamMatchGoal(scorer, assistant, match, new Date(time));
+        TeamMatchGoal goal = new TeamMatchGoal(scorer, assistant, match, now);
         em.persist(goal);
         em.flush();
 
@@ -165,15 +160,12 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
     @Test
     public void testChangeMatchTime()
     {
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
-        Date endTime = new Date(time + 5520000);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         em.persist(homeTeam);
         em.persist(awayTeam);
 
-        TeamMatch teamMatch = new TeamMatch(homeTeam, awayTeam, startTime, endTime);
+        TeamMatch teamMatch = new TeamMatch(homeTeam, awayTeam, now, now.plusMinutes(60));
         em.persist(teamMatch);
         em.flush();
         em.clear();
@@ -181,11 +173,11 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
         TeamMatch dbMatch = em.find(TeamMatch.class, teamMatch.getId());
 
         assertNotNull(dbMatch);
-        assertEquals(startTime, dbMatch.getStartTime());
-        assertEquals(endTime, dbMatch.getEndTime());
+        assertEquals(teamMatch.getStartTime(), dbMatch.getStartTime());
+        assertEquals(teamMatch.getEndTime(), dbMatch.getEndTime());
 
-        Date newStartTime = new Date(startTime.getTime() + 9548700);
-        Date newEndTime = new Date(endTime.getTime() + 9600000);
+        LocalDateTime newStartTime = now.plusMinutes(15);
+        LocalDateTime newEndTime = now.plusMinutes(75);
 
         teamMatchFacade.changeMatchTime(teamMatch.getId(), newStartTime, newEndTime);
 
@@ -198,14 +190,12 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
     @Test
     public void testEndMatch()
     {
-        long time = System.currentTimeMillis();
-        Date startTime = new Date(time);
         Team homeTeam = new Team("HomeTeam");
         Team awayTeam = new Team("AwayTeam");
         em.persist(homeTeam);
         em.persist(awayTeam);
 
-        TeamMatch teamMatch = new TeamMatch(homeTeam, awayTeam, startTime);
+        TeamMatch teamMatch = new TeamMatch(homeTeam, awayTeam, now);
         em.persist(teamMatch);
         em.flush();
         em.clear();
@@ -213,10 +203,10 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
         TeamMatch dbMatch = em.find(TeamMatch.class, teamMatch.getId());
 
         assertNotNull(dbMatch);
-        assertEquals(startTime, dbMatch.getStartTime());
+        assertEquals(teamMatch.getStartTime(), dbMatch.getStartTime());
         assertNull(dbMatch.getEndTime());
 
-        Date newEndTime = new Date(dbMatch.getStartTime().getTime() + 9600000);
+        LocalDateTime newEndTime = now.plusMinutes(67);
 
         teamMatchFacade.endMatch(teamMatch.getId(), newEndTime);
 

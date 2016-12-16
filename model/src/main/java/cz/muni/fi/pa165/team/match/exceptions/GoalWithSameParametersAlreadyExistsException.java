@@ -1,7 +1,6 @@
 package cz.muni.fi.pa165.team.match.exceptions;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -16,25 +15,27 @@ public class GoalWithSameParametersAlreadyExistsException extends RuntimeExcepti
 
     private final UUID matchId;
 
-    private final Date matchTime;
+    private final LocalDateTime matchTime;
 
     public GoalWithSameParametersAlreadyExistsException(
         UUID scorerId,
         UUID assistantId,
         UUID matchId,
-        Date matchTime
+        LocalDateTime matchTime
     )
     {
-        super(String.format("Goal from match %s scored by %s with assistant %s and scored in match time %s already exists",
+        super(String.format(
+            "Goal from match %s scored by %s with assistant %s and scored in match time %s already exists",
             matchId.toString(),
             scorerId.toString(),
             assistantId.toString(),
-            new SimpleDateFormat("dd/MM/YYYY hh:mm:ss").format(matchTime)));
+            matchTime.toString()
+        ));
 
         this.scorerId = scorerId;
         this.assistantId = assistantId;
         this.matchId = matchId;
-        this.matchTime = new Date(matchTime.getTime());
+        this.matchTime = matchTime;
     }
 
     public UUID getScorerId()
@@ -52,8 +53,8 @@ public class GoalWithSameParametersAlreadyExistsException extends RuntimeExcepti
         return matchId;
     }
 
-    public Date getMatchTime()
+    public LocalDateTime getMatchTime()
     {
-        return new Date(matchTime.getTime());
+        return matchTime;
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -64,7 +64,7 @@ public class TeamMatchFacade
      * @param endTime    end time of the match, can be null
      * @return newly created match
      */
-    public TeamMatch createMatch(UUID homeTeamId, UUID awayTeamId, Date startTime, Date endTime)
+    public TeamMatch createMatch(UUID homeTeamId, UUID awayTeamId, LocalDateTime startTime, LocalDateTime endTime)
     {
         Team homeTeam = teamRepository.getTeamById(homeTeamId);
         Team awayTeam = teamRepository.getTeamById(awayTeamId);
@@ -113,7 +113,7 @@ public class TeamMatchFacade
      * @param startTime new start time of the match
      * @param endTime   new end time of the match
      */
-    public void changeMatchTime(UUID matchId, Date startTime, Date endTime)
+    public void changeMatchTime(UUID matchId, LocalDateTime startTime, LocalDateTime endTime)
     {
         TeamMatch teamMatch = teamMatchRepository.getMatchById(matchId);
         TeamMatch conflictingMatchForHomeTeam =
@@ -138,7 +138,7 @@ public class TeamMatchFacade
      * @param matchId id of the match which end time should be updated
      * @param endTime new end time of the match
      */
-    public void endMatch(UUID matchId, Date endTime)
+    public void endMatch(UUID matchId, LocalDateTime endTime)
     {
         TeamMatch teamMatch = teamMatchRepository.getMatchById(matchId);
 
@@ -156,7 +156,7 @@ public class TeamMatchFacade
      * @param matchTime   time in which the goal is scored
      * @return newly created goal
      */
-    public TeamMatchGoal addNewScoredGoal(UUID scorerId, UUID assistantId, UUID matchId, Date matchTime)
+    public TeamMatchGoal addNewScoredGoal(UUID scorerId, UUID assistantId, UUID matchId, LocalDateTime matchTime)
     {
         TeamPlayer scorer = teamPlayerRepository.getTeamPlayerById(scorerId);
         TeamPlayer assistant = teamPlayerRepository.getTeamPlayerById(assistantId);

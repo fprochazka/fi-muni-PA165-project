@@ -13,8 +13,8 @@ import org.testng.annotations.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 import java.util.UUID;
 
 import static org.testng.Assert.*;
@@ -25,6 +25,8 @@ import static org.testng.Assert.*;
 @ContextConfiguration(classes = ModelConfig.class)
 public class TeamRepositoryImplTest extends AbstractTransactionalTestNGSpringContextTests
 {
+
+    private LocalDateTime now = LocalDateTime.now();
 
     @Autowired
     public TeamRepositoryImpl teamRepository;
@@ -51,10 +53,10 @@ public class TeamRepositoryImplTest extends AbstractTransactionalTestNGSpringCon
         em.flush();
 
         long time = System.currentTimeMillis();
-        m1 = new TeamMatch(t1, t2, new Date(time), new Date(time + 5520000));
-        m2 = new TeamMatch(t2, t3, new Date(time), new Date(time + 5520000));
-        m3 = new TeamMatch(t3, t4, new Date(time), new Date(time + 5520000));
-        m4 = new TeamMatch(t4, t1, new Date(time), new Date(time + 5520000));
+        m1 = new TeamMatch(t1, t2, now, now.plusMinutes(55));
+        m2 = new TeamMatch(t2, t3, now, now.plusMinutes(55));
+        m3 = new TeamMatch(t3, t4, now, now.plusMinutes(55));
+        m4 = new TeamMatch(t4, t1, now, now.plusMinutes(55));
         em.persist(m1);
         em.persist(m2);
         em.persist(m3);
@@ -79,10 +81,10 @@ public class TeamRepositoryImplTest extends AbstractTransactionalTestNGSpringCon
         em.persist(p42);
         em.flush();
 
-        g1 = new TeamMatchGoal(p1, p12, m1, new Date(time + 2520000));
-        g2 = new TeamMatchGoal(p2, p22, m2, new Date(time + 2520000));
-        g3 = new TeamMatchGoal(p3, p32, m3, new Date(time + 2520000));
-        g4 = new TeamMatchGoal(p4, p42, m4, new Date(time + 2520000));
+        g1 = new TeamMatchGoal(p1, p12, m1, now.plusMinutes(25));
+        g2 = new TeamMatchGoal(p2, p22, m2, now.plusMinutes(25));
+        g3 = new TeamMatchGoal(p3, p32, m3, now.plusMinutes(25));
+        g4 = new TeamMatchGoal(p4, p42, m4, now.plusMinutes(25));
         em.persist(g1);
         em.persist(g2);
         em.persist(g3);

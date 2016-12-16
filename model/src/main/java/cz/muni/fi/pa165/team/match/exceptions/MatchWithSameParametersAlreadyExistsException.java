@@ -1,7 +1,6 @@
 package cz.muni.fi.pa165.team.match.exceptions;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -12,16 +11,18 @@ public class MatchWithSameParametersAlreadyExistsException extends RuntimeExcept
 
     private final UUID teamId;
 
-    private final Date startTime;
+    private final LocalDateTime startTime;
 
-    public MatchWithSameParametersAlreadyExistsException(UUID teamId, Date startTime)
+    public MatchWithSameParametersAlreadyExistsException(UUID teamId, LocalDateTime startTime)
     {
-        super(String.format("There already exists match with team %s with start time %s",
+        super(String.format(
+            "There already exists match with team %s with start time %s",
             teamId.toString(),
-            new SimpleDateFormat("dd/MM/YYYY hh:mm:ss").format(startTime)));
+            startTime.toString()
+        ));
 
         this.teamId = teamId;
-        this.startTime = new Date(startTime.getTime());
+        this.startTime = startTime;
     }
 
     public UUID getTeamId()
@@ -29,8 +30,8 @@ public class MatchWithSameParametersAlreadyExistsException extends RuntimeExcept
         return teamId;
     }
 
-    public Date getStartTime()
+    public LocalDateTime getStartTime()
     {
-        return new Date(startTime.getTime());
+        return startTime;
     }
 }

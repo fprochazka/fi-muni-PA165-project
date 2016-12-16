@@ -6,7 +6,7 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -36,13 +36,13 @@ public class TeamMatch
 
     @Column(nullable = false)
     @NotNull
-    private Date startTime;
+    private LocalDateTime startTime;
 
     /**
      * nullable=true is the default setting, could be missed, but mentioned for better overview
      */
     @Column(nullable = true)
-    private Date endTime;
+    private LocalDateTime endTime;
 
     /**
      * First constructor which takes 3 parameters for attributes set up and
@@ -52,7 +52,7 @@ public class TeamMatch
      * @param awayTeam  away team in the match
      * @param startTime start time of the match
      */
-    public TeamMatch(Team homeTeam, Team awayTeam, Date startTime)
+    public TeamMatch(Team homeTeam, Team awayTeam, LocalDateTime startTime)
     {
         this(homeTeam, awayTeam, startTime, null);
     }
@@ -65,7 +65,7 @@ public class TeamMatch
      * @param startTime start time of the match
      * @param endTime   end time of the match
      */
-    public TeamMatch(Team homeTeam, Team awayTeam, Date startTime, Date endTime)
+    public TeamMatch(Team homeTeam, Team awayTeam, LocalDateTime startTime, LocalDateTime endTime)
     {
         Assert.notNull(homeTeam, "Cannot create match with a null home team");
         Assert.notNull(awayTeam, "Cannot create match with a null away team");
@@ -74,8 +74,8 @@ public class TeamMatch
         this.id = UUID.randomUUID();
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
-        this.startTime = startTime == null ? null : new Date(startTime.getTime());
-        this.endTime = endTime == null ? null : new Date(endTime.getTime());
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     /**
@@ -101,14 +101,14 @@ public class TeamMatch
         return awayTeam;
     }
 
-    public Date getStartTime()
+    public LocalDateTime getStartTime()
     {
-        return startTime == null ? null : new Date(startTime.getTime());
+        return startTime;
     }
 
-    public Date getEndTime()
+    public LocalDateTime getEndTime()
     {
-        return endTime == null ? null : new Date(endTime.getTime());
+        return endTime;
     }
 
     /**
@@ -117,12 +117,12 @@ public class TeamMatch
      * @param startTime new start time of the match, cannot be null
      * @param endTime   new end time of the match, can be null
      */
-    public void changeMatchTime(Date startTime, Date endTime)
+    public void changeMatchTime(LocalDateTime startTime, LocalDateTime endTime)
     {
         validateMatchTimes(startTime, endTime);
 
-        this.startTime = new Date(startTime.getTime());
-        this.endTime = (endTime == null ? null : new Date(endTime.getTime()));
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     /**
@@ -130,18 +130,18 @@ public class TeamMatch
      *
      * @param endTime new end time of the match, cannot be null
      */
-    public void endMatch(Date endTime)
+    public void endMatch(LocalDateTime endTime)
     {
         Assert.notNull(endTime, "Cannot end the match with a null end time");
 
         validateMatchTimes(this.startTime, endTime);
 
-        this.endTime = new Date(endTime.getTime());
+        this.endTime = endTime;
     }
 
-    private void validateMatchTimes(Date startTime, Date endTime)
+    private void validateMatchTimes(LocalDateTime startTime, LocalDateTime endTime)
     {
         Assert.notNull(startTime, "Match start time is null");
-        Assert.isTrue((endTime == null || endTime.after(startTime)), "Match end time is not after start time");
+        Assert.isTrue((endTime == null || endTime.isAfter(startTime)), "Match end time is not after start time");
     }
 }
