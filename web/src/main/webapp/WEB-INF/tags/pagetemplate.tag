@@ -36,7 +36,7 @@
                     <a class="nav-link" href="#">Matches</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Teams</a>
+                    <a class="nav-link" href="<c:url value="/teams"/>">Teams</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Players</a>

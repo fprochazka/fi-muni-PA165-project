@@ -36,3 +36,118 @@
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
+
+
+.tr-header-team {
+    width: 100%;
+    display: inline-table;
+    height: 60px;
+    table-layout: fixed;
+}
+
+.tr-fixed-team {
+    text-align: center;
+    width: 100%;
+    display: inline-table;
+    height: 60px;
+    table-layout: fixed;
+}
+
+.clickable-row {
+    cursor: pointer;
+}
+
+.th-center {
+    text-align: center;
+}
+
+.new-team-button-area {
+    margin-top: 30px;
+}
+
+.invisible-button {
+    display: none;
+}
+
+.team-form {
+    padding: 10px;
+    margin: 50px;
+    border-style: solid;
+    border-color: lightgrey;
+    border-width: 1px;
+}
+
+#team-form-legend {
+    margin-bottom: 40px;
+}
+
+.team-form-item {
+    margin: 5px;
+    padding: 5px;
+}
+
+.team-text-field {
+    margin-left: 15px;
+    padding: 2px;
+    border-color: lightgrey;
+    width: 37%;
+}
+
+#form-buttons {
+    text-align: right;
+}
+
+#pcancel {
+    margin: 5px;
+    margin-top: 30px;
+}
+
+#psubmit {
+    margin: 5px;
+    margin-top: 30px;
+}
+
+.edit-team-button-area {
+    margin-top: 30px;
+}
+
+.delete-team-button-area {
+    margin-top: 30px;
+}
+
+.table-fixed-no-margin {
+    height: 10px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.tr-fixed {
+    width: 100%;
+    display: inline-table;
+    height: 60px;
+    table-layout: fixed;
+}
+
+.tr-header {
+    width: 104%;
+    display: inline-table;
+    height: 60px;
+    table-layout: fixed;
+}
+
+.table-fixed {
+    height: 300px;
+    margin-bottom: 80px;
+}
+
+.tr-fixed-small {
+    width: 100%;
+    display: inline-table;
+    table-layout: fixed;
+}
+
+.table-fixed-small {
+    height: 150px;
+}
