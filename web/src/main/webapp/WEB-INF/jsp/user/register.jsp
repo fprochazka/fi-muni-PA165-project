@@ -15,8 +15,7 @@
                     <h1>Registration</h1>
                     <br>
 
-                    <c:url value="/register" var="registerActionUrl" />
-                    <form:form class="form-horizontal" method="post" modelAttribute="registerRequest" action="${registerActionUrl}">
+                    <form:form class="form-horizontal" method="post" modelAttribute="registerRequest" action="${requestScope['javax.servlet.forward.request_uri']}">
 
                         <s:bind path="email">
                             <div class="form-group row ${status.error ? 'has-danger' : ''}">
