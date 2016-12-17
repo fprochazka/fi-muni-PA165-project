@@ -47,7 +47,9 @@ public class UserFacadeTest extends AbstractTransactionalTestNGSpringContextTest
         em.flush();
         em.clear();
 
-        userFacade.promoteUserToModerator(user.getId());
+        User returnedUser = userFacade.promoteUserToModerator(user.getId());
+        assertEquals(user.getId(), returnedUser.getId());
+        assertEquals(UserRole.MODERATOR, returnedUser.getRole());
         em.clear();
 
         User promotedUser = em.find(User.class, user.getId());
@@ -62,7 +64,9 @@ public class UserFacadeTest extends AbstractTransactionalTestNGSpringContextTest
         em.flush();
         em.clear();
 
-        userFacade.promoteUserToAdmin(user.getId());
+        User returnedUser = userFacade.promoteUserToAdmin(user.getId());
+        assertEquals(user.getId(), returnedUser.getId());
+        assertEquals(UserRole.ADMIN, returnedUser.getRole());
         em.clear();
 
         User promotedUser = em.find(User.class, user.getId());
