@@ -43,7 +43,7 @@
                 </li>
                 <sec:authorize access="hasRole('ROLE_ADMIN')">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Users</a>
+                        <a class="nav-link" href="<c:url value="/admin/users"/>">Users</a>
                     </li>
                 </sec:authorize>
             </ul>
