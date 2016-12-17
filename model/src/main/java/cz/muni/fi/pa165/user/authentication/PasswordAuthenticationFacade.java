@@ -56,7 +56,17 @@ public class PasswordAuthenticationFacade implements UserDetailsService
     private List<GrantedAuthority> buildUserAuthority(UserRole userRole)
     {
         Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority(userRole.toString()));
+
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+
+        if (userRole == UserRole.MODERATOR) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_MODERATOR"));
+        }
+
+        if (userRole == UserRole.ADMIN) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+
         return new ArrayList<>(authorities);
     }
 

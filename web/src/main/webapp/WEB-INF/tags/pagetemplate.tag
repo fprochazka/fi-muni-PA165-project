@@ -41,7 +41,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Players</a>
                 </li>
-                <sec:authorize access="hasRole('admin')">
+                <sec:authorize access="hasRole('ROLE_ADMIN')">
                     <li class="nav-item">
                         <a class="nav-link" href="#">Users</a>
                     </li>

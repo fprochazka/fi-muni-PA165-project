@@ -194,7 +194,7 @@
                     </div>
                 </div>
 
-                <sec:authorize access="hasAnyRole('moderator', 'admin')">
+                <sec:authorize access="hasAnyRole('MODERATOR', 'ADMIN')">
                     <div class="row">
                         <div class="col-md-10 offset-md-1 delete-team-button-area text-md-right">
                             <a href="<c:url value="/team/${team.id}/edit"/>" class="btn btn-success edit-team-button-area" role="button">Edit Team</a>
