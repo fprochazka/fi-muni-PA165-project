@@ -45,8 +45,8 @@ public class TeamMatchServiceTest
         assertEquals(endTime, newMatch.getEndTime());
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Match cannot be created with a null away team")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Match cannot be created with a null away team")
     public void testCreateMatchWithNullAwayTeam()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
@@ -65,8 +65,8 @@ public class TeamMatchServiceTest
         );
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Match cannot be created with a null home team")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Match cannot be created with a null home team")
     public void testCreateMatchWithNullHomeTeam()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
@@ -85,8 +85,8 @@ public class TeamMatchServiceTest
         );
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Match cannot be created for home and away teams which are same")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Match cannot be created for home and away teams which are same")
     public void testCreateMatchWithSameHomeAndAwayTeam()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
@@ -105,8 +105,8 @@ public class TeamMatchServiceTest
         );
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Match start time is null")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Match start time is null")
     public void testCreateMatchWithNullStartTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
@@ -150,8 +150,8 @@ public class TeamMatchServiceTest
         assertNull(newMatch.getEndTime());
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Match end time is not after start time")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Match end time is not after start time")
     public void testCreateMatchWithEndTimeBeforeStartTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
@@ -171,8 +171,8 @@ public class TeamMatchServiceTest
         );
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Match end time is not after start time")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Match end time is not after start time")
     public void testCreateMatchWithStartTimeEqualToEndTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
@@ -270,7 +270,7 @@ public class TeamMatchServiceTest
 
         assertNotNull(newMatch);
         assertEquals(team3.getId(), newMatch.getHomeTeam().getId());
-        assertEquals(team4.getId(),newMatch.getAwayTeam().getId());
+        assertEquals(team4.getId(), newMatch.getAwayTeam().getId());
         assertEquals(startTime, newMatch.getStartTime());
         assertNull(newMatch.getEndTime());
 
@@ -300,7 +300,7 @@ public class TeamMatchServiceTest
 
         assertNotNull(newMatch);
         assertEquals(team3.getId(), newMatch.getHomeTeam().getId());
-        assertEquals(team1.getId(),newMatch.getAwayTeam().getId());
+        assertEquals(team1.getId(), newMatch.getAwayTeam().getId());
         assertEquals(startTime2, newMatch.getStartTime());
         assertNull(newMatch.getEndTime());
 
@@ -329,7 +329,7 @@ public class TeamMatchServiceTest
 
         assertNotNull(newMatch);
         assertEquals(team2.getId(), newMatch.getHomeTeam().getId());
-        assertEquals(team1.getId(),newMatch.getAwayTeam().getId());
+        assertEquals(team1.getId(), newMatch.getAwayTeam().getId());
         assertEquals(startTime2, newMatch.getStartTime());
         assertNull(newMatch.getEndTime());
 
@@ -360,8 +360,8 @@ public class TeamMatchServiceTest
         assertEquals(endTime2, match.getEndTime());
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Cannot change match times of null match")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot change match times of null match")
     public void testChangeMatchTimeWithNullMatch()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
@@ -378,8 +378,8 @@ public class TeamMatchServiceTest
         );
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Match start time is null")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Match start time is null")
     public void testChangeMatchTimeWithNullStartTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
@@ -423,8 +423,8 @@ public class TeamMatchServiceTest
         assertNull(match.getEndTime());
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Match end time is not after start time")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Match end time is not after start time")
     public void testChangeMatchTimeWithEndTimeBeforeStartTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
@@ -446,8 +446,8 @@ public class TeamMatchServiceTest
         );
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Match end time is not after start time")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Match end time is not after start time")
     public void testChangeMatchTimeWithEndTimeEqualToStartTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
@@ -625,58 +625,90 @@ public class TeamMatchServiceTest
         LocalDateTime endTime = now.plusMinutes(50);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
+        TeamPlayer scorer = new TeamPlayer("Josef", "Fracek", 185, 84, team1);
+        TeamPlayer assistant = new TeamPlayer("Leopold", "Petarda", 174, 65, team1);
         TeamMatch match = new TeamMatch(team1, team2, startTime);
+        TeamMatchGoal lastGoal = new TeamMatchGoal(scorer, assistant, match, endTime.minusMinutes(1));
 
         assertNull(match.getEndTime());
 
-        teamMatchService.endMatch(match, endTime);
+        teamMatchService.endMatch(match, lastGoal, endTime);
 
         assertEquals(endTime, match.getEndTime());
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Cannot end the null match")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot end the null match")
     public void testEndMatchWithNullMatch()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
 
+        LocalDateTime startTime = now;
         LocalDateTime endTime = now.plusMinutes(50);
+        Team team1 = new Team("Team1");
+        Team team2 = new Team("Team2");
+        TeamPlayer scorer = new TeamPlayer("Josef", "Fracek", 185, 84, team1);
+        TeamPlayer assistant = new TeamPlayer("Leopold", "Petarda", 174, 65, team1);
+        TeamMatch match = new TeamMatch(team1, team2, startTime);
+        TeamMatchGoal lastGoal = new TeamMatchGoal(scorer, assistant, match, endTime.minusMinutes(5));
 
-        teamMatchService.endMatch(null, endTime);
+        teamMatchService.endMatch(null, lastGoal, endTime);
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Cannot end the match with a null end time")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot end the match with a null end time")
     public void testEndMatchWithNullEndTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-
         LocalDateTime startTime = now;
+        LocalDateTime endTime = now.plusMinutes(50);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
+        TeamPlayer scorer = new TeamPlayer("Josef", "Fracek", 185, 84, team1);
+        TeamPlayer assistant = new TeamPlayer("Leopold", "Petarda", 174, 65, team1);
         TeamMatch match = new TeamMatch(team1, team2, startTime);
+        TeamMatchGoal lastGoal = new TeamMatchGoal(scorer, assistant, match, endTime.minusMinutes(5));
 
-        teamMatchService.endMatch(match, null);
+        teamMatchService.endMatch(match, lastGoal, null);
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Cannot end already ended match")
+//    @Test
+//    public void testEndMatchWithNullLastGoal()
+//    {
+//        TeamMatchService teamMatchService = new TeamMatchService();
+//        LocalDateTime startTime = now;
+//        LocalDateTime endTime = now.plusMinutes(90);
+//        Team team1 = new Team("Team1");
+//        Team team2 = new Team("Team2");
+//        TeamMatch match = new TeamMatch(team1, team2, startTime);
+//
+//        assertNull(match.getEndTime());
+//
+//        teamMatchService.endMatch(match, null, endTime);
+//
+//        assertEquals(endTime, match.getEndTime());
+//    }
+
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot end already ended match")
     public void testEndMatchWithAlreadyEndedMatch()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
-
         LocalDateTime startTime = now;
         LocalDateTime endTime = now.plusMinutes(50);
         LocalDateTime endTime2 = now.plusSeconds(1);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
+        TeamPlayer scorer = new TeamPlayer("Josef", "Fracek", 185, 84, team1);
+        TeamPlayer assistant = new TeamPlayer("Leopold", "Petarda", 174, 65, team1);
         TeamMatch match = new TeamMatch(team1, team2, startTime, endTime);
+        TeamMatchGoal lastGoal = new TeamMatchGoal(scorer, assistant, match, endTime.minusSeconds(1));
 
-        teamMatchService.endMatch(match, endTime2);
+        teamMatchService.endMatch(match, lastGoal, endTime2);
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Match end time is not after start time")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Match end time is not after start time")
     public void testEndMatchWithEndTimeBeforeStartTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
@@ -685,13 +717,16 @@ public class TeamMatchServiceTest
         LocalDateTime endTime = now.minusSeconds(1);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
+        TeamPlayer scorer = new TeamPlayer("Josef", "Fracek", 185, 84, team1);
+        TeamPlayer assistant = new TeamPlayer("Leopold", "Petarda", 174, 65, team1);
         TeamMatch match = new TeamMatch(team1, team2, startTime);
+        TeamMatchGoal lastGoal = new TeamMatchGoal(scorer, assistant, match, startTime.plusSeconds(1));
 
-        teamMatchService.endMatch(match, endTime);
+        teamMatchService.endMatch(match, lastGoal, endTime);
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Match end time is not after start time")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Match end time is not after start time")
     public void testEndMatchWithEndTimeEqualToStartTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
@@ -700,9 +735,46 @@ public class TeamMatchServiceTest
         LocalDateTime endTime = now;
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
+        TeamPlayer scorer = new TeamPlayer("Josef", "Fracek", 185, 84, team1);
+        TeamPlayer assistant = new TeamPlayer("Leopold", "Petarda", 174, 65, team1);
         TeamMatch match = new TeamMatch(team1, team2, startTime);
+        TeamMatchGoal lastGoal = new TeamMatchGoal(scorer, assistant, match, startTime.plusSeconds(1));
 
-        teamMatchService.endMatch(match, endTime);
+        teamMatchService.endMatch(match, lastGoal, endTime);
+    }
+
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Match end time is not after last match scored goal time")
+    public void testEndMatchWithLastGoalMatchTimeAfterNewEndTime()
+    {
+        TeamMatchService teamMatchService = new TeamMatchService();
+        LocalDateTime startTime = now;
+        LocalDateTime endTime = now.plusMinutes(90);
+        Team team1 = new Team("Team1");
+        Team team2 = new Team("Team2");
+        TeamPlayer scorer = new TeamPlayer("Josef", "Fracek", 185, 84, team1);
+        TeamPlayer assistant = new TeamPlayer("Leopold", "Petarda", 174, 65, team1);
+        TeamMatch match = new TeamMatch(team1, team2, startTime);
+        TeamMatchGoal lastGoal = new TeamMatchGoal(scorer, assistant, match, endTime.plusSeconds(1));
+
+        teamMatchService.endMatch(match, lastGoal, endTime);
+    }
+
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Match end time is not after last match scored goal time")
+    public void testEndMatchWithLastGoalMatchTimeEqualToNewEndTime()
+    {
+        TeamMatchService teamMatchService = new TeamMatchService();
+        LocalDateTime startTime = now;
+        LocalDateTime endTime = now.plusMinutes(90);
+        Team team1 = new Team("Team1");
+        Team team2 = new Team("Team2");
+        TeamPlayer scorer = new TeamPlayer("Josef", "Fracek", 185, 84, team1);
+        TeamPlayer assistant = new TeamPlayer("Leopold", "Petarda", 174, 65, team1);
+        TeamMatch match = new TeamMatch(team1, team2, startTime);
+        TeamMatchGoal lastGoal = new TeamMatchGoal(scorer, assistant, match, endTime);
+
+        teamMatchService.endMatch(match, lastGoal, endTime);
     }
 
     @Test
@@ -733,8 +805,8 @@ public class TeamMatchServiceTest
         assertEquals(goalMatchTime, newGoal.getMatchTime());
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Cannot create new goal with a null scorer")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot create new goal with a null scorer")
     public void testAddNewScoredGoalWithNullScorer()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
@@ -755,8 +827,8 @@ public class TeamMatchServiceTest
         );
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Cannot create new goal with a null assistant")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot create new goal with a null assistant")
     public void testAddNewScoredGoalWithNullAssistant()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
@@ -777,8 +849,8 @@ public class TeamMatchServiceTest
         );
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Cannot create new goal with scorer and assistant who are the same player")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot create new goal with scorer and assistant who are the same player")
     public void testAddNewScoredGoalWithSameScorerAndAssistant()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
@@ -799,8 +871,8 @@ public class TeamMatchServiceTest
         );
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Given a null goal match time")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Given a null goal match time")
     public void testAddNewScoredGoalWithNullGoalMatchTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
@@ -821,8 +893,8 @@ public class TeamMatchServiceTest
         );
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Goal match time is not after match start time")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Goal match time is not after match start time")
     public void testAddNewScoredGoalWithGoalMatchTimeBeforeMatchStartTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
@@ -844,8 +916,8 @@ public class TeamMatchServiceTest
         );
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Goal match time is not after match start time")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Goal match time is not after match start time")
     public void testAddNewScoredGoalWithGoalMatchTimeEqualToMatchStartTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
@@ -867,8 +939,8 @@ public class TeamMatchServiceTest
         );
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Goal match time is not before match end time")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Goal match time is not before match end time")
     public void testAddNewScoredGoalWithGoalMatchTimeAfterMatchEndTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
@@ -891,8 +963,8 @@ public class TeamMatchServiceTest
         );
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Goal match time is not before match end time")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Goal match time is not before match end time")
     public void testAddNewScoredGoalWithGoalMatchTimeEqualToMatchEndTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();

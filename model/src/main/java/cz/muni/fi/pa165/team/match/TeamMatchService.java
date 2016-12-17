@@ -101,14 +101,17 @@ public class TeamMatchService
      * This method sets new end time to the match.
      *
      * @param match   match which end time should be updated
+     * @param lastGoal last scored goal in the match
      * @param endTime new end time of the match
      */
-    public void endMatch(TeamMatch match, LocalDateTime endTime)
+    public void endMatch(TeamMatch match, TeamMatchGoal lastGoal, LocalDateTime endTime)
     {
         Assert.notNull(match, "Cannot end the null match");
         Assert.isNull(match.getEndTime(), "Cannot end already ended match");
 
-        match.endMatch(endTime);
+        LocalDateTime lastGoalTime = lastGoal.getMatchTime();
+
+        match.endMatch(endTime, lastGoalTime);
     }
 
     /**

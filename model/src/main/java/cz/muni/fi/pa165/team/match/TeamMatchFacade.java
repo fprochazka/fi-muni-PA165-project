@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -141,8 +142,9 @@ public class TeamMatchFacade
     public void endMatch(UUID matchId, LocalDateTime endTime)
     {
         TeamMatch teamMatch = teamMatchRepository.getMatchById(matchId);
+        TeamMatchGoal teamMatchGoal = teamMatchGoalRepository.findLastGoalByMatch(teamMatch.getId());
 
-        teamMatchService.endMatch(teamMatch, endTime);
+        teamMatchService.endMatch(teamMatch, teamMatchGoal, endTime);
 
         entityManager.flush();
     }
@@ -193,6 +195,66 @@ public class TeamMatchFacade
 
         entityManager.remove(teamMatchGoal);
         entityManager.flush();
+    }
+
+    /**
+     * Retrieves all matches which have already been played.
+     *
+     * @return collection of all played matches
+     */
+    public Collection<TeamMatch> findAllPlayedMatches()
+    {
+        return teamMatchRepository.findAllPlayedMatches();
+    }
+
+    /**
+     * Retrieves all matches which are planned to be played, but have not
+     * already been played.
+     *
+     * @return collection of all planned but not played matches
+     */
+    public Collection<TeamMatch> findAllPlannedMatches()
+    {
+        return teamMatchRepository.findAllPlannedMatches();
+    }
+
+    /**
+     * Retrieves all scored goals by home team in the given match.
+     *
+     * @param matchId match which home team should score some goals a those should be retrieved
+     * @return all scored goals by home team in the required match
+     */
+    public Collection<TeamMatchGoal> findAllGoalByHomeTeamInMatch(UUID matchId)
+    {
+        TeamMatch teamMatch = teamMatchRepository.getMatchById(matchId);
+
+        return teamMatchGoalRepository.findAllGoalsByTeamInMatch(
+            teamMatch.getId(), teamMatch.getHomeTeam().getId());
+    }
+
+    /**
+     * Retrieves all scored goals by away team in the given match.
+     *
+     * @param matchId match which away team should score some goals a those should be retrieved
+     * @return all scored goals by away team in the required match
+     */
+    public Collection<TeamMatchGoal> findAllGoalByAwayTeamInMatch(UUID matchId)
+    {
+        TeamMatch teamMatch = teamMatchRepository.getMatchById(matchId);
+
+        return teamMatchGoalRepository.findAllGoalsByTeamInMatch(
+            teamMatch.getId(), teamMatch.getAwayTeam().getId());
+    }
+
+    /**
+     * Retrieves match by id.
+     *
+     * @param matchId match which should be retrieved from DB
+     * @return match with the required id
+     */
+    public TeamMatch getMatchById(UUID matchId)
+    {
+        return teamMatchRepository.getMatchById(matchId);
     }
 
 }

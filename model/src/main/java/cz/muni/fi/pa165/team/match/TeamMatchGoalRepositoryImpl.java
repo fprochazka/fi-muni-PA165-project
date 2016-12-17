@@ -98,4 +98,32 @@ public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
             return null;
         }
     }
+
+    @Override
+    public TeamMatchGoal findLastGoalByMatch(final UUID matchId)
+    {
+        Assert.notNull(matchId, "Cannot search last scored goal for null match");
+
+        try {
+            return entityManager.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.match.id = :matchId AND " +
+                "g.matchTime IN (SELECT max(tmg.matchTime) FROM TeamMatchGoal tmg WHERE tmg.match.id = :matchId)", TeamMatchGoal.class)
+                .setParameter("matchId", matchId)
+                .getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        }
+    }
+
+    @Override
+    public Collection<TeamMatchGoal> findAllGoalsByTeamInMatch(final UUID matchId, final UUID teamId)
+    {
+        Assert.notNull(matchId, "Cannot search all scored goals of a team in null match");
+        Assert.notNull(teamId, "Cannot search all scored goals of null team");
+
+        return entityManager.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.match.id = :matchId AND " +
+            "g.scorer.team.id = :teamId", TeamMatchGoal.class)
+            .setParameter("matchId", matchId)
+            .setParameter("teamId", teamId)
+            .getResultList();
+    }
 }
