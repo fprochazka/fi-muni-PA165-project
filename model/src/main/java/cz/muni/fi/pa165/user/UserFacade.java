@@ -55,25 +55,29 @@ public class UserFacade
     /**
      * Promote user to admin and persist.
      */
-    public void promoteUserToAdmin(UUID userId)
+    public User promoteUserToAdmin(UUID userId)
     {
         User user = userRepository.getUserById(userId);
 
         userService.promoteUserToAdmin(user);
 
         entityManager.flush();
+
+        return user;
     }
 
     /**
      * Promote user to moderator and persist.
      */
-    public void promoteUserToModerator(UUID userId)
+    public User promoteUserToModerator(UUID userId)
     {
         User user = userRepository.getUserById(userId);
 
         userService.promoteUserToModerator(user);
 
         entityManager.flush();
+
+        return user;
     }
 
 }

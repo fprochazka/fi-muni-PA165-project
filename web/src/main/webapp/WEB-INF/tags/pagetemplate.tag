@@ -41,9 +41,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Players</a>
                 </li>
-                <sec:authorize access="hasRole('admin')">
+                <sec:authorize access="hasRole('ROLE_ADMIN')">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Users</a>
+                        <a class="nav-link" href="<c:url value="/admin/users"/>">Users</a>
                     </li>
                 </sec:authorize>
             </ul>
@@ -68,6 +68,19 @@
             </ul>
         </sec:authorize>
     </nav>
+
+    <%--@elvariable id="flashMessages" type="java.util.List<java.lang.String>"--%>
+    <c:if test="${flashMessages.size() > 0}">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <c:forEach items="${flashMessages}" var="message">
+                    <div class="alert alert-info"><c:out value="${message}" /></div>
+                </c:forEach>
+            </div>
+        </div>
+    </div>
+    </c:if>
 
     <!-- page body -->
     <jsp:invoke fragment="body"/>
