@@ -3,6 +3,8 @@ package cz.muni.fi.pa165.config.core;
 import cz.muni.fi.pa165.config.RestConfig;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import javax.servlet.ServletRegistration;
+
 /**
  * @author Filip Procházka <filip@prochazka.su>
  */
@@ -26,4 +28,12 @@ public class SpringWebInitializer extends AbstractAnnotationConfigDispatcherServ
     {
         return new Class<?>[]{RestConfig.class};
     }
+
+    @Override
+    protected void customizeRegistration(ServletRegistration.Dynamic registration)
+    {
+        registration
+            .setInitParameter("throwExceptionIfNoHandlerFound", "true");
+    }
+
 }
