@@ -1,6 +1,6 @@
 package cz.muni.fi.pa165.config;
 
-import cz.muni.fi.pa165.SampleDataConfig;
+import cz.muni.fi.pa165.fixtures.sample.SampleDataConfig;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
