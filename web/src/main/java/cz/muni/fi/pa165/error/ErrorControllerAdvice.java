@@ -2,6 +2,8 @@ package cz.muni.fi.pa165.error;
 
 import cz.muni.fi.pa165.web.exceptions.BadRequestException;
 import cz.muni.fi.pa165.web.exceptions.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -18,6 +20,8 @@ import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMeth
 @ControllerAdvice
 public class ErrorControllerAdvice
 {
+
+    private static final Logger log = LoggerFactory.getLogger(ErrorControllerAdvice.class);
 
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
     @ExceptionHandler({
@@ -61,8 +65,10 @@ public class ErrorControllerAdvice
     @ExceptionHandler({
         Exception.class,
     })
-    public ModelAndView internalError()
+    public ModelAndView internalError(Exception e)
     {
+        log.error(e.getMessage(), e);
+
         return new ModelAndView("error/5xx");
     }
 

@@ -4,6 +4,8 @@ import cz.muni.fi.pa165.api.exceptions.BadRequestException;
 import cz.muni.fi.pa165.api.exceptions.ResourceNotFoundException;
 import cz.muni.fi.pa165.api.exceptions.UnprocessableEntityException;
 import cz.muni.fi.pa165.api.response.ErrorResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +22,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class ErrorControllerAdvice extends ResponseEntityExceptionHandler
 {
+
+    private static final Logger log = LoggerFactory.getLogger(ErrorControllerAdvice.class);
 
     @ExceptionHandler({cz.muni.fi.pa165.api.exceptions.Exception.class})
     public ResponseEntity<Object> apiException(WebRequest request, cz.muni.fi.pa165.api.exceptions.Exception exception)
@@ -73,6 +77,16 @@ public class ErrorControllerAdvice extends ResponseEntityExceptionHandler
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request)
     {
+        if (status.is5xxServerError()) {
+            log.error(ex.getMessage(), ex);
+
+        } else if (status.is4xxClientError()) {
+            log.warn(ex.getMessage());
+
+        } else if (status.is3xxRedirection()) {
+            log.info(ex.getMessage());
+        }
+
         if (body == null) {
             String code = status.getReasonPhrase()
                 .toLowerCase()
