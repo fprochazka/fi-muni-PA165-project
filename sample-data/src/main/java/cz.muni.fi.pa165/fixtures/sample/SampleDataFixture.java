@@ -1,4 +1,4 @@
-package cz.muni.fi.pa165;
+package cz.muni.fi.pa165.fixtures.sample;
 
 import cz.muni.fi.pa165.team.Team;
 import cz.muni.fi.pa165.team.TeamFacade;

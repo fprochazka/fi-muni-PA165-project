@@ -1,4 +1,4 @@
-package cz.muni.fi.pa165;
+package cz.muni.fi.pa165.fixtures.sample;
 
 import cz.muni.fi.pa165.config.ModelConfig;
 import org.springframework.beans.factory.annotation.Autowired;

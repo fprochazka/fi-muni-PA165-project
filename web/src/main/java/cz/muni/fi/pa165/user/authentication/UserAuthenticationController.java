@@ -37,13 +37,6 @@ public class UserAuthenticationController
         return response;
     }
 
-    // for 403 access denied page
-    @RequestMapping(value = "/403", method = RequestMethod.GET)
-    public ModelAndView accessDenied()
-    {
-        return new ModelAndView("error/403");
-    }
-
     private String getErrorMessage(HttpServletRequest request, String key)
     {
         Exception exception = (Exception) request.getSession().getAttribute(key);

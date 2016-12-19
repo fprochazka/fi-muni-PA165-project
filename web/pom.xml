@@ -112,6 +112,13 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
         </dependency>
+
+        <!-- must provide logging implementation, this is a runnable project -->
+        <!-- see viz http://docs.spring.io/platform/docs/1.1.4.RELEASE/reference/htmlsingle/#getting-started-logging -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
