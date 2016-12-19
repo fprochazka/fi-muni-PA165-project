@@ -1,5 +1,6 @@
 package cz.muni.fi.pa165.api.response;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ public class ErrorResource
 
     private String code;
     private String message;
-    private List<FieldErrorResource> fieldErrors;
+    private List<FieldErrorResource> fieldErrors = new ArrayList<>();
 
     public ErrorResource()
     {
