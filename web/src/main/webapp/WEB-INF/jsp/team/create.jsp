@@ -13,7 +13,7 @@
             <div class="col-md-2"></div>
             <div class="col-md-8">
                 <%--<c:url value="/team/create" var="registerActionUrl"/>--%>
-                <form:form class="team-form" id="team-form" method="post" modelAttribute="teamDetailsRequest" action="${requestScope['javax.servlet.forward.request_uri']}" autocomplete="off">
+                <form:form class="team-form" id="team-form" modelAttribute="teamDetailsRequest" autocomplete="off">
                     <fieldset>
                         <legend id="team-form-legend">Create team</legend>
                         <s:bind path="name">

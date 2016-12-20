@@ -28,7 +28,8 @@
                                     <td><c:out value="${user.role}"/></td>
                                     <td class="text-xs-right">
                                         <c:if test="${user.role.toString() == 'user' || user.role.toString() == 'moderator'}">
-                                            <form action="<c:url value="/admin/users/${user.id}/promote"/>" method="post" class="pull-right">
+                                            <c:url value="/admin/users/${user.id}/promote" var="promoteUrl" />
+                                            <form action="<c:out value="${promoteUrl}" />" method="post" class="pull-right">
                                                 <button type="submit" name="submit" class="btn ${user.role.toString() == 'user' ? 'btn-outline-warning' : 'btn-outline-danger'}">
                                                     <c:out value="${user.role.toString() == 'user' ? 'Moderator' : 'Admin'}"/>
                                                 </button>
