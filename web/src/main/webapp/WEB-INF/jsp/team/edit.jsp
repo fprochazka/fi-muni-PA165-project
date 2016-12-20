@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col-md-2"></div>
             <div class="col-md-8">
-                <form:form class="team-form" id="team-form" method="post" modelAttribute="teamDetailsRequest" action="${requestScope['javax.servlet.forward.request_uri']}" autocomplete="off">
+                <form:form class="team-form" id="team-form" modelAttribute="teamDetailsRequest" autocomplete="off">
                     <fieldset>
                         <legend id="team-form-legend">Edit team</legend>
                         <s:bind path="name">

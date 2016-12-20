@@ -49,10 +49,9 @@
             </ul>
             <ul class="lead nav navbar-nav pull-right">
                 <li class="nav-item">
-                    <%--@elvariable id="_csrf" type="org.springframework.security.web.csrf.CsrfToken"--%>
                     <form action="<c:url value="/sign-out"/>" method="post">
                         <button class="btn btn-link nav-link" href="<c:url value="/sign-out"/>">Sign out</button>
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                        <sec:csrfInput />
                     </form>
                 </li>
             </ul>

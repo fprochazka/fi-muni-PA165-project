@@ -11,15 +11,15 @@
         <div class="container">
 
             <c:if test="${not empty error}">
-                <div class="alert alert-danger" role="alert">${error}</div>
+                <div class="alert alert-danger" role="alert"><c:out value="${error}" /></div>
             </c:if>
             <c:if test="${not empty msg}">
-                <div class="alert alert-success" role="alert">${msg}</div>
+                <div class="alert alert-success" role="alert"><c:out value="${msg}" /></div>
             </c:if>
 
             <div class="row">
                 <c:url var="signInUrl" value="/sign-in"/>
-                <form class="form-signin" action="${signInUrl}" method="post">
+                <form class="form-signin" action="<c:out value="${signInUrl}" />" method="post">
                     <h2 class="form-signin-heading">Please sign in</h2>
                     <label for="inputEmail" class="sr-only">Email address</label>
                     <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>

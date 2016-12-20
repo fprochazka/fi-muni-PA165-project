@@ -33,7 +33,7 @@
                                      <tbody>
                                      <c:forEach items="${teams}" var="team">
                                          <tr class="tr-fixed-team clickable-row">
-                                             <td><a href="<c:url value="/team/${team.id}"/>">${team.name}</a></td>
+                                             <td><a href="<c:url value="/team/${team.id}"/>"><c:out value="${team.name}" /></a></td>
                                              <td>0</td>
                                              <td>12</td>
                                              <td>1</td>
