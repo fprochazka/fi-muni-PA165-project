@@ -625,14 +625,12 @@ public class TeamMatchServiceTest
         LocalDateTime endTime = now.plusMinutes(50);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
-        TeamPlayer scorer = new TeamPlayer("Josef", "Fracek", 185, 84, team1);
-        TeamPlayer assistant = new TeamPlayer("Leopold", "Petarda", 174, 65, team1);
         TeamMatch match = new TeamMatch(team1, team2, startTime);
-        TeamMatchGoal lastGoal = new TeamMatchGoal(scorer, assistant, match, endTime.minusMinutes(1));
+        LocalDateTime lastGoalTime = endTime.minusMinutes(1);
 
         assertNull(match.getEndTime());
 
-        teamMatchService.endMatch(match, lastGoal, endTime);
+        teamMatchService.endMatch(match, lastGoalTime, endTime);
 
         assertEquals(endTime, match.getEndTime());
     }
@@ -647,12 +645,10 @@ public class TeamMatchServiceTest
         LocalDateTime endTime = now.plusMinutes(50);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
-        TeamPlayer scorer = new TeamPlayer("Josef", "Fracek", 185, 84, team1);
-        TeamPlayer assistant = new TeamPlayer("Leopold", "Petarda", 174, 65, team1);
         TeamMatch match = new TeamMatch(team1, team2, startTime);
-        TeamMatchGoal lastGoal = new TeamMatchGoal(scorer, assistant, match, endTime.minusMinutes(5));
+        LocalDateTime lastGoalTime = endTime.minusMinutes(1);
 
-        teamMatchService.endMatch(null, lastGoal, endTime);
+        teamMatchService.endMatch(null, lastGoalTime, endTime);
     }
 
     @Test(expectedExceptions = {IllegalArgumentException.class},
@@ -664,30 +660,28 @@ public class TeamMatchServiceTest
         LocalDateTime endTime = now.plusMinutes(50);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
-        TeamPlayer scorer = new TeamPlayer("Josef", "Fracek", 185, 84, team1);
-        TeamPlayer assistant = new TeamPlayer("Leopold", "Petarda", 174, 65, team1);
         TeamMatch match = new TeamMatch(team1, team2, startTime);
-        TeamMatchGoal lastGoal = new TeamMatchGoal(scorer, assistant, match, endTime.minusMinutes(5));
+        LocalDateTime lastGoalTime = endTime.minusMinutes(1);
 
-        teamMatchService.endMatch(match, lastGoal, null);
+        teamMatchService.endMatch(match, lastGoalTime, null);
     }
 
-//    @Test
-//    public void testEndMatchWithNullLastGoal()
-//    {
-//        TeamMatchService teamMatchService = new TeamMatchService();
-//        LocalDateTime startTime = now;
-//        LocalDateTime endTime = now.plusMinutes(90);
-//        Team team1 = new Team("Team1");
-//        Team team2 = new Team("Team2");
-//        TeamMatch match = new TeamMatch(team1, team2, startTime);
-//
-//        assertNull(match.getEndTime());
-//
-//        teamMatchService.endMatch(match, null, endTime);
-//
-//        assertEquals(endTime, match.getEndTime());
-//    }
+    @Test
+    public void testEndMatchWithNullLastGoalTime()
+    {
+        TeamMatchService teamMatchService = new TeamMatchService();
+        LocalDateTime startTime = now;
+        LocalDateTime endTime = now.plusMinutes(90);
+        Team team1 = new Team("Team1");
+        Team team2 = new Team("Team2");
+        TeamMatch match = new TeamMatch(team1, team2, startTime);
+
+        assertNull(match.getEndTime());
+
+        teamMatchService.endMatch(match, null, endTime);
+
+        assertEquals(endTime, match.getEndTime());
+    }
 
     @Test(expectedExceptions = {IllegalArgumentException.class},
         expectedExceptionsMessageRegExp = "Cannot end already ended match")
@@ -699,12 +693,10 @@ public class TeamMatchServiceTest
         LocalDateTime endTime2 = now.plusSeconds(1);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
-        TeamPlayer scorer = new TeamPlayer("Josef", "Fracek", 185, 84, team1);
-        TeamPlayer assistant = new TeamPlayer("Leopold", "Petarda", 174, 65, team1);
         TeamMatch match = new TeamMatch(team1, team2, startTime, endTime);
-        TeamMatchGoal lastGoal = new TeamMatchGoal(scorer, assistant, match, endTime.minusSeconds(1));
+        LocalDateTime lastGoalTime = endTime.minusMinutes(1);
 
-        teamMatchService.endMatch(match, lastGoal, endTime2);
+        teamMatchService.endMatch(match, lastGoalTime, endTime2);
     }
 
     @Test(expectedExceptions = {IllegalArgumentException.class},
@@ -717,12 +709,10 @@ public class TeamMatchServiceTest
         LocalDateTime endTime = now.minusSeconds(1);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
-        TeamPlayer scorer = new TeamPlayer("Josef", "Fracek", 185, 84, team1);
-        TeamPlayer assistant = new TeamPlayer("Leopold", "Petarda", 174, 65, team1);
         TeamMatch match = new TeamMatch(team1, team2, startTime);
-        TeamMatchGoal lastGoal = new TeamMatchGoal(scorer, assistant, match, startTime.plusSeconds(1));
+        LocalDateTime lastGoalTime = endTime.minusMinutes(1);
 
-        teamMatchService.endMatch(match, lastGoal, endTime);
+        teamMatchService.endMatch(match, lastGoalTime, endTime);
     }
 
     @Test(expectedExceptions = {IllegalArgumentException.class},
@@ -735,46 +725,39 @@ public class TeamMatchServiceTest
         LocalDateTime endTime = now;
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
-        TeamPlayer scorer = new TeamPlayer("Josef", "Fracek", 185, 84, team1);
-        TeamPlayer assistant = new TeamPlayer("Leopold", "Petarda", 174, 65, team1);
         TeamMatch match = new TeamMatch(team1, team2, startTime);
-        TeamMatchGoal lastGoal = new TeamMatchGoal(scorer, assistant, match, startTime.plusSeconds(1));
+        LocalDateTime lastGoalTime = endTime.minusMinutes(1);
 
-        teamMatchService.endMatch(match, lastGoal, endTime);
+        teamMatchService.endMatch(match, lastGoalTime, endTime);
     }
 
     @Test(expectedExceptions = {IllegalArgumentException.class},
         expectedExceptionsMessageRegExp = "Match end time is not after last match scored goal time")
-    public void testEndMatchWithLastGoalMatchTimeAfterNewEndTime()
+    public void testEndMatchWithNewEndTimeBeforeLastGoalTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
         LocalDateTime startTime = now;
         LocalDateTime endTime = now.plusMinutes(90);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
-        TeamPlayer scorer = new TeamPlayer("Josef", "Fracek", 185, 84, team1);
-        TeamPlayer assistant = new TeamPlayer("Leopold", "Petarda", 174, 65, team1);
         TeamMatch match = new TeamMatch(team1, team2, startTime);
-        TeamMatchGoal lastGoal = new TeamMatchGoal(scorer, assistant, match, endTime.plusSeconds(1));
+        LocalDateTime lastGoalTime = endTime.plusSeconds(1);
 
-        teamMatchService.endMatch(match, lastGoal, endTime);
+        teamMatchService.endMatch(match, lastGoalTime, endTime);
     }
 
     @Test(expectedExceptions = {IllegalArgumentException.class},
         expectedExceptionsMessageRegExp = "Match end time is not after last match scored goal time")
-    public void testEndMatchWithLastGoalMatchTimeEqualToNewEndTime()
+    public void testEndMatchWithNewEndTimeEqualToLastGoalTime()
     {
         TeamMatchService teamMatchService = new TeamMatchService();
         LocalDateTime startTime = now;
         LocalDateTime endTime = now.plusMinutes(90);
         Team team1 = new Team("Team1");
         Team team2 = new Team("Team2");
-        TeamPlayer scorer = new TeamPlayer("Josef", "Fracek", 185, 84, team1);
-        TeamPlayer assistant = new TeamPlayer("Leopold", "Petarda", 174, 65, team1);
         TeamMatch match = new TeamMatch(team1, team2, startTime);
-        TeamMatchGoal lastGoal = new TeamMatchGoal(scorer, assistant, match, endTime);
 
-        teamMatchService.endMatch(match, lastGoal, endTime);
+        teamMatchService.endMatch(match, endTime, endTime);
     }
 
     @Test
