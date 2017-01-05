@@ -102,29 +102,9 @@ public class TeamMatchTest
 
         assertNull(teamMatch.getEndTime());
 
-        teamMatch.endMatch(newEndTime, newEndTime.minusMinutes(1));
+        teamMatch.endMatch(newEndTime);
 
         assertEquals(newEndTime, teamMatch.getEndTime());
-    }
-
-    @Test(expectedExceptions = {IllegalArgumentException.class},
-        expectedExceptionsMessageRegExp = "Cannot end the match with a null end time")
-    public void testEndMatchNullEndTimeToNullEndTime()
-    {
-        TeamMatch teamMatch = new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), now);
-
-        teamMatch.endMatch(null, teamMatch.getStartTime().plusMinutes(5));
-    }
-
-    @Test(expectedExceptions = {IllegalArgumentException.class},
-        expectedExceptionsMessageRegExp = "Cannot end the match with a null end time")
-    public void testEndMatchValidEndTimeToNullEndTime()
-    {
-        TeamMatch teamMatch = new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), now, now.plusMinutes(15));
-
-        assertEquals(now.plusMinutes(15), teamMatch.getEndTime());
-
-        teamMatch.endMatch(null, teamMatch.getStartTime().plusMinutes(5));
     }
 
     @Test(expectedExceptions = {IllegalArgumentException.class},
@@ -135,7 +115,7 @@ public class TeamMatchTest
 
         assertEquals(now.plusMinutes(15), teamMatch.getEndTime());
 
-        teamMatch.endMatch(now.minusSeconds(1), teamMatch.getStartTime().plusMinutes(5));
+        teamMatch.endMatch(now.minusSeconds(1));
     }
 
     @Test(expectedExceptions = {IllegalArgumentException.class},
@@ -146,44 +126,7 @@ public class TeamMatchTest
 
         assertEquals(now.plusMinutes(15), teamMatch.getEndTime());
 
-        teamMatch.endMatch(now, teamMatch.getStartTime().plusMinutes(5));
-    }
-
-    @Test
-    public void testEndMatchWithNullLastGoalMatchTime()
-    {
-        TeamMatch teamMatch = new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), now);
-        LocalDateTime newEndTime = now.plusMinutes(90);
-
-        assertNull(teamMatch.getEndTime());
-
-        teamMatch.endMatch(newEndTime, null);
-
-        assertEquals(newEndTime, teamMatch.getEndTime());
-    }
-
-    @Test(expectedExceptions = {IllegalArgumentException.class},
-        expectedExceptionsMessageRegExp = "Match end time is not after last match scored goal time")
-    public void testEndMatchWithLastGoalMatchTimeAfterNewEndTime()
-    {
-        TeamMatch teamMatch = new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), now);
-
-        LocalDateTime newEndTime = now.plusMinutes(90);
-
-        assertNull(teamMatch.getEndTime());
-
-        teamMatch.endMatch(newEndTime, newEndTime.plusSeconds(1));
-    }
-
-    @Test(expectedExceptions = {IllegalArgumentException.class},
-        expectedExceptionsMessageRegExp = "Match end time is not after last match scored goal time")
-    public void testEndMatchWithLastGoalMatchTimeEqualToNewEndTime()
-    {
-        TeamMatch teamMatch = new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), now);
-        LocalDateTime newEndTime = now.plusMinutes(90);
-        assertNull(teamMatch.getEndTime());
-
-        teamMatch.endMatch(newEndTime, newEndTime);
+        teamMatch.endMatch(now);
     }
 
     @Test(expectedExceptions = {IllegalArgumentException.class},

@@ -128,18 +128,11 @@ public class TeamMatch
     /**
      * Ends the match, respectively sets the new end time of the match.
      *
-     * @param endTime new end time of the match, cannot be null
-     * @param lastGoalTime time in the match of the last scored goal
+     * @param endTime new end time of the match
      */
-    public void endMatch(LocalDateTime endTime, LocalDateTime lastGoalTime)
+    public void endMatch(LocalDateTime endTime)
     {
-        Assert.notNull(endTime, "Cannot end the match with a null end time");
-
         validateMatchTimes(this.startTime, endTime);
-
-        if(lastGoalTime != null){
-            Assert.isTrue(endTime.isAfter(lastGoalTime), "Match end time is not after last match scored goal time");
-        }
 
         this.endTime = endTime;
     }
