@@ -68,7 +68,6 @@ interface TeamMatchGoalRepository
      * @param matchTime   time of the match in which goal is scored
      * @return found conflicting goal, null otherwise
      */
-
     TeamMatchGoal findConflictingGoal(final UUID matchId, final UUID scorerId, final UUID assistantId, final LocalDateTime matchTime);
 
     /**
