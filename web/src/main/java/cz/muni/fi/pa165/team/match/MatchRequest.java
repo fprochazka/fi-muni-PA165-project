@@ -19,18 +19,6 @@ public class MatchRequest
     @NotEmpty
     public String endTime;
 
-    public String getTarget()
-    {
-        return target;
-    }
-
-    public void setTarget(String target)
-    {
-        this.target = target;
-    }
-
-    public String target;
-
     public String getHomeTeam()
     {
         return homeTeam;
