@@ -24,8 +24,8 @@ public class TeamMatchTest
 
         teamMatch.changeMatchTime(newStartTime, newEndTime);
 
-        assertEquals(newStartTime, teamMatch.getStartTime());
-        assertEquals(newEndTime, teamMatch.getEndTime());
+        assertEquals(teamMatch.getStartTime(), newStartTime);
+        assertEquals(teamMatch.getEndTime(), newEndTime);
     }
 
     @Test(expectedExceptions = {IllegalArgumentException.class},
@@ -46,7 +46,7 @@ public class TeamMatchTest
 
         teamMatch.changeMatchTime(newStartTime, null);
 
-        assertEquals(newStartTime, teamMatch.getStartTime());
+        assertEquals(teamMatch.getStartTime(), newStartTime);
         assertNull(teamMatch.getEndTime());
     }
 
@@ -60,7 +60,7 @@ public class TeamMatchTest
 
         teamMatch.changeMatchTime(newStartTime, null);
 
-        assertEquals(newStartTime, teamMatch.getStartTime());
+        assertEquals(teamMatch.getStartTime(), newStartTime);
         assertNull(teamMatch.getEndTime());
     }
 
@@ -71,11 +71,11 @@ public class TeamMatchTest
         TeamMatch teamMatch = new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), now, now.plusMinutes(15));
         LocalDateTime newStartTime = now.plusMinutes(1);
 
-        assertEquals(now.plusMinutes(15), teamMatch.getEndTime());
+        assertEquals(teamMatch.getEndTime(), now.plusMinutes(15));
 
         teamMatch.changeMatchTime(newStartTime, now);
 
-        assertEquals(newStartTime, teamMatch.getStartTime());
+        assertEquals(teamMatch.getStartTime(), newStartTime);
         assertNull(teamMatch.getEndTime());
     }
 
@@ -86,11 +86,11 @@ public class TeamMatchTest
         TeamMatch teamMatch = new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), now, now.plusMinutes(15));
         LocalDateTime newStartTime = now.plusMinutes(1);
 
-        assertEquals(now.plusMinutes(15), teamMatch.getEndTime());
+        assertEquals(teamMatch.getEndTime(), now.plusMinutes(15));
 
         teamMatch.changeMatchTime(newStartTime, now.plusMinutes(1));
 
-        assertEquals(newStartTime, teamMatch.getStartTime());
+        assertEquals(teamMatch.getStartTime(), newStartTime);
         assertNull(teamMatch.getEndTime());
     }
 
@@ -104,7 +104,7 @@ public class TeamMatchTest
 
         teamMatch.endMatch(newEndTime);
 
-        assertEquals(newEndTime, teamMatch.getEndTime());
+        assertEquals(teamMatch.getEndTime(), newEndTime);
     }
 
     @Test(expectedExceptions = {IllegalArgumentException.class},
@@ -113,7 +113,7 @@ public class TeamMatchTest
     {
         TeamMatch teamMatch = new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), now, now.plusMinutes(15));
 
-        assertEquals(now.plusMinutes(15), teamMatch.getEndTime());
+        assertEquals(teamMatch.getEndTime(), now.plusMinutes(15));
 
         teamMatch.endMatch(now.minusSeconds(1));
     }
@@ -124,7 +124,7 @@ public class TeamMatchTest
     {
         TeamMatch teamMatch = new TeamMatch(new Team("HomeTeam"), new Team("AwayTeam"), now, now.plusMinutes(15));
 
-        assertEquals(now.plusMinutes(15), teamMatch.getEndTime());
+        assertEquals(teamMatch.getEndTime(), now.plusMinutes(15));
 
         teamMatch.endMatch(now);
     }
@@ -180,9 +180,9 @@ public class TeamMatchTest
         );
 
         assertNotNull(teamMatch);
-        assertEquals(homeTeam, teamMatch.getHomeTeam());
-        assertEquals(awayTeam, teamMatch.getAwayTeam());
-        assertEquals(startTime, teamMatch.getStartTime());
+        assertEquals(teamMatch.getHomeTeam(), homeTeam);
+        assertEquals(teamMatch.getAwayTeam(), awayTeam);
+        assertEquals(teamMatch.getStartTime(), startTime);
         assertNull(teamMatch.getEndTime());
     }
 
