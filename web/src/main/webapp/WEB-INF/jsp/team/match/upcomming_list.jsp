@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <my:pagetemplate title="UpcommingMatchesOverview">
     <jsp:attribute name="body">
@@ -37,12 +38,12 @@
                                      <tbody>
                                      <c:forEach items="${pmContainer.matches}" var="plannedMatch">
                                          <tr>
-                                             <td><c:out value="${plannedMatch.startTime.format(pmContainer.formatter)}" /></td>
-                                             <td><c:out value="${plannedMatch.homeTeam.name}" /></td>
-                                             <td><c:out value="${plannedMatch.awayTeam.name}" /></td>
-                                             <td><c:out value="${pmContainer.homeGoals.get(plannedMatch)} - ${pmContainer.awayGoals.get(plannedMatch)}" /></td>
+                                             <td><c:out value="${plannedMatch.startTime.format(pmContainer.formatter)}"/></td>
+                                             <td><c:out value="${plannedMatch.homeTeam.name}"/></td>
+                                             <td><c:out value="${plannedMatch.awayTeam.name}"/></td>
+                                             <td><c:out value="${pmContainer.homeGoals.get(plannedMatch)} - ${pmContainer.awayGoals.get(plannedMatch)}"/></td>
                                              <td>
-                                                 <a href="${pageContext.request.contextPath}/match/${plannedMatch.id}" title="View detail" name="matchdetailbutton" class="btn btn-success center-block" style="background-color: grey; border: 0px">
+                                                 <a href="${pageContext.request.contextPath}/match/${plannedMatch.id}" title="View detail" name="matchdetailbutton" class="btn btn-success center-block btn-outline-info">
                                                      Detail
                                                  </a>
                                              </td>
@@ -53,15 +54,17 @@
                              </div>
                          </div>
 
-                     <div class="form-group">
-                         <label class="col-sm-5 control-label" for="newmatchbutton"></label>
-                         <div class="col-sm-3 center-block">
-                             <a href="${pageContext.request.contextPath}/match/new" name="newmatchbutton" class="btn btn-success center-block player-button-area">New match</a>
-                         </div>
+                         <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
+                             <div class="form-group">
+                                 <label class="col-sm-5 control-label" for="newmatchbutton"></label>
+                                 <div class="col-sm-3 center-block">
+                                     <a href="${pageContext.request.contextPath}/match/new" name="newmatchbutton" class="btn btn-success center-block player-button-area">New match</a>
+                                 </div>
+                             </div>
+                         </sec:authorize>
                      </div>
                  </div>
              </div>
-         </div>
 
     </jsp:attribute>
 </my:pagetemplate>
