@@ -87,4 +87,14 @@ interface TeamMatchGoalRepository
      * @return all scored goals by the team in the match
      */
     Collection<TeamMatchGoal> findAllGoalsByTeamInMatch(final UUID matchId, final UUID teamId);
+
+    /**
+     * Finds out the number scored goals by particular team in particular match.
+     *
+     * @param matchId match in which the particular team played and number of its
+     *                scored goals should be retrieved
+     * @param teamId team which number of scored goals are required
+     * @return number of scored goals by the given team in the given match
+     */
+    Long findGoalsCountByTeamInMatch(final UUID matchId, final UUID teamId);
 }

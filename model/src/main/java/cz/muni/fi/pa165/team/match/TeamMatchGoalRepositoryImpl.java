@@ -126,4 +126,17 @@ public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
             .setParameter("teamId", teamId)
             .getResultList();
     }
+
+    @Override
+    public Long findGoalsCountByTeamInMatch(final UUID matchId, final UUID teamId)
+    {
+        Assert.notNull(matchId, "Cannot search all scored goals number of a team in null match");
+        Assert.notNull(teamId, "Cannot search all scored goals number of null team");
+
+        return (Long) entityManager.createQuery("SELECT count(g.id) FROM TeamMatchGoal g WHERE g.match.id = :matchId AND " +
+            "g.scorer.team.id = :teamId")
+            .setParameter("matchId", matchId)
+            .setParameter("teamId", teamId)
+            .getResultList().get(0);
+    }
 }

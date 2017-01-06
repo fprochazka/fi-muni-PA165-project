@@ -110,7 +110,7 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
             TeamMatchGoal dbGoal = teamMatchGoalRepository.getGoalById(badId);
             Assert.fail("Expected exception GoalNotFoundException");
         } catch (GoalNotFoundException ex) {
-            Assert.assertEquals(badId, ex.getGoalId());
+            Assert.assertEquals(ex.getGoalId(), badId);
         }
     }
 
@@ -809,10 +809,10 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         TeamMatchGoal dbGoal = teamMatchGoalRepository.findLastGoalByMatch(match.getId());
 
         Assert.assertNotNull(dbGoal);
-        Assert.assertEquals(goal2.getId(), dbGoal.getId());
-        Assert.assertEquals(goal2.getMatchTime(), dbGoal.getMatchTime());
-        Assert.assertEquals(goal2.getScorer(), dbGoal.getScorer());
-        Assert.assertEquals(goal2.getAssistant(), dbGoal.getAssistant());
+        Assert.assertEquals(dbGoal.getId(), goal2.getId());
+        Assert.assertEquals(dbGoal.getMatchTime(), goal2.getMatchTime());
+        Assert.assertEquals(dbGoal.getScorer(), goal2.getScorer());
+        Assert.assertEquals(dbGoal.getAssistant(), goal2.getAssistant());
     }
 
     @Test(expectedExceptions = {IllegalArgumentException.class},
@@ -1044,7 +1044,6 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         expectedExceptionsMessageRegExp = "Cannot search all scored goals of a team in null match")
     public void testFindAllGoalsByTeamInNullMatch()
     {
-        long time = System.currentTimeMillis();
         Team homeTeam = new Team("homeTeam");
         Team awayTeam = new Team("awayTeam");
         em.persist(homeTeam);
@@ -1076,5 +1075,149 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         em.flush();
 
         Collection<TeamMatchGoal> dbGoals = teamMatchGoalRepository.findAllGoalsByTeamInMatch(null, homeTeam.getId());
+    }
+
+    @Test
+    public void testFindGoalsCountByTeamInMatch()
+    {
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Bruno", "Fartis", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Emil", "Hunter", 179, 74, homeTeam);
+        TeamPlayer scorer3 = new TeamPlayer("Levin", "Korn", 187, 95, awayTeam);
+        TeamPlayer assistant3 = new TeamPlayer("Dumbo", "Hlavka", 179, 74, awayTeam);
+        em.persist(scorer);
+        em.persist(assistant);
+        em.persist(scorer2);
+        em.persist(assistant2);
+        em.persist(scorer3);
+        em.persist(assistant3);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now);
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now.plusMinutes(5));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(16));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer3, assistant3, match, now.plusMinutes(89));
+
+        em.persist(goal1);
+        em.persist(goal2);
+        em.persist(goal3);
+        em.flush();
+
+        long numGoals = teamMatchGoalRepository.findGoalsCountByTeamInMatch(match.getId(), homeTeam.getId());
+
+        Assert.assertEquals(numGoals, 2);
+    }
+
+    @Test
+    public void testFindGoalsCountByTeamInMatchWithNoGoalsOfRequiredTeam()
+    {
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Bruno", "Fartis", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Emil", "Hunter", 179, 74, homeTeam);
+        em.persist(scorer);
+        em.persist(assistant);
+        em.persist(scorer2);
+        em.persist(assistant2);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now);
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now.plusMinutes(5));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(16));
+
+        em.persist(goal1);
+        em.persist(goal2);
+        em.flush();
+
+        long numGoals = teamMatchGoalRepository.findGoalsCountByTeamInMatch(match.getId(), awayTeam.getId());
+
+        Assert.assertEquals(numGoals, 0);
+    }
+
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot search all scored goals number of null team")
+    public void testFindGoalsCountByNullTeamInMatch()
+    {
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Bruno", "Fartis", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Emil", "Hunter", 179, 74, homeTeam);
+        TeamPlayer scorer3 = new TeamPlayer("Levin", "Korn", 187, 95, awayTeam);
+        TeamPlayer assistant3 = new TeamPlayer("Dumbo", "Hlavka", 179, 74, awayTeam);
+        em.persist(scorer);
+        em.persist(assistant);
+        em.persist(scorer2);
+        em.persist(assistant2);
+        em.persist(scorer3);
+        em.persist(assistant3);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now);
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now.plusMinutes(5));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(16));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer3, assistant3, match, now.plusMinutes(89));
+
+        em.persist(goal1);
+        em.persist(goal2);
+        em.persist(goal3);
+        em.flush();
+
+        long numGoals = teamMatchGoalRepository.findGoalsCountByTeamInMatch(match.getId(), null);
+    }
+
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot search all scored goals number of a team in null match")
+    public void testFindGoalsCountByTeamInNullMatch()
+    {
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Bruno", "Fartis", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Emil", "Hunter", 179, 74, homeTeam);
+        TeamPlayer scorer3 = new TeamPlayer("Levin", "Korn", 187, 95, awayTeam);
+        TeamPlayer assistant3 = new TeamPlayer("Dumbo", "Hlavka", 179, 74, awayTeam);
+        em.persist(scorer);
+        em.persist(assistant);
+        em.persist(scorer2);
+        em.persist(assistant2);
+        em.persist(scorer3);
+        em.persist(assistant3);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now);
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now.plusMinutes(5));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(16));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer3, assistant3, match, now.plusMinutes(89));
+
+        em.persist(goal1);
+        em.persist(goal2);
+        em.persist(goal3);
+        em.flush();
+
+        long numGoals = teamMatchGoalRepository.findGoalsCountByTeamInMatch(null, homeTeam.getId());
     }
 }
