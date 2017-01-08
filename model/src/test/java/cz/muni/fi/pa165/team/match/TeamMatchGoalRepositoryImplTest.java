@@ -1220,5 +1220,5 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
 
         long numGoals = teamMatchGoalRepository.getGoalsCountByTeamInMatch(null, homeTeam.getId());
     }
-    
+
 }

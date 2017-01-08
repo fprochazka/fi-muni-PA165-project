@@ -4,6 +4,7 @@ import cz.muni.fi.pa165.team.Team;
 import cz.muni.fi.pa165.team.TeamPlayer;
 import cz.muni.fi.pa165.team.TeamPlayerRepository;
 import cz.muni.fi.pa165.team.TeamRepository;
+import cz.muni.fi.pa165.team.match.result.MatchResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author Tomas Smid <smid.thomas@gmail.com>
@@ -193,6 +194,30 @@ public class TeamMatchFacade
 
         entityManager.remove(teamMatchGoal);
         entityManager.flush();
+    }
+
+    /**
+     * Retrieves result for each played match.
+     *
+     * @return collection of all played matches results
+     */
+    public List<MatchResult> getPlayedMatchesList()
+    {
+        Collection<TeamMatch> playedMatches = teamMatchRepository.findAllPlayedMatches();
+        List<MatchResult> matchResults = new ArrayList<>();
+
+        for (TeamMatch pm : playedMatches)
+        {
+            MatchResult mr = new MatchResult();
+
+            mr.setMatch(pm);
+            mr.setHomeGoals(teamMatchGoalRepository.getGoalsCountByTeamInMatch(pm.getId(), pm.getHomeTeam().getId()));
+            mr.setAwayGoals(teamMatchGoalRepository.getGoalsCountByTeamInMatch(pm.getId(), pm.getAwayTeam().getId()));
+
+            matchResults.add(mr);
+        }
+
+        return matchResults;
     }
 
 }
