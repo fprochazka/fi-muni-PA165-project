@@ -3,6 +3,7 @@ package cz.muni.fi.pa165.team.match;
 import cz.muni.fi.pa165.config.ModelConfig;
 import cz.muni.fi.pa165.team.Team;
 import cz.muni.fi.pa165.team.TeamPlayer;
+import cz.muni.fi.pa165.team.match.containers.MatchListContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
@@ -49,10 +50,10 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
         TeamMatch dbMatch = em.find(TeamMatch.class, teamMatch.getId());
 
         assertNotNull(dbMatch);
-        assertEquals(homeTeam.getId(), dbMatch.getHomeTeam().getId());
-        assertEquals(awayTeam.getId(), dbMatch.getAwayTeam().getId());
-        assertEquals(teamMatch.getStartTime(), dbMatch.getStartTime());
-        assertEquals(teamMatch.getEndTime(), dbMatch.getEndTime());
+        assertEquals(dbMatch.getHomeTeam().getId(), homeTeam.getId());
+        assertEquals(dbMatch.getAwayTeam().getId(), awayTeam.getId());
+        assertEquals(dbMatch.getStartTime(), teamMatch.getStartTime());
+        assertEquals(dbMatch.getEndTime(), teamMatch.getEndTime());
     }
 
     @Test
@@ -173,8 +174,8 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
         TeamMatch dbMatch = em.find(TeamMatch.class, teamMatch.getId());
 
         assertNotNull(dbMatch);
-        assertEquals(teamMatch.getStartTime(), dbMatch.getStartTime());
-        assertEquals(teamMatch.getEndTime(), dbMatch.getEndTime());
+        assertEquals(dbMatch.getStartTime(), teamMatch.getStartTime());
+        assertEquals(dbMatch.getEndTime(), teamMatch.getEndTime());
 
         LocalDateTime newStartTime = now.plusMinutes(15);
         LocalDateTime newEndTime = now.plusMinutes(75);
@@ -183,8 +184,8 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
 
         dbMatch = em.find(TeamMatch.class, teamMatch.getId());
         assertNotNull(dbMatch);
-        assertEquals(newStartTime, dbMatch.getStartTime());
-        assertEquals(newEndTime, dbMatch.getEndTime());
+        assertEquals(dbMatch.getStartTime(), newStartTime);
+        assertEquals(dbMatch.getEndTime(), newEndTime);
     }
 
     @Test
@@ -197,13 +198,23 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
 
         TeamMatch teamMatch = new TeamMatch(homeTeam, awayTeam, now);
         em.persist(teamMatch);
+
+        TeamPlayer player1 = new TeamPlayer("Josef", "Fracek", 185, 84, homeTeam);
+        TeamPlayer player2 = new TeamPlayer("Leopold", "Petarda", 174, 65, homeTeam);
+        em.persist(player1);
+        em.persist(player2);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(player1, player2, teamMatch, teamMatch.getStartTime().plusMinutes(10));
+        TeamMatchGoal goal2 = new TeamMatchGoal(player2, player1, teamMatch, teamMatch.getStartTime().plusMinutes(15));
+        em.persist(goal1);
+        em.persist(goal2);
         em.flush();
         em.clear();
 
         TeamMatch dbMatch = em.find(TeamMatch.class, teamMatch.getId());
 
         assertNotNull(dbMatch);
-        assertEquals(teamMatch.getStartTime(), dbMatch.getStartTime());
+        assertEquals(dbMatch.getStartTime(), teamMatch.getStartTime());
         assertNull(dbMatch.getEndTime());
 
         LocalDateTime newEndTime = now.plusMinutes(67);
@@ -212,6 +223,89 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
 
         dbMatch = em.find(TeamMatch.class, teamMatch.getId());
         assertNotNull(dbMatch);
-        assertEquals(newEndTime, dbMatch.getEndTime());
+        assertEquals(dbMatch.getEndTime(), newEndTime);
     }
+
+    @Test
+    public void testPreparePlayedMatchesForList()
+    {
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Bruno", "Fartis", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Emil", "Hunter", 179, 74, homeTeam);
+        TeamPlayer scorer3 = new TeamPlayer("Levin", "Korn", 187, 95, awayTeam);
+        TeamPlayer assistant3 = new TeamPlayer("Dumbo", "Hlavka", 179, 74, awayTeam);
+        em.persist(scorer);
+        em.persist(assistant);
+        em.persist(scorer2);
+        em.persist(assistant2);
+        em.persist(scorer3);
+        em.persist(assistant3);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now, now.plusMinutes(94));
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now.plusMinutes(5));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(16));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer3, assistant3, match, now.plusMinutes(89));
+
+        em.persist(goal1);
+        em.persist(goal2);
+        em.persist(goal3);
+        em.flush();
+
+        MatchListContainer mlc = teamMatchFacade.preparePlayedMatchesForList();
+
+        assertEquals(mlc.getMatches().size(), 1);
+        assertTrue(mlc.getMatches().contains(match));
+        assertEquals(mlc.getHomeGoals().get(match).longValue(), 2);
+        assertEquals(mlc.getAwayGoals().get(match).longValue(), 1);
+    }
+
+    @Test
+    public void testPreparePlannedMatchesForList()
+    {
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Bruno", "Fartis", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Emil", "Hunter", 179, 74, homeTeam);
+        TeamPlayer scorer3 = new TeamPlayer("Levin", "Korn", 187, 95, awayTeam);
+        TeamPlayer assistant3 = new TeamPlayer("Dumbo", "Hlavka", 179, 74, awayTeam);
+        em.persist(scorer);
+        em.persist(assistant);
+        em.persist(scorer2);
+        em.persist(assistant2);
+        em.persist(scorer3);
+        em.persist(assistant3);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now);
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now.plusMinutes(5));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(16));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer3, assistant3, match, now.plusMinutes(89));
+
+        em.persist(goal1);
+        em.persist(goal2);
+        em.persist(goal3);
+        em.flush();
+
+        MatchListContainer mlc = teamMatchFacade.preparePlannedMatchesForList();
+
+        assertEquals(mlc.getMatches().size(), 1);
+        assertTrue(mlc.getMatches().contains(match));
+        assertEquals(mlc.getHomeGoals().get(match).longValue(), 2);
+        assertEquals(mlc.getAwayGoals().get(match).longValue(), 1);
+    }
+
 }

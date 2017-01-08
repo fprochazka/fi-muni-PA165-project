@@ -59,8 +59,8 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         Assert.assertEquals(dbGoal.getMatchTime(), goal.getMatchTime());
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Cannot search for a null goal id")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot search for a null goal id")
     public void testGetGoalByNullId()
     {
         Team homeTeam = new Team("homeTeam");
@@ -110,7 +110,7 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
             TeamMatchGoal dbGoal = teamMatchGoalRepository.getGoalById(badId);
             Assert.fail("Expected exception GoalNotFoundException");
         } catch (GoalNotFoundException ex) {
-            Assert.assertEquals(badId, ex.getGoalId());
+            Assert.assertEquals(ex.getGoalId(), badId);
         }
     }
 
@@ -151,8 +151,8 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         Assert.assertFalse(dbGoals.contains(goal2));
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Cannot search for null scorer")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot search for null scorer")
     public void testFindGoalByScorerNull()
     {
         Team homeTeam = new Team("homeTeam");
@@ -256,8 +256,8 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         Assert.assertFalse(dbGoals.contains(goal3));
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Cannot search for null assistant")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot search for null assistant")
     public void testFindGoalByAssistantNull()
     {
         Team homeTeam = new Team("homeTeam");
@@ -365,8 +365,8 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         Assert.assertFalse(dbGoals.contains(goal3));
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Cannot search for null match")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot search for null match")
     public void testFindGoalByMatchNull()
     {
         Team homeTeam = new Team("homeTeam");
@@ -633,8 +633,8 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         Assert.assertNull(conflictingGoal);
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Cannot search goal for a null match")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot search goal for a null match")
     public void testFindConflictingGoalWithNullMatch()
     {
         Team homeTeam = new Team("homeTeam");
@@ -668,8 +668,8 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         );
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Cannot search goal for a null scorer")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot search goal for a null scorer")
     public void testFindConflictingGoalWithNullScorer()
     {
         Team homeTeam = new Team("homeTeam");
@@ -703,8 +703,8 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         );
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Cannot search goal for a null assistant")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot search goal for a null assistant")
     public void testFindConflictingGoalWithNullAssistant()
     {
         Team homeTeam = new Team("homeTeam");
@@ -738,8 +738,8 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
         );
     }
 
-    @Test(expectedExceptions = { IllegalArgumentException.class },
-          expectedExceptionsMessageRegExp = "Cannot search goal for a null goal match time")
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot search goal for a null goal match time")
     public void testFindConflictingGoalWithNullMatchTime()
     {
         Team homeTeam = new Team("homeTeam");
@@ -771,5 +771,453 @@ public class TeamMatchGoalRepositoryImplTest extends AbstractTransactionalTestNG
             assistant1.getId(),
             null
         );
+    }
+
+    @Test
+    public void testFindLastGoalByMatch()
+    {
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        Team awayTeam2 = new Team("awayTeam2");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+        em.persist(awayTeam2);
+
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Bruno", "Fartis", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Emil", "Hunter", 179, 74, homeTeam);
+        em.persist(scorer);
+        em.persist(assistant);
+        em.persist(scorer2);
+        em.persist(assistant2);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now);
+        TeamMatch match2 = new TeamMatch(homeTeam, awayTeam2, now.plusDays(3));
+        em.persist(match);
+        em.persist(match2);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now.plusMinutes(10));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, now.plusMinutes(55));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match2, now.plusDays(3).plusMinutes(26));
+
+        em.persist(goal1);
+        em.persist(goal2);
+        em.persist(goal3);
+        em.flush();
+
+        TeamMatchGoal dbGoal = teamMatchGoalRepository.findLastGoalByMatch(match.getId());
+
+        Assert.assertNotNull(dbGoal);
+        Assert.assertEquals(dbGoal.getId(), goal2.getId());
+        Assert.assertEquals(dbGoal.getMatchTime(), goal2.getMatchTime());
+        Assert.assertEquals(dbGoal.getScorer(), goal2.getScorer());
+        Assert.assertEquals(dbGoal.getAssistant(), goal2.getAssistant());
+    }
+
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot search last scored goal for null match")
+    public void testFindLastGoalByMatchNull()
+    {
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        Team awayTeam2 = new Team("awayTeam2");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+        em.persist(awayTeam2);
+
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Bruno", "Fartis", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Emil", "Hunter", 179, 74, homeTeam);
+        em.persist(scorer);
+        em.persist(assistant);
+        em.persist(scorer2);
+        em.persist(assistant2);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now);
+        TeamMatch match2 = new TeamMatch(homeTeam, awayTeam2, now.plusDays(3));
+        em.persist(match);
+        em.persist(match2);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now.plusMinutes(10));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, now.plusMinutes(55));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match2, now.plusDays(3).plusMinutes(26));
+
+        em.persist(goal1);
+        em.persist(goal2);
+        em.persist(goal3);
+        em.flush();
+
+        TeamMatchGoal dbGoal = teamMatchGoalRepository.findLastGoalByMatch(null);
+    }
+
+    @Test
+    public void testFindLastGoalByMatchNonexistent()
+    {
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        Team awayTeam2 = new Team("awayTeam2");
+        Team awayTeam3 = new Team("awayTeam3");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+        em.persist(awayTeam2);
+        em.persist(awayTeam3);
+
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Bruno", "Fartis", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Emil", "Hunter", 179, 74, homeTeam);
+        em.persist(scorer);
+        em.persist(assistant);
+        em.persist(scorer2);
+        em.persist(assistant2);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now);
+        TeamMatch match2 = new TeamMatch(homeTeam, awayTeam2, now.plusDays(3));
+        em.persist(match);
+        em.persist(match2);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now.plusMinutes(10));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, now.plusMinutes(55));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer, assistant2, match2, now.plusDays(3).plusMinutes(26));
+
+        em.persist(goal1);
+        em.persist(goal2);
+        em.persist(goal3);
+        em.flush();
+
+        TeamMatch match3 = new TeamMatch(homeTeam, awayTeam3, now.plusDays(8));
+
+        TeamMatchGoal dbGoal = teamMatchGoalRepository.findLastGoalByMatch(match3.getId());
+
+        Assert.assertNull(dbGoal);
+    }
+
+    @Test
+    public void testFindLastGoalByMatchWithNoGoal()
+    {
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        Team awayTeam2 = new Team("awayTeam2");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+        em.persist(awayTeam2);
+
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Bruno", "Fartis", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Emil", "Hunter", 179, 74, homeTeam);
+        em.persist(scorer);
+        em.persist(assistant);
+        em.persist(scorer2);
+        em.persist(assistant2);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now);
+        TeamMatch match2 = new TeamMatch(homeTeam, awayTeam2, now.plusDays(3));
+        em.persist(match);
+        em.persist(match2);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now.plusMinutes(10));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant, match, now.plusMinutes(55));
+
+        em.persist(goal1);
+        em.persist(goal2);
+        em.flush();
+
+        TeamMatchGoal dbGoal = teamMatchGoalRepository.findLastGoalByMatch(match2.getId());
+
+        Assert.assertNull(dbGoal);
+    }
+
+    @Test
+    public void testFindAllGoalsByTeamInMatch()
+    {
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Bruno", "Fartis", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Emil", "Hunter", 179, 74, homeTeam);
+        TeamPlayer scorer3 = new TeamPlayer("Levin", "Korn", 187, 95, awayTeam);
+        TeamPlayer assistant3 = new TeamPlayer("Dumbo", "Hlavka", 179, 74, awayTeam);
+        em.persist(scorer);
+        em.persist(assistant);
+        em.persist(scorer2);
+        em.persist(assistant2);
+        em.persist(scorer3);
+        em.persist(assistant3);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now);
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now.plusMinutes(5));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(16));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer3, assistant3, match, now.plusMinutes(89));
+
+        em.persist(goal1);
+        em.persist(goal2);
+        em.persist(goal3);
+        em.flush();
+
+        Collection<TeamMatchGoal> dbGoals = teamMatchGoalRepository.findAllGoalsByTeamInMatch(match.getId(), homeTeam.getId());
+
+        Assert.assertFalse(dbGoals.isEmpty());
+        Assert.assertTrue(dbGoals.contains(goal1));
+        Assert.assertTrue(dbGoals.contains(goal2));
+        Assert.assertFalse(dbGoals.contains(goal3));
+    }
+
+    @Test
+    public void testFindAllGoalsByTeamInMatchWithNoGoalsOfRequiredTeam()
+    {
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Bruno", "Fartis", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Emil", "Hunter", 179, 74, homeTeam);
+        em.persist(scorer);
+        em.persist(assistant);
+        em.persist(scorer2);
+        em.persist(assistant2);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now);
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now.plusMinutes(5));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(16));
+
+        em.persist(goal1);
+        em.persist(goal2);
+        em.flush();
+
+        Collection<TeamMatchGoal> dbGoals = teamMatchGoalRepository.findAllGoalsByTeamInMatch(match.getId(), awayTeam.getId());
+
+        Assert.assertTrue(dbGoals.isEmpty());
+    }
+
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot search all scored goals of null team")
+    public void testFindAllGoalsByNullTeamInMatch()
+    {
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Bruno", "Fartis", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Emil", "Hunter", 179, 74, homeTeam);
+        TeamPlayer scorer3 = new TeamPlayer("Levin", "Korn", 187, 95, awayTeam);
+        TeamPlayer assistant3 = new TeamPlayer("Dumbo", "Hlavka", 179, 74, awayTeam);
+        em.persist(scorer);
+        em.persist(assistant);
+        em.persist(scorer2);
+        em.persist(assistant2);
+        em.persist(scorer3);
+        em.persist(assistant3);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now);
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now.plusMinutes(5));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(16));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer3, assistant3, match, now.plusMinutes(89));
+
+        em.persist(goal1);
+        em.persist(goal2);
+        em.persist(goal3);
+        em.flush();
+
+        Collection<TeamMatchGoal> dbGoals = teamMatchGoalRepository.findAllGoalsByTeamInMatch(match.getId(), null);
+    }
+
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot search all scored goals of a team in null match")
+    public void testFindAllGoalsByTeamInNullMatch()
+    {
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Bruno", "Fartis", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Emil", "Hunter", 179, 74, homeTeam);
+        TeamPlayer scorer3 = new TeamPlayer("Levin", "Korn", 187, 95, awayTeam);
+        TeamPlayer assistant3 = new TeamPlayer("Dumbo", "Hlavka", 179, 74, awayTeam);
+        em.persist(scorer);
+        em.persist(assistant);
+        em.persist(scorer2);
+        em.persist(assistant2);
+        em.persist(scorer3);
+        em.persist(assistant3);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now);
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now.plusMinutes(5));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(16));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer3, assistant3, match, now.plusMinutes(89));
+
+        em.persist(goal1);
+        em.persist(goal2);
+        em.persist(goal3);
+        em.flush();
+
+        Collection<TeamMatchGoal> dbGoals = teamMatchGoalRepository.findAllGoalsByTeamInMatch(null, homeTeam.getId());
+    }
+
+    @Test
+    public void testFindGoalsCountByTeamInMatch()
+    {
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Bruno", "Fartis", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Emil", "Hunter", 179, 74, homeTeam);
+        TeamPlayer scorer3 = new TeamPlayer("Levin", "Korn", 187, 95, awayTeam);
+        TeamPlayer assistant3 = new TeamPlayer("Dumbo", "Hlavka", 179, 74, awayTeam);
+        em.persist(scorer);
+        em.persist(assistant);
+        em.persist(scorer2);
+        em.persist(assistant2);
+        em.persist(scorer3);
+        em.persist(assistant3);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now);
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now.plusMinutes(5));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(16));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer3, assistant3, match, now.plusMinutes(89));
+
+        em.persist(goal1);
+        em.persist(goal2);
+        em.persist(goal3);
+        em.flush();
+
+        long numGoals = teamMatchGoalRepository.findGoalsCountByTeamInMatch(match.getId(), homeTeam.getId());
+
+        Assert.assertEquals(numGoals, 2);
+    }
+
+    @Test
+    public void testFindGoalsCountByTeamInMatchWithNoGoalsOfRequiredTeam()
+    {
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Bruno", "Fartis", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Emil", "Hunter", 179, 74, homeTeam);
+        em.persist(scorer);
+        em.persist(assistant);
+        em.persist(scorer2);
+        em.persist(assistant2);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now);
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now.plusMinutes(5));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(16));
+
+        em.persist(goal1);
+        em.persist(goal2);
+        em.flush();
+
+        long numGoals = teamMatchGoalRepository.findGoalsCountByTeamInMatch(match.getId(), awayTeam.getId());
+
+        Assert.assertEquals(numGoals, 0);
+    }
+
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot search all scored goals number of null team")
+    public void testFindGoalsCountByNullTeamInMatch()
+    {
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Bruno", "Fartis", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Emil", "Hunter", 179, 74, homeTeam);
+        TeamPlayer scorer3 = new TeamPlayer("Levin", "Korn", 187, 95, awayTeam);
+        TeamPlayer assistant3 = new TeamPlayer("Dumbo", "Hlavka", 179, 74, awayTeam);
+        em.persist(scorer);
+        em.persist(assistant);
+        em.persist(scorer2);
+        em.persist(assistant2);
+        em.persist(scorer3);
+        em.persist(assistant3);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now);
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now.plusMinutes(5));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(16));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer3, assistant3, match, now.plusMinutes(89));
+
+        em.persist(goal1);
+        em.persist(goal2);
+        em.persist(goal3);
+        em.flush();
+
+        long numGoals = teamMatchGoalRepository.findGoalsCountByTeamInMatch(match.getId(), null);
+    }
+
+    @Test(expectedExceptions = {IllegalArgumentException.class},
+        expectedExceptionsMessageRegExp = "Cannot search all scored goals number of a team in null match")
+    public void testFindGoalsCountByTeamInNullMatch()
+    {
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Bruno", "Fartis", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Emil", "Hunter", 179, 74, homeTeam);
+        TeamPlayer scorer3 = new TeamPlayer("Levin", "Korn", 187, 95, awayTeam);
+        TeamPlayer assistant3 = new TeamPlayer("Dumbo", "Hlavka", 179, 74, awayTeam);
+        em.persist(scorer);
+        em.persist(assistant);
+        em.persist(scorer2);
+        em.persist(assistant2);
+        em.persist(scorer3);
+        em.persist(assistant3);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now);
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now.plusMinutes(5));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(16));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer3, assistant3, match, now.plusMinutes(89));
+
+        em.persist(goal1);
+        em.persist(goal2);
+        em.persist(goal3);
+        em.flush();
+
+        long numGoals = teamMatchGoalRepository.findGoalsCountByTeamInMatch(null, homeTeam.getId());
     }
 }

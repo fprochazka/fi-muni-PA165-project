@@ -128,12 +128,10 @@ public class TeamMatch
     /**
      * Ends the match, respectively sets the new end time of the match.
      *
-     * @param endTime new end time of the match, cannot be null
+     * @param endTime new end time of the match
      */
     public void endMatch(LocalDateTime endTime)
     {
-        Assert.notNull(endTime, "Cannot end the match with a null end time");
-
         validateMatchTimes(this.startTime, endTime);
 
         this.endTime = endTime;

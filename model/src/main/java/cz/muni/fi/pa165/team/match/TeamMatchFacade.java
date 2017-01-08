@@ -4,6 +4,7 @@ import cz.muni.fi.pa165.team.Team;
 import cz.muni.fi.pa165.team.TeamPlayer;
 import cz.muni.fi.pa165.team.TeamPlayerRepository;
 import cz.muni.fi.pa165.team.TeamRepository;
+import cz.muni.fi.pa165.team.match.containers.MatchListContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -141,8 +146,9 @@ public class TeamMatchFacade
     public void endMatch(UUID matchId, LocalDateTime endTime)
     {
         TeamMatch teamMatch = teamMatchRepository.getMatchById(matchId);
+        TeamMatchGoal teamMatchGoal = teamMatchGoalRepository.findLastGoalByMatch(teamMatch.getId());
 
-        teamMatchService.endMatch(teamMatch, endTime);
+        teamMatchService.endMatch(teamMatch, teamMatchGoal.getMatchTime(), endTime);
 
         entityManager.flush();
     }
@@ -193,6 +199,64 @@ public class TeamMatchFacade
 
         entityManager.remove(teamMatchGoal);
         entityManager.flush();
+    }
+
+    /**
+     * Prepares new object of type MatchListContainer with played matches which will be
+     * used as source of DB data on html page.
+     *
+     * @return new set up object of type MatchListContainer
+     */
+    public MatchListContainer preparePlayedMatchesForList()
+    {
+        Map<TeamMatch, Long> homeGoals = new HashMap<>();
+        Map<TeamMatch, Long> awayGoals = new HashMap<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        MatchListContainer container = new MatchListContainer();
+
+        Collection<TeamMatch> playedMatches = teamMatchRepository.findAllPlayedMatches();
+
+        for (TeamMatch pm : playedMatches)
+        {
+            homeGoals.put(pm, teamMatchGoalRepository.findGoalsCountByTeamInMatch(pm.getId(), pm.getHomeTeam().getId()));
+            awayGoals.put(pm, teamMatchGoalRepository.findGoalsCountByTeamInMatch(pm.getId(), pm.getAwayTeam().getId()));
+        }
+
+        container.setMatches(playedMatches);
+        container.setHomeGoals(homeGoals);
+        container.setAwayGoals(awayGoals);
+        container.setFormatter(formatter);
+
+        return container;
+    }
+
+    /**
+     * Prepares new object of type MatchListContainer with planned matches which will be
+     * used as source of DB data on html page.
+     *
+     * @return new set up object of type MatchListContainer
+     */
+    public MatchListContainer preparePlannedMatchesForList()
+    {
+        Map<TeamMatch, Long> homeGoals = new HashMap<>();
+        Map<TeamMatch, Long> awayGoals = new HashMap<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        MatchListContainer container = new MatchListContainer();
+
+        Collection<TeamMatch> plannedMatches = teamMatchRepository.findAllPlannedMatches();
+
+        for (TeamMatch pm : plannedMatches)
+        {
+            homeGoals.put(pm, teamMatchGoalRepository.findGoalsCountByTeamInMatch(pm.getId(), pm.getHomeTeam().getId()));
+            awayGoals.put(pm, teamMatchGoalRepository.findGoalsCountByTeamInMatch(pm.getId(), pm.getAwayTeam().getId()));
+        }
+
+        container.setMatches(plannedMatches);
+        container.setHomeGoals(homeGoals);
+        container.setAwayGoals(awayGoals);
+        container.setFormatter(formatter);
+
+        return container;
     }
 
 }
