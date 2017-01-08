@@ -58,7 +58,7 @@
                              <div class="form-group">
                                  <label class="col-sm-5 control-label" for="newmatchbutton"></label>
                                  <div class="col-sm-3 center-block">
-                                     <a href="<c:url value="/match/new"/>" name="newmatchbutton" class="btn btn-success center-block">New match</a>
+                                     <a href="<c:url value="/match/create"/>" name="newmatchbutton" class="btn btn-success center-block">New match</a>
                                  </div>
                              </div>
                          </sec:authorize>
