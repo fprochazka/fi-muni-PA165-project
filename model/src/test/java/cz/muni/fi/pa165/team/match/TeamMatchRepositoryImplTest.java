@@ -88,7 +88,7 @@ public class TeamMatchRepositoryImplTest extends AbstractTransactionalTestNGSpri
             teamMatchRepository.getMatchById(badId);
             Assert.fail("Expected exception MatchNotFoundException");
         } catch (MatchNotFoundException ex) {
-            Assert.assertEquals(ex.getMatchId(), badId);
+            Assert.assertEquals(badId, ex.getMatchId());
         }
     }
 
