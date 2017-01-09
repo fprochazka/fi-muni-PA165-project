@@ -1,4 +1,4 @@
-package cz.muni.fi.pa165.team.match.result;
+package cz.muni.fi.pa165.team.match.auxobjects;
 
 import cz.muni.fi.pa165.team.match.TeamMatch;
 
