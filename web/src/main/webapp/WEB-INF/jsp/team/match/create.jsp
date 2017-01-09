@@ -21,14 +21,14 @@
                                      <div class="col-md-7">
                                          <form:select path="homeTeamId" id="hteam" cssClass="match-dropdown-items match-form-team form-control">
                                              <c:choose>
-                                                 <c:when test="${matchRequest.homeTeamId != null && !matchRequest.homeTeamId.isEmpty()}">
-                                                     <form:option value="select" label="--- Select ---" disabled="true"/>
+                                                 <c:when test="${matchRequest.homeTeamId != null}">
+                                                     <form:option value="${null}" label="--- Select ---" disabled="true"/>
                                                      <c:forEach items="${teams}" var="team">
-                                                         <form:option value="${team.id}" label="${team.name}" selected="${team.id.toString().equals(matchRequest.homeTeamId) ? 'selected' : ''}"/>
+                                                         <form:option value="${team.id}" label="${team.name}" selected="${team.id.equals(matchRequest.homeTeamId) ? 'selected' : ''}"/>
                                                      </c:forEach>
                                                  </c:when>
                                                  <c:otherwise>
-                                                     <form:option value="select" label="--- Select ---" disabled="true" selected="selected"/>
+                                                     <form:option value="${null}" label="--- Select ---" disabled="true" selected="selected"/>
                                                      <form:options items="${teams}" itemLabel="name" itemValue="id"/>
                                                  </c:otherwise>
                                              </c:choose>
@@ -44,14 +44,14 @@
                                      <div class="col-md-7">
                                          <form:select path="awayTeamId" id="ateam" cssClass="match-dropdown-items match-form-team form-control">
                                              <c:choose>
-                                                 <c:when test="${matchRequest.awayTeamId != null && !matchRequest.awayTeamId.isEmpty()}">
-                                                     <form:option value="select" label="--- Select ---" disabled="true"/>
+                                                 <c:when test="${matchRequest.awayTeamId != null}">
+                                                     <form:option value="${null}" label="--- Select ---" disabled="true"/>
                                                      <c:forEach items="${teams}" var="team">
-                                                         <form:option value="${team.id}" label="${team.name}" selected="${team.id.toString().equals(matchRequest.awayTeamId) ? 'selected' : ''}"/>
+                                                         <form:option value="${team.id}" label="${team.name}" selected="${team.id.equals(matchRequest.awayTeamId) ? 'selected' : ''}"/>
                                                      </c:forEach>
                                                  </c:when>
                                                  <c:otherwise>
-                                                     <form:option value="select" label="--- Select ---" disabled="true" selected="selected"/>
+                                                     <form:option value="${null}" label="--- Select ---" disabled="true" selected="selected"/>
                                                      <form:options items="${teams}" itemLabel="name" itemValue="id"/>
                                                  </c:otherwise>
                                              </c:choose>
@@ -81,7 +81,7 @@
                                  </div>
                              </s:bind>
 
-                             <div id="form-buttons" class="match-form-item">
+                             <div class="match-form-item text-md-right">
                                  <a href="<c:url value="/matches"/>" class="btn btn-success mbuttons" role="button" id="mcancel">Cancel</a>
                                  <input id="msubmit" name="submit" type="submit" class="btn btn-success mbuttons" value="Save">
                              </div>

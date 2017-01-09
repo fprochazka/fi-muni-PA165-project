@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.UUID;
 
 /**
  * @author Tomas Smid <smid.thomas@gmail.com>
@@ -94,30 +92,14 @@ public class MatchController
                 .addObject("matchRequest", matchRequest);
         }
 
-        LocalDateTime startTime = getMVCLocalDateTime(matchRequest.getStartTime());
-        LocalDateTime endTime = getMVCLocalDateTime(matchRequest.getEndTime());
-
         TeamMatch teamMatch = teamMatchFacade.createMatch(
-            UUID.fromString(matchRequest.getHomeTeamId()),
-            UUID.fromString(matchRequest.getAwayTeamId()),
-            startTime,
-            endTime
+            matchRequest.getHomeTeamId(),
+            matchRequest.getAwayTeamId(),
+            matchRequest.getStartTime(),
+            matchRequest.getEndTime()
         );
 
         return new RedirectResponse("/match/" + teamMatch.getId().toString());
-    }
-
-    private LocalDateTime getMVCLocalDateTime(String formInputDate)
-    {
-        if (formInputDate == null || formInputDate.isEmpty()){
-            return null;
-        }
-
-        String[] splittedFormDate = formInputDate.split("T");
-        String dateToBeParsed = splittedFormDate[0] + " " + splittedFormDate[1];
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-        return LocalDateTime.parse(dateToBeParsed, formatter);
     }
 
     /**

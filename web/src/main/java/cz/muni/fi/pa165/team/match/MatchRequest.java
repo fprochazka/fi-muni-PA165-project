@@ -2,59 +2,62 @@ package cz.muni.fi.pa165.team.match;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 /**
  * @author Tomas Smid <smid.thomas@gmail.com>
  */
 public class MatchRequest
 {
     @NotEmpty
-    public String homeTeamId;
+    public UUID homeTeamId;
 
     @NotEmpty
-    public String awayTeamId;
+    public UUID awayTeamId;
 
     @NotEmpty
-    public String startTime;
+    public LocalDateTime startTime;
 
     @NotEmpty
-    public String endTime;
+    public LocalDateTime endTime;
 
-    public String getHomeTeamId()
+    public UUID getHomeTeamId()
     {
         return homeTeamId;
     }
 
-    public void setHomeTeamId(String homeTeamId)
+    public void setHomeTeamId(UUID homeTeamId)
     {
         this.homeTeamId = homeTeamId;
     }
 
-    public String getAwayTeamId()
+    public UUID getAwayTeamId()
     {
         return awayTeamId;
     }
 
-    public void setAwayTeamId(String awayTeamId)
+    public void setAwayTeamId(UUID awayTeamId)
     {
         this.awayTeamId = awayTeamId;
     }
 
-    public String getStartTime()
+    public LocalDateTime getStartTime()
     {
         return startTime;
     }
 
-    public void setStartTime(String startTime)
+    public void setStartTime(LocalDateTime startTime)
     {
         this.startTime = startTime;
     }
 
-    public String getEndTime()
+    public LocalDateTime getEndTime()
     {
         return endTime;
     }
 
-    public void setEndTime(String endTime)
+    public void setEndTime(LocalDateTime endTime)
     {
         this.endTime = endTime;
     }
