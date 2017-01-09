@@ -208,11 +208,11 @@ public class TeamMatchFacade
 
         for (TeamMatch pm : playedMatches)
         {
-            MatchResult mr = new MatchResult();
-
-            mr.setMatch(pm);
-            mr.setHomeGoals(teamMatchGoalRepository.getGoalsCountByTeamInMatch(pm.getId(), pm.getHomeTeam().getId()));
-            mr.setAwayGoals(teamMatchGoalRepository.getGoalsCountByTeamInMatch(pm.getId(), pm.getAwayTeam().getId()));
+            MatchResult mr = new MatchResult(
+                pm,
+                teamMatchGoalRepository.getGoalsCountByTeamInMatch(pm.getId(), pm.getHomeTeam().getId()),
+                teamMatchGoalRepository.getGoalsCountByTeamInMatch(pm.getId(), pm.getAwayTeam().getId())
+            );
 
             matchResults.add(mr);
         }

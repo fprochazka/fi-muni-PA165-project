@@ -7,20 +7,22 @@ import cz.muni.fi.pa165.team.match.TeamMatch;
  */
 public class MatchResult
 {
-    private TeamMatch match;
+    private final TeamMatch match;
 
-    private Long homeGoals;
+    private final Long homeGoals;
 
-    private Long awayGoals;
+    private final Long awayGoals;
+
+    public MatchResult(TeamMatch match, Long homeGoals, Long awayGoals)
+    {
+        this.match = match;
+        this.homeGoals = homeGoals;
+        this.awayGoals = awayGoals;
+    }
 
     public TeamMatch getMatch()
     {
         return match;
-    }
-
-    public void setMatch(TeamMatch match)
-    {
-        this.match = match;
     }
 
     public Long getHomeGoals()
@@ -28,18 +30,9 @@ public class MatchResult
         return homeGoals;
     }
 
-    public void setHomeGoals(Long homeGoals)
-    {
-        this.homeGoals = homeGoals;
-    }
-
     public Long getAwayGoals()
     {
         return awayGoals;
     }
 
-    public void setAwayGoals(Long awayGoals)
-    {
-        this.awayGoals = awayGoals;
-    }
 }
