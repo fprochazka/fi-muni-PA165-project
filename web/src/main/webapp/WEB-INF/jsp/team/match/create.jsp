@@ -82,8 +82,10 @@
                              </s:bind>
 
                              <div class="match-form-item text-md-right">
-                                 <a href="<c:url value="/matches"/>" class="btn btn-success mbuttons" role="button" id="mcancel">Cancel</a>
-                                 <input id="msubmit" name="submit" type="submit" class="btn btn-success mbuttons" value="Save">
+                                 <a href="<c:url value="/matches"/>" class="btn btn-secondary mbuttons" role="button" id="mcancel">Cancel</a>
+                                 <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
+                                    <input id="msubmit" name="submit" type="submit" class="btn btn-success mbuttons" value="Save">
+                                 </sec:authorize>
                              </div>
                          </fieldset>
                      </form:form>

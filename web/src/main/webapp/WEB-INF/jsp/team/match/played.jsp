@@ -43,7 +43,7 @@
                                              <td><c:out value="${matchResult.match.awayTeam.name}" /></td>
                                              <td><c:out value="${matchResult.homeGoals} - ${matchResult.awayGoals}" /></td>
                                              <td>
-                                                 <a href="<c:url value="/match/${playedMatch.id}"/>" title="View detail" name="matchdetailbutton" class="btn btn-success center-block btn-outline-info">
+                                                 <a href="<c:url value="/match/${matchResult.match.id}"/>" title="View detail" name="matchdetailbutton" class="btn btn-success center-block btn-outline-info">
                                                      Detail
                                                  </a>
                                              </td>
