@@ -10,13 +10,11 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 /**
  * @author Tomas Smid <smid.thomas@gmail.com>
@@ -100,6 +98,31 @@ public class MatchController
         );
 
         return new RedirectResponse("/match/" + teamMatch.getId().toString());
+    }
+
+    @RequestMapping(value = "/match/{id}", method = RequestMethod.GET)
+    public ModelAndView viewMatchDetail(@PathVariable("id") UUID id)
+    {
+        return new ModelAndView("team/match/detail")
+            .addObject("matchResult", teamMatchFacade.getMatchResult(id))
+            .addObject("matchDetail", teamMatchFacade.getMatchDetail(id))
+            .addObject("formatter", DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+    }
+
+    @RequestMapping(value = "/match/{id}/delete", method = RequestMethod.POST)
+    public ModelAndView deleteMatch(@PathVariable("id") UUID id) throws Exception
+    {
+        teamMatchFacade.deleteMatch(id);
+
+        return new RedirectResponse("/matches");
+    }
+
+    @RequestMapping(value = "/match/{mid}/goal/{gid}/delete", method = RequestMethod.POST)
+    public ModelAndView deleteGoal(@PathVariable("mid") UUID mid, @PathVariable("gid") UUID gid)
+    {
+        teamMatchFacade.deleteMatchGoal(gid);
+
+        return new RedirectResponse("/match/" + mid);
     }
 
     /**

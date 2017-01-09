@@ -77,3 +77,19 @@
     margin: 5px;
     margin-top: 30px;
 }
+
+.btn-goal-delete {
+    color:darkred;
+    padding: 0px;
+    padding-top: 60%;
+    text-align: center;
+}
+
+.roster-block {
+    margin-top: 30px;
+}
+
+.btn-match-detail {
+    margin-top: 40px;
+    margin-bottom: 30px;
+}
