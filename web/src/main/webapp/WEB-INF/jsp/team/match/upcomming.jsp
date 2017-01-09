@@ -41,7 +41,7 @@
                                              <td><c:out value="${plannedMatch.startTime.format(formatter)}"/></td>
                                              <td><c:out value="${plannedMatch.homeTeam.name}"/></td>
                                              <td><c:out value="${plannedMatch.awayTeam.name}"/></td>
-                                             <td><c:out value=" - "/></td>
+                                             <td> - </td>
                                              <td>
                                                  <a href="<c:url value="/match/${plannedMatch.id}"/>" title="View detail" name="matchdetailbutton" class="btn btn-success center-block btn-outline-info">
                                                      Detail
