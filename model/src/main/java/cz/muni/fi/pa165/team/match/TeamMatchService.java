@@ -158,6 +158,6 @@ public class TeamMatchService
             && conflictingMatch.getStartTime().equals(startTime)
             && (conflictingMatch.getHomeTeam().equals(team) || conflictingMatch.getAwayTeam().equals(team)));
 
-        return ((result == false || match == null) ? result : !conflictingMatch.getId().equals(match.getId()));
+        return ((!result || match == null) ? result : !conflictingMatch.getId().equals(match.getId()));
     }
 }
