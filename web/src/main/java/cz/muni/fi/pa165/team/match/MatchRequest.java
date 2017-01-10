@@ -61,4 +61,22 @@ public class MatchRequest
     {
         this.endTime = endTime;
     }
+
+    /**
+     * Prepares match request object.
+     *
+     * @param match match for which the match request object should be prepared
+     * @return match request object
+     */
+    public static MatchRequest fromMatch(TeamMatch match)
+    {
+        MatchRequest request = new MatchRequest();
+
+        request.setHomeTeamId(match.getHomeTeam().getId());
+        request.setAwayTeamId(match.getAwayTeam().getId());
+        request.setStartTime(match.getStartTime());
+        request.setEndTime(match.getEndTime());
+
+        return request;
+    }
 }
