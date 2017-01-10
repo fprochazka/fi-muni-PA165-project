@@ -125,6 +125,36 @@ public class MatchController
         return new RedirectResponse("/match/" + mid);
     }
 
+    @RequestMapping(value = "/match/{id}/edit", method = RequestMethod.GET)
+    public ModelAndView viewEditMatch(@PathVariable("id") UUID id)
+    {
+        MatchRequest matchRequest = MatchRequest.fromMatch(teamMatchRepository.getMatchById(id));
+
+        return new ModelAndView("team/match/edit")
+            .addObject("matchRequest", matchRequest)
+            .addObject("teams", teamRepository.findAll());
+    }
+
+    @RequestMapping(value = "/match/{id}/edit", method = RequestMethod.POST)
+    public ModelAndView submitEditMatch(
+        @PathVariable("id") UUID id,
+        @ModelAttribute("matchRequest") @Validated MatchRequest matchRequest,
+        BindingResult result
+    )
+    {
+        if (result.hasErrors()) {
+            System.out.println("RESULT HAS ERROR, CYCLE INFINITE");
+            return new ModelAndView("team/match/edit")
+                .addObject("matchRequest", matchRequest)
+                .addObject("teams", teamRepository.findAll());
+        }
+
+        System.out.println("CHANGE MATCH TIME");
+        teamMatchFacade.changeMatchTime(id, matchRequest.getStartTime(), matchRequest.getEndTime());
+
+        return new RedirectResponse("/matches");
+    }
+
     /**
      * Validates match form data.
      */
@@ -154,6 +184,11 @@ public class MatchController
                 request.getHomeTeamId().equals(request.getAwayTeamId()))
             {
                 errors.rejectValue("awayTeamId", "matchform.sameteams");
+            }
+
+            if (request.getEndTime() != null && !request.getEndTime().isAfter(request.getStartTime()))
+            {
+                errors.rejectValue("endTime", "matchform.endtimenotafterstarttime");
             }
         }
 
