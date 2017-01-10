@@ -42,11 +42,13 @@
                                             </tr>
                                         </thead>
                                         <tbody class="tbody-scrollable-small">
+
                                             <c:forEach items="${matchDetail.homeGoals}" var="homeGoal">
                                                 <tr class="tr-fixed-small">
                                                     <td><c:out value="${homeGoal.matchTime.format(formatter)}"/></td>
                                                     <td><c:out value="${homeGoal.scorer.firstname} ${homeGoal.scorer.surname}"/></td>
                                                     <td><c:out value="${homeGoal.assistant.firstname} ${homeGoal.assistant.surname}"/></td>
+
                                                     <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
                                                         <td>
                                                             <a href="#deleteHomeGoalModal" title="Delete goal" class="btn btn-block btn-goal-delete" data-toggle="modal" role="button">
@@ -75,13 +77,17 @@
                                                             </div>
                                                         </div>
                                                     </sec:authorize>
+
                                                 </tr>
                                             </c:forEach>
+
                                         </tbody>
                                     </table>
+
                                     <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
                                         <a href="<c:url value="/match/${matchResult.match.id}/goal/create"/>" class="btn btn-outline-primary pull-right" data-dismiss="modal">Add Goal</a>
                                     </sec:authorize>
+
                                 </div>
 
                                 <h4 class="m-a-0 roster-block">Roster</h4>
@@ -104,6 +110,7 @@
                                     </table>
                                 </div>
                             </div>
+
                             <div class="col-md-6">
                                 <div class="table-div table-responsive">
                                     <table class="table table-fixed table-hover table-striped table-fixed-small">
@@ -115,11 +122,13 @@
                                         </tr>
                                         </thead>
                                         <tbody class="tbody-scrollable-small">
-                                        <c:forEach items="${matchDetail.awayGoals}" var="awayGoal">
+
+                                            <c:forEach items="${matchDetail.awayGoals}" var="awayGoal">
                                                 <tr class="tr-fixed-small">
                                                     <td><c:out value="${awayGoal.matchTime.format(formatter)}"/></td>
                                                     <td><c:out value="${awayGoal.scorer.firstname} ${awayGoal.scorer.surname}"/></td>
                                                     <td><c:out value="${awayGoal.assistant.firstname} ${awayGoal.assistant.surname}"/></td>
+
                                                     <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
                                                         <td>
                                                             <a href="#deleteAwayGoalModal" title="Delete goal" class="btn btn-block btn-goal-delete" data-toggle="modal" role="button">
@@ -148,13 +157,17 @@
                                                             </div>
                                                         </div>
                                                     </sec:authorize>
+
                                                 </tr>
                                             </c:forEach>
+
                                         </tbody>
                                     </table>
+
                                     <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
                                         <a href="<c:url value="/match/${matchResult.match.id}/goal/create"/>" class="btn btn-outline-primary pull-right" data-dismiss="modal">Add Goal</a>
                                     </sec:authorize>
+
                                 </div>
 
                                 <h4 class="m-a-0 roster-block">Roster</h4>
@@ -205,7 +218,7 @@
 
                     <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
                         <div class="text-md-center btn-match-detail">
-                            <a href="match_form.html" class="btn btn-success">Edit</a>
+                            <a href="<c:url value="/match/${matchResult.match.id}/edit"/> " class="btn btn-success">Edit</a>
                             <a href="#deleteMatchModal" class="btn btn-outline-danger" data-toggle="modal" role="button">Delete</a>
                         </div>
                     </sec:authorize>

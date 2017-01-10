@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="utf-8" trimDirectiveWhitespaces="true" session="false" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="utf-8" trimDirectiveWhitespaces="true" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="my" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -62,7 +62,7 @@
                              </s:bind>
 
                              <s:bind path="startTime">
-                                 <div class="form-group row match-form-item">
+                                 <div class="form-group row match-form-item ${status.error ? 'has-danger' : ''}">
                                      <form:label path="startTime" for="start-time" cssClass="col-md-3 col-form-label col-form-label-lg form-control-label">Start Time</form:label>
                                      <div class="col-md-7 match-time-picker">
                                          <form:input path="startTime" cssClass="form-control form-control-sm" type="datetime-local" id="start-time" required="required"/>
@@ -72,7 +72,7 @@
                              </s:bind>
 
                              <s:bind path="endTime">
-                                 <div class="form-group row match-form-item">
+                                 <div class="form-group row match-form-item ${status.error ? 'has-danger' : ''}">
                                      <form:label path="endTime" for="end-time" cssClass="col-md-3 col-form-label col-form-label-lg form-control-label">End Time</form:label>
                                      <div class="col-md-7 match-time-picker">
                                          <form:input path="endTime" cssClass="form-control form-control-sm" type="datetime-local" id="end-time" required=""/>
