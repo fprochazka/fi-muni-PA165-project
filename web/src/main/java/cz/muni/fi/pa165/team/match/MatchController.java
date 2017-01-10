@@ -1,7 +1,6 @@
 package cz.muni.fi.pa165.team.match;
 
 import cz.muni.fi.pa165.response.RedirectResponse;
-import cz.muni.fi.pa165.team.TeamPlayerRepository;
 import cz.muni.fi.pa165.team.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,23 +28,16 @@ public class MatchController
 
     private final TeamRepository teamRepository;
 
-    private final TeamMatchGoalRepository teamMatchGoalRepository;
-
-    private final TeamPlayerRepository teamPlayerRepository;
-
     @Autowired
     public MatchController(
         TeamMatchFacade teamMatchFacade,
         TeamMatchRepository teamMatchRepository,
-        TeamRepository teamRepository,
-        TeamMatchGoalRepository teamMatchGoalRepository,
-        TeamPlayerRepository teamPlayerRepository)
+        TeamRepository teamRepository
+    )
     {
         this.teamMatchFacade = teamMatchFacade;
         this.teamMatchRepository = teamMatchRepository;
         this.teamRepository = teamRepository;
-        this.teamMatchGoalRepository = teamMatchGoalRepository;
-        this.teamPlayerRepository = teamPlayerRepository;
     }
 
     @InitBinder("matchRequest")
@@ -117,14 +109,6 @@ public class MatchController
         return new RedirectResponse("/matches");
     }
 
-    @RequestMapping(value = "/match/{mid}/goal/{gid}/delete", method = RequestMethod.POST)
-    public ModelAndView deleteGoal(@PathVariable("mid") UUID mid, @PathVariable("gid") UUID gid)
-    {
-        teamMatchFacade.deleteMatchGoal(gid);
-
-        return new RedirectResponse("/match/" + mid);
-    }
-
     @RequestMapping(value = "/match/{id}/edit", method = RequestMethod.GET)
     public ModelAndView viewEditMatch(@PathVariable("id") UUID id)
     {
@@ -143,13 +127,11 @@ public class MatchController
     )
     {
         if (result.hasErrors()) {
-            System.out.println("RESULT HAS ERROR, CYCLE INFINITE");
             return new ModelAndView("team/match/edit")
                 .addObject("matchRequest", matchRequest)
                 .addObject("teams", teamRepository.findAll());
         }
 
-        System.out.println("CHANGE MATCH TIME");
         teamMatchFacade.changeMatchTime(id, matchRequest.getStartTime(), matchRequest.getEndTime());
 
         return new RedirectResponse("/matches");

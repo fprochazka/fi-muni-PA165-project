@@ -85,7 +85,7 @@
                                     </table>
 
                                     <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
-                                        <a href="<c:url value="/match/${matchResult.match.id}/goal/create"/>" class="btn btn-outline-primary pull-right" data-dismiss="modal">Add Goal</a>
+                                        <a href="<c:url value="/match/${matchResult.match.id}/team/${matchResult.match.homeTeam.id}/goal/create"/>" class="btn btn-outline-primary pull-right" data-dismiss="modal">Add Goal</a>
                                     </sec:authorize>
 
                                 </div>
@@ -165,7 +165,7 @@
                                     </table>
 
                                     <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
-                                        <a href="<c:url value="/match/${matchResult.match.id}/goal/create"/>" class="btn btn-outline-primary pull-right" data-dismiss="modal">Add Goal</a>
+                                        <a href="<c:url value="/match/${matchResult.match.id}/team/${matchResult.match.awayTeam.id}/goal/create"/>" class="btn btn-outline-primary pull-right" data-dismiss="modal">Add Goal</a>
                                     </sec:authorize>
 
                                 </div>
