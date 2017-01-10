@@ -617,6 +617,53 @@ public class TeamMatchServiceTest
     }
 
     @Test
+    public void testChangeMatchTimeWithNotNullConflictingMatchButNoRealConflictJustOneSameMatchAndNoRealChange()
+    {
+        TeamMatchService teamMatchService = new TeamMatchService();
+
+        LocalDateTime startTime = now;
+        Team team1 = new Team("Team1");
+        Team team2 = new Team("Team2");
+        TeamMatch match = new TeamMatch(team1, team2, startTime);
+
+
+        teamMatchService.changeMatchTime(
+            match,
+            match,
+            match,
+            startTime,
+            null
+        );
+
+        assertEquals(match.getStartTime(), startTime);
+        assertNull(match.getEndTime());
+    }
+
+    @Test
+    public void testChangeMatchTimeWithNotNullConflictingMatchButNoRealConflictJustOneSameMatchAndEndTimeChange()
+    {
+        TeamMatchService teamMatchService = new TeamMatchService();
+
+        LocalDateTime startTime = now;
+        LocalDateTime endTime = now.plusMinutes(50);
+        Team team1 = new Team("Team1");
+        Team team2 = new Team("Team2");
+        TeamMatch match = new TeamMatch(team1, team2, startTime);
+
+
+        teamMatchService.changeMatchTime(
+            match,
+            match,
+            match,
+            startTime,
+            endTime
+        );
+
+        assertEquals(match.getStartTime(), startTime);
+        assertEquals(match.getEndTime(), endTime);
+    }
+
+    @Test
     public void testEndMatch()
     {
         TeamMatchService teamMatchService = new TeamMatchService();

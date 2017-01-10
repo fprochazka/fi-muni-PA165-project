@@ -43,10 +43,10 @@ public class TeamMatchService
         Assert.notNull(awayTeam, "Match cannot be created with a null away team");
         Assert.isTrue(!homeTeam.equals(awayTeam), "Match cannot be created for home and away teams which are same");
 
-        if (isMatchReallyConflicting(conflictingMatchForHomeTeam, homeTeam, startTime)) {
+        if (isMatchReallyConflicting(conflictingMatchForHomeTeam, null, homeTeam, startTime)) {
             throw new MatchWithSameParametersAlreadyExistsException(homeTeam.getId(), startTime);
         }
-        if (isMatchReallyConflicting(conflictingMatchForAwayTeam, awayTeam, startTime)) {
+        if (isMatchReallyConflicting(conflictingMatchForAwayTeam, null, awayTeam, startTime)) {
             throw new MatchWithSameParametersAlreadyExistsException(awayTeam.getId(), startTime);
         }
 
@@ -76,7 +76,7 @@ public class TeamMatchService
     {
         Assert.notNull(match, "Cannot change match times of null match");
 
-        if (isMatchReallyConflicting(conflictingMatchForHomeTeam, match.getHomeTeam(), startTime)) {
+        if (isMatchReallyConflicting(conflictingMatchForHomeTeam, match, match.getHomeTeam(), startTime)) {
             throw new MatchTimeCollisionException(
                 match.getId(),
                 conflictingMatchForHomeTeam.getId(),
@@ -85,7 +85,7 @@ public class TeamMatchService
             );
         }
 
-        if (isMatchReallyConflicting(conflictingMatchForAwayTeam, match.getAwayTeam(), startTime)) {
+        if (isMatchReallyConflicting(conflictingMatchForAwayTeam, match, match.getAwayTeam(), startTime)) {
             throw new MatchTimeCollisionException(
                 match.getId(),
                 conflictingMatchForAwayTeam.getId(),
@@ -152,10 +152,12 @@ public class TeamMatchService
         return new TeamMatchGoal(scorer, assistant, match, matchTime);
     }
 
-    private boolean isMatchReallyConflicting(TeamMatch conflictingMatch, Team team, LocalDateTime startTime)
+    private boolean isMatchReallyConflicting(TeamMatch conflictingMatch, TeamMatch match, Team team, LocalDateTime startTime)
     {
-        return (conflictingMatch != null
+        boolean result = (conflictingMatch != null
             && conflictingMatch.getStartTime().equals(startTime)
             && (conflictingMatch.getHomeTeam().equals(team) || conflictingMatch.getAwayTeam().equals(team)));
+
+        return ((result == false || match == null) ? result : !conflictingMatch.getId().equals(match.getId()));
     }
 }
