@@ -3,6 +3,7 @@ package cz.muni.fi.pa165.team.match;
 import cz.muni.fi.pa165.response.RedirectResponse;
 import cz.muni.fi.pa165.team.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
@@ -46,7 +47,7 @@ public class MatchController
         binder.setValidator(new MatchCreationValidator());
     }
 
-    @RequestMapping(value = "/matches", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView viewListPlayed()
     {
         return new ModelAndView("team/match/played")
@@ -54,7 +55,7 @@ public class MatchController
             .addObject("formatter", DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
     }
 
-    @RequestMapping(value = "/matches/upcomming", method = RequestMethod.GET)
+    @RequestMapping(value = "/upcomming", method = RequestMethod.GET)
     public ModelAndView viewListUpcomming()
     {
         return new ModelAndView("team/match/upcomming")
@@ -70,6 +71,7 @@ public class MatchController
             .addObject("matchRequest", new MatchRequest());
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_MODERATOR"})
     @RequestMapping(value = "/match/create", method = RequestMethod.POST)
     public ModelAndView submitNewMatch(
         @ModelAttribute("matchRequest") @Validated MatchRequest matchRequest,
@@ -106,7 +108,7 @@ public class MatchController
     {
         teamMatchFacade.deleteMatch(id);
 
-        return new RedirectResponse("/matches");
+        return new RedirectResponse("/");
     }
 
     @RequestMapping(value = "/match/{id}/edit", method = RequestMethod.GET)
@@ -134,7 +136,7 @@ public class MatchController
 
         teamMatchFacade.changeMatchTime(id, matchRequest.getStartTime(), matchRequest.getEndTime());
 
-        return new RedirectResponse("/matches");
+        return new RedirectResponse("/match/" + id);
     }
 
     /**
