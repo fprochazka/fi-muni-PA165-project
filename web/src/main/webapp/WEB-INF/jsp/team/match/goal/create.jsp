@@ -15,7 +15,7 @@
                 <div class="col-md-8 offset-md-2">
                     <form:form class="form-horizontal match-form" id="goal-form" method="post" modelAttribute="goalRequest" action="${requestScope['javax.servlet.forward.request_uri']}" autocomplete="off">
                         <fieldset>
-                            <legend>New goal creation form</legend>
+                            <legend>Create goal</legend>
 
                             <s:bind path="scorerId">
                                 <div class="form-group row match-form-item ${status.error ? 'has-danger' : ''}">

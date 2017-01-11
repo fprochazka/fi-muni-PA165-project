@@ -14,7 +14,7 @@
 
                      <form:form class="form-horizontal match-form" id="match-form" method="post" modelAttribute="matchRequest" action="${requestScope['javax.servlet.forward.request_uri']}" autocomplete="off">
                          <fieldset>
-                            <legend>New match creation form</legend>
+                            <legend>Create match</legend>
 
                              <s:bind path="homeTeamId">
                                  <div class="form-group row match-form-item ${status.error ? 'has-danger' : ''}">
