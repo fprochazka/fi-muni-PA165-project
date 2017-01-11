@@ -4,8 +4,8 @@ import cz.muni.fi.pa165.team.Team;
 import cz.muni.fi.pa165.team.TeamPlayer;
 import cz.muni.fi.pa165.team.TeamPlayerRepository;
 import cz.muni.fi.pa165.team.TeamRepository;
-import cz.muni.fi.pa165.team.match.auxobjects.MatchDetailView;
-import cz.muni.fi.pa165.team.match.auxobjects.MatchResult;
+import cz.muni.fi.pa165.team.match.result.MatchDetailResult;
+import cz.muni.fi.pa165.team.match.result.MatchResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -158,11 +158,12 @@ public class TeamMatchFacade
      * @param matchTime   time in which the goal is scored
      * @return newly created goal
      */
-    public TeamMatchGoal addNewScoredGoal(UUID scorerId, UUID assistantId, UUID matchId, LocalDateTime matchTime)
+    public TeamMatchGoal addNewScoredGoal(UUID scorerId, UUID assistantId, UUID matchId, UUID teamId, LocalDateTime matchTime)
     {
         TeamPlayer scorer = teamPlayerRepository.getTeamPlayerById(scorerId);
         TeamPlayer assistant = teamPlayerRepository.getTeamPlayerById(assistantId);
         TeamMatch match = teamMatchRepository.getMatchById(matchId);
+        Team team = teamRepository.getTeamById(teamId);
         TeamMatchGoal sameGoal = teamMatchGoalRepository.findConflictingGoal(
             match.getId(),
             scorer.getId(),
@@ -174,6 +175,7 @@ public class TeamMatchFacade
             scorer,
             assistant,
             match,
+            team,
             matchTime,
             sameGoal
         );
@@ -245,11 +247,11 @@ public class TeamMatchFacade
      * @param matchId match whose information should be retrieved
      * @return detail of the given match
      */
-    public MatchDetailView getMatchDetail(UUID matchId)
+    public MatchDetailResult getMatchDetail(UUID matchId)
     {
         TeamMatch teamMatch = teamMatchRepository.getMatchById(matchId);
 
-        return new MatchDetailView(
+        return new MatchDetailResult(
             teamMatchGoalRepository.findAllGoalsByTeamInMatch(teamMatch.getId(), teamMatch.getHomeTeam().getId()),
             teamMatchGoalRepository.findAllGoalsByTeamInMatch(teamMatch.getId(), teamMatch.getAwayTeam().getId()),
             teamPlayerRepository.findTeamPlayerByTeam(teamMatch.getHomeTeam()),

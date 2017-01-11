@@ -3,8 +3,8 @@ package cz.muni.fi.pa165.team.match;
 import cz.muni.fi.pa165.config.ModelConfig;
 import cz.muni.fi.pa165.team.Team;
 import cz.muni.fi.pa165.team.TeamPlayer;
-import cz.muni.fi.pa165.team.match.auxobjects.MatchDetailView;
-import cz.muni.fi.pa165.team.match.auxobjects.MatchResult;
+import cz.muni.fi.pa165.team.match.result.MatchDetailResult;
+import cz.muni.fi.pa165.team.match.result.MatchResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
@@ -120,6 +120,7 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
             scorer.getId(),
             assistant.getId(),
             match.getId(),
+            homeTeam.getId(),
             now
         );
         em.clear();
@@ -333,7 +334,7 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
         em.persist(goal3);
         em.flush();
 
-        MatchDetailView mdv = teamMatchFacade.getMatchDetail(match.getId());
+        MatchDetailResult mdv = teamMatchFacade.getMatchDetail(match.getId());
 
         assertTrue(mdv.getHomeGoals().contains(goal1));
         assertTrue(mdv.getHomeGoals().contains(goal2));

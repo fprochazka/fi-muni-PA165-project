@@ -126,6 +126,7 @@ public class TeamMatchService
         TeamPlayer scorer,
         TeamPlayer assistant,
         TeamMatch match,
+        Team team,
         LocalDateTime matchTime,
         TeamMatchGoal sameGoal
     )
@@ -133,6 +134,10 @@ public class TeamMatchService
         Assert.notNull(scorer, "Cannot create new goal with a null scorer");
         Assert.notNull(assistant, "Cannot create new goal with a null assistant");
         Assert.isTrue(!scorer.equals(assistant), "Cannot create new goal with scorer and assistant who are the same player");
+        Assert.notNull(match, "Cannot create new goal with a null match");
+        Assert.notNull(team, "Cannot create new goal with a null scoring team");
+        Assert.isTrue(scorer.getTeam().equals(team), "Cannot create new goal with scorer who is not from scoring team");
+        Assert.isTrue(assistant.getTeam().equals(team), "Cannot create new goal with assistant who is not from scoring team");
 
         if (
             sameGoal != null

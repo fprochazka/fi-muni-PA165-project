@@ -39,10 +39,10 @@ public class TeamMatchServiceTest
         );
 
         assertNotNull(newMatch);
-        assertEquals(team1.getId(), newMatch.getHomeTeam().getId());
-        assertEquals(team2.getId(), newMatch.getAwayTeam().getId());
-        assertEquals(startTime, newMatch.getStartTime());
-        assertEquals(endTime, newMatch.getEndTime());
+        assertEquals(newMatch.getHomeTeam().getId(), team1.getId());
+        assertEquals(newMatch.getAwayTeam().getId(), team2.getId());
+        assertEquals(newMatch.getStartTime(), startTime);
+        assertEquals(newMatch.getEndTime(), endTime);
     }
 
     @Test(expectedExceptions = { IllegalArgumentException.class },
@@ -144,9 +144,9 @@ public class TeamMatchServiceTest
         );
 
         assertNotNull(newMatch);
-        assertEquals(team1.getId(), newMatch.getHomeTeam().getId());
-        assertEquals(team2.getId(), newMatch.getAwayTeam().getId());
-        assertEquals(startTime, newMatch.getStartTime());
+        assertEquals(newMatch.getHomeTeam().getId(), team1.getId());
+        assertEquals(newMatch.getAwayTeam().getId(), team2.getId());
+        assertEquals(newMatch.getStartTime(), startTime);
         assertNull(newMatch.getEndTime());
     }
 
@@ -214,8 +214,8 @@ public class TeamMatchServiceTest
             );
             fail("Expected exception 'MatchWithSameParametersAlreadyExistsException'");
         } catch (MatchWithSameParametersAlreadyExistsException ex) {
-            assertEquals(startTime, ex.getStartTime());
-            assertEquals(team1.getId(), ex.getTeamId());
+            assertEquals(ex.getStartTime(), startTime);
+            assertEquals(ex.getTeamId(), team1.getId());
         }
     }
 
@@ -241,8 +241,8 @@ public class TeamMatchServiceTest
             );
             fail("Expected exception 'MatchWithSameParametersAlreadyExistsException'");
         } catch (MatchWithSameParametersAlreadyExistsException ex) {
-            assertEquals(startTime, ex.getStartTime());
-            assertEquals(team2.getId(), ex.getTeamId());
+            assertEquals(ex.getStartTime(), startTime);
+            assertEquals(ex.getTeamId(), team2.getId());
         }
     }
 
@@ -269,9 +269,9 @@ public class TeamMatchServiceTest
         );
 
         assertNotNull(newMatch);
-        assertEquals(team3.getId(), newMatch.getHomeTeam().getId());
-        assertEquals(team4.getId(),newMatch.getAwayTeam().getId());
-        assertEquals(startTime, newMatch.getStartTime());
+        assertEquals(newMatch.getHomeTeam().getId(), team3.getId());
+        assertEquals(newMatch.getAwayTeam().getId(), team4.getId());
+        assertEquals(newMatch.getStartTime(), startTime);
         assertNull(newMatch.getEndTime());
 
     }
@@ -299,9 +299,9 @@ public class TeamMatchServiceTest
         );
 
         assertNotNull(newMatch);
-        assertEquals(team3.getId(), newMatch.getHomeTeam().getId());
-        assertEquals(team1.getId(),newMatch.getAwayTeam().getId());
-        assertEquals(startTime2, newMatch.getStartTime());
+        assertEquals(newMatch.getHomeTeam().getId(), team3.getId());
+        assertEquals(newMatch.getAwayTeam().getId(), team1.getId());
+        assertEquals(newMatch.getStartTime(), startTime2);
         assertNull(newMatch.getEndTime());
 
     }
@@ -328,9 +328,9 @@ public class TeamMatchServiceTest
         );
 
         assertNotNull(newMatch);
-        assertEquals(team2.getId(), newMatch.getHomeTeam().getId());
-        assertEquals(team1.getId(),newMatch.getAwayTeam().getId());
-        assertEquals(startTime2, newMatch.getStartTime());
+        assertEquals(newMatch.getHomeTeam().getId(), team2.getId());
+        assertEquals(newMatch.getAwayTeam().getId(), team1.getId());
+        assertEquals(newMatch.getStartTime(), startTime2);
         assertNull(newMatch.getEndTime());
 
     }
@@ -356,8 +356,8 @@ public class TeamMatchServiceTest
             endTime2
         );
 
-        assertEquals(startTime2, match.getStartTime());
-        assertEquals(endTime2, match.getEndTime());
+        assertEquals(match.getStartTime(), startTime2);
+        assertEquals(match.getEndTime(), endTime2);
     }
 
     @Test(expectedExceptions = { IllegalArgumentException.class },
@@ -419,7 +419,7 @@ public class TeamMatchServiceTest
             null
         );
 
-        assertEquals(startTime2, match.getStartTime());
+        assertEquals(match.getStartTime(), startTime2);
         assertNull(match.getEndTime());
     }
 
@@ -494,10 +494,10 @@ public class TeamMatchServiceTest
             );
             fail("Expected exception MatchTimeCollisionException");
         } catch (MatchTimeCollisionException ex) {
-            assertEquals(match2.getId(), ex.getMatchPlannedToBeChangedId());
-            assertEquals(match1.getId(), ex.getCollidingMatchId());
-            assertEquals(startTime2, ex.getStartTime());
-            assertEquals(team1.getId(), ex.getTeamId());
+            assertEquals(ex.getMatchPlannedToBeChangedId(), match2.getId());
+            assertEquals(ex.getCollidingMatchId(), match1.getId());
+            assertEquals(ex.getStartTime(), startTime2);
+            assertEquals(ex.getTeamId(), team1.getId());
         }
     }
 
@@ -526,10 +526,10 @@ public class TeamMatchServiceTest
             );
             fail("Expected exception MatchTimeCollisionException");
         } catch (MatchTimeCollisionException ex) {
-            assertEquals(match2.getId(), ex.getMatchPlannedToBeChangedId());
-            assertEquals(match1.getId(), ex.getCollidingMatchId());
-            assertEquals(startTime2, ex.getStartTime());
-            assertEquals(team1.getId(), ex.getTeamId());
+            assertEquals(ex.getMatchPlannedToBeChangedId(), match2.getId());
+            assertEquals(ex.getCollidingMatchId(), match1.getId());
+            assertEquals(ex.getStartTime(), startTime2);
+            assertEquals(ex.getTeamId(), team1.getId());
         }
     }
 
@@ -557,8 +557,8 @@ public class TeamMatchServiceTest
             endTime2
         );
 
-        assertEquals(startTime, match2.getStartTime());
-        assertEquals(endTime2, match2.getEndTime());
+        assertEquals(match2.getStartTime(), startTime);
+        assertEquals(match2.getEndTime(), endTime2);
     }
 
     @Test
@@ -585,8 +585,8 @@ public class TeamMatchServiceTest
             endTime2
         );
 
-        assertEquals(startTime2, match2.getStartTime());
-        assertEquals(endTime2, match2.getEndTime());
+        assertEquals(match2.getStartTime(), startTime2);
+        assertEquals(match2.getEndTime(), endTime2);
     }
 
     @Test
@@ -612,8 +612,8 @@ public class TeamMatchServiceTest
             endTime2
         );
 
-        assertEquals(startTime2, match2.getStartTime());
-        assertEquals(endTime2, match2.getEndTime());
+        assertEquals(match2.getStartTime(), startTime2);
+        assertEquals(match2.getEndTime(), endTime2);
     }
 
     @Test
@@ -769,15 +769,16 @@ public class TeamMatchServiceTest
             scorer,
             assistant,
             match,
+            homeTeam,
             goalMatchTime,
             null
         );
 
         assertNotNull(newGoal);
-        assertEquals(scorer.getId(), newGoal.getScorer().getId());
-        assertEquals(assistant.getId(), newGoal.getAssistant().getId());
-        assertEquals(match.getId(), newGoal.getMatch().getId());
-        assertEquals(goalMatchTime, newGoal.getMatchTime());
+        assertEquals(newGoal.getScorer().getId(), scorer.getId());
+        assertEquals(newGoal.getAssistant().getId(), assistant.getId());
+        assertEquals(newGoal.getMatch().getId(), match.getId());
+        assertEquals(newGoal.getMatchTime(), goalMatchTime);
     }
 
     @Test(expectedExceptions = { IllegalArgumentException.class },
@@ -797,6 +798,7 @@ public class TeamMatchServiceTest
             null,
             assistant,
             match,
+            homeTeam,
             goalMatchTime,
             null
         );
@@ -819,6 +821,7 @@ public class TeamMatchServiceTest
             scorer,
             null,
             match,
+            homeTeam,
             goalMatchTime,
             null
         );
@@ -841,6 +844,7 @@ public class TeamMatchServiceTest
             player,
             player,
             match,
+            homeTeam,
             goalMatchTime,
             null
         );
@@ -863,6 +867,7 @@ public class TeamMatchServiceTest
             scorer,
             assistant,
             match,
+            homeTeam,
             null,
             null
         );
@@ -886,6 +891,7 @@ public class TeamMatchServiceTest
             scorer,
             assistant,
             match,
+            homeTeam,
             goalMatchTime,
             null
         );
@@ -909,6 +915,7 @@ public class TeamMatchServiceTest
             scorer,
             assistant,
             match,
+            homeTeam,
             goalMatchTime,
             null
         );
@@ -933,6 +940,7 @@ public class TeamMatchServiceTest
             scorer,
             assistant,
             match,
+            homeTeam,
             goalMatchTime,
             null
         );
@@ -957,6 +965,7 @@ public class TeamMatchServiceTest
             scorer,
             assistant,
             match,
+            homeTeam,
             goalMatchTime,
             null
         );
@@ -981,15 +990,16 @@ public class TeamMatchServiceTest
                 scorer,
                 assistant,
                 match,
+                homeTeam,
                 goalMatchTime,
                 goal
             );
             fail("Expected exception GoalWithSameParametersAlreadyExistsException");
         } catch (GoalWithSameParametersAlreadyExistsException ex) {
-            assertEquals(scorer.getId(), ex.getScorerId());
-            assertEquals(assistant.getId(), ex.getAssistantId());
-            assertEquals(match.getId(), ex.getMatchId());
-            assertEquals(goalMatchTime, ex.getMatchTime());
+            assertEquals(ex.getScorerId(), scorer.getId());
+            assertEquals(ex.getAssistantId(), assistant.getId());
+            assertEquals(ex.getMatchId(), match.getId());
+            assertEquals(ex.getMatchTime(), goalMatchTime);
         }
     }
 
@@ -1014,15 +1024,16 @@ public class TeamMatchServiceTest
             scorer,
             assistant,
             match2,
+            homeTeam,
             goalMatchTime,
             goal
         );
 
         assertNotNull(newGoal);
-        assertEquals(scorer.getId(), newGoal.getScorer().getId());
-        assertEquals(assistant.getId(), newGoal.getAssistant().getId());
-        assertEquals(match2.getId(), newGoal.getMatch().getId());
-        assertEquals(goalMatchTime, newGoal.getMatchTime());
+        assertEquals(newGoal.getScorer().getId(), scorer.getId());
+        assertEquals(newGoal.getAssistant().getId(), assistant.getId());
+        assertEquals(newGoal.getMatch().getId(), match2.getId());
+        assertEquals(newGoal.getMatchTime(), goalMatchTime);
     }
 
     @Test
@@ -1045,15 +1056,16 @@ public class TeamMatchServiceTest
             scorer2,
             assistant,
             match,
+            homeTeam,
             goalMatchTime,
             goal
         );
 
         assertNotNull(newGoal);
-        assertEquals(scorer2.getId(), newGoal.getScorer().getId());
-        assertEquals(assistant.getId(), newGoal.getAssistant().getId());
-        assertEquals(match.getId(), newGoal.getMatch().getId());
-        assertEquals(goalMatchTime, newGoal.getMatchTime());
+        assertEquals(newGoal.getScorer().getId(), scorer2.getId());
+        assertEquals(newGoal.getAssistant().getId(), assistant.getId());
+        assertEquals(newGoal.getMatch().getId(), match.getId());
+        assertEquals(newGoal.getMatchTime(), goalMatchTime);
     }
 
     @Test
@@ -1076,15 +1088,16 @@ public class TeamMatchServiceTest
             scorer,
             assistant2,
             match,
+            homeTeam,
             goalMatchTime,
             goal
         );
 
         assertNotNull(newGoal);
-        assertEquals(scorer.getId(), newGoal.getScorer().getId());
-        assertEquals(assistant2.getId(), newGoal.getAssistant().getId());
-        assertEquals(match.getId(), newGoal.getMatch().getId());
-        assertEquals(goalMatchTime, newGoal.getMatchTime());
+        assertEquals(newGoal.getScorer().getId(), scorer.getId());
+        assertEquals(newGoal.getAssistant().getId(), assistant2.getId());
+        assertEquals(newGoal.getMatch().getId(), match.getId());
+        assertEquals(newGoal.getMatchTime(), goalMatchTime);
     }
 
     @Test
@@ -1102,19 +1115,123 @@ public class TeamMatchServiceTest
         TeamPlayer assistant = new TeamPlayer("Alex", "Collina", 187, 90, homeTeam);
         TeamMatchGoal goal = new TeamMatchGoal(scorer, assistant, match, goalMatchTime1);
 
-
         TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
             scorer,
             assistant,
             match,
+            homeTeam,
             goalMatchTime2,
             goal
         );
 
         assertNotNull(newGoal);
-        assertEquals(scorer.getId(), newGoal.getScorer().getId());
-        assertEquals(assistant.getId(), newGoal.getAssistant().getId());
-        assertEquals(match.getId(), newGoal.getMatch().getId());
-        assertEquals(goalMatchTime2, newGoal.getMatchTime());
+        assertEquals(newGoal.getScorer().getId(), scorer.getId());
+        assertEquals(newGoal.getAssistant().getId(), assistant.getId());
+        assertEquals(newGoal.getMatch().getId(), match.getId());
+        assertEquals(newGoal.getMatchTime(), goalMatchTime2);
+    }
+
+    @Test(expectedExceptions = { IllegalArgumentException.class },
+    expectedExceptionsMessageRegExp = "Cannot create new goal with a null match")
+    public void testAddNewScoredGoalWithNullMatch()
+    {
+        TeamMatchService teamMatchService = new TeamMatchService();
+
+        LocalDateTime startTime = now;
+        LocalDateTime goalMatchTime1 = now.plusMinutes(15);
+        LocalDateTime goalMatchTime2 = now.plusMinutes(15).plusSeconds(1);
+        Team homeTeam = new Team("HomeTeam");
+        Team awayTeam = new Team("AwayTeam");
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Alex", "Collina", 187, 90, homeTeam);
+        TeamMatchGoal goal = new TeamMatchGoal(scorer, assistant, match, goalMatchTime1);
+
+        TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
+            scorer,
+            assistant,
+            null,
+            homeTeam,
+            goalMatchTime2,
+            goal
+        );
+    }
+
+    @Test(expectedExceptions = { IllegalArgumentException.class },
+        expectedExceptionsMessageRegExp = "Cannot create new goal with a null scoring team")
+    public void testAddNewScoredGoalWithNullScoringTeam()
+    {
+        TeamMatchService teamMatchService = new TeamMatchService();
+
+        LocalDateTime startTime = now;
+        LocalDateTime goalMatchTime1 = now.plusMinutes(15);
+        LocalDateTime goalMatchTime2 = now.plusMinutes(15).plusSeconds(1);
+        Team homeTeam = new Team("HomeTeam");
+        Team awayTeam = new Team("AwayTeam");
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Alex", "Collina", 187, 90, homeTeam);
+        TeamMatchGoal goal = new TeamMatchGoal(scorer, assistant, match, goalMatchTime1);
+
+        TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
+            scorer,
+            assistant,
+            match,
+            null,
+            goalMatchTime2,
+            goal
+        );
+    }
+
+    @Test(expectedExceptions = { IllegalArgumentException.class },
+        expectedExceptionsMessageRegExp = "Cannot create new goal with scorer who is not from scoring team")
+    public void testAddNewScoredGoalWithScorerNotFromScoringTeam()
+    {
+        TeamMatchService teamMatchService = new TeamMatchService();
+
+        LocalDateTime startTime = now;
+        LocalDateTime goalMatchTime1 = now.plusMinutes(15);
+        LocalDateTime goalMatchTime2 = now.plusMinutes(15).plusSeconds(1);
+        Team homeTeam = new Team("HomeTeam");
+        Team awayTeam = new Team("AwayTeam");
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 90, awayTeam);
+        TeamPlayer assistant = new TeamPlayer("Alex", "Collina", 187, 90, homeTeam);
+        TeamMatchGoal goal = new TeamMatchGoal(scorer, assistant, match, goalMatchTime1);
+
+        TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
+            scorer,
+            assistant,
+            match,
+            homeTeam,
+            goalMatchTime2,
+            goal
+        );
+    }
+
+    @Test(expectedExceptions = { IllegalArgumentException.class },
+        expectedExceptionsMessageRegExp = "Cannot create new goal with assistant who is not from scoring team")
+    public void testAddNewScoredGoalWithAssistantNotFromScoringTeam()
+    {
+        TeamMatchService teamMatchService = new TeamMatchService();
+
+        LocalDateTime startTime = now;
+        LocalDateTime goalMatchTime1 = now.plusMinutes(15);
+        LocalDateTime goalMatchTime2 = now.plusMinutes(15).plusSeconds(1);
+        Team homeTeam = new Team("HomeTeam");
+        Team awayTeam = new Team("AwayTeam");
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, startTime);
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 90, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Alex", "Collina", 187, 90, awayTeam);
+        TeamMatchGoal goal = new TeamMatchGoal(scorer, assistant, match, goalMatchTime1);
+
+        TeamMatchGoal newGoal = teamMatchService.addNewScoredGoal(
+            scorer,
+            assistant,
+            match,
+            homeTeam,
+            goalMatchTime2,
+            goal
+        );
     }
 }
