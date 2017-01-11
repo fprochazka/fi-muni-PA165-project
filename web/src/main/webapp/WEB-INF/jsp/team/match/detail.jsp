@@ -28,172 +28,171 @@
                         <strong><span>End: </span></strong>
                         <c:out value="${matchResult.match.endTime == null ? ' - ' : matchResult.match.endTime.format(formatter)}"/>
                     </p>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="table-div table-responsive">
-                                    <table class="table table-fixed table-hover table-striped table-fixed-small">
-                                        <thead>
-                                            <tr class="tr-fixed-small">
-                                                <th>Time</th>
-                                                <th>Scorer</th>
-                                                <th>Assist</th>
-                                                <th> </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="tbody-scrollable-small">
 
-                                            <c:forEach items="${matchDetail.homeGoals}" var="homeGoal">
-                                                <tr class="tr-fixed-small">
-                                                    <td><c:out value="${homeGoal.matchTime.format(formatter)}"/></td>
-                                                    <td><c:out value="${homeGoal.scorer.firstname} ${homeGoal.scorer.surname}"/></td>
-                                                    <td><c:out value="${homeGoal.assistant.firstname} ${homeGoal.assistant.surname}"/></td>
-
-                                                    <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
-                                                        <td>
-                                                            <a href="#deleteHomeGoalModal" title="Delete goal" class="btn btn-block btn-goal-delete" data-toggle="modal" role="button">
-                                                                <strong>X</strong>
-                                                            </a>
-                                                        </td>
-                                                        <div class="modal fade" id="deleteHomeGoalModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                                                            <div class="modal-dialog" role="document">
-                                                                <div class="modal-content">
-
-                                                                    <div class="modal-body">
-                                                                        Are you sure you want to delete this goal?
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <c:url value="/match/${matchResult.match.id}/goal/${homeGoal.id}/delete" var="deleteHomeGoalActionUrl"/>
-                                                                        <form:form method="post" action="${deleteHomeGoalActionUrl}" autocomplete="off">
-                                                                            <fieldset>
-                                                                                <div class="team-form-item">
-                                                                                    <a class="btn btn-secondary" role="button" id="hgcancel" data-dismiss="modal">Cancel</a>
-                                                                                    <input id="hgsubmit" name="submit" type="submit" class="btn btn-success" value="Delete">
-                                                                                </div>
-                                                                            </fieldset>
-                                                                        </form:form>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </sec:authorize>
-
-                                                </tr>
-                                            </c:forEach>
-
-                                        </tbody>
-                                    </table>
-
-                                    <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
-                                        <a href="<c:url value="/match/${matchResult.match.id}/team/${matchResult.match.homeTeam.id}/goal/create"/>" class="btn btn-outline-primary pull-right" data-dismiss="modal">Add Goal</a>
-                                    </sec:authorize>
-
-                                </div>
-
-                                <h4 class="m-a-0 roster-block">Roster</h4>
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Firstname</th>
-                                                <th>Lastname</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach items="${matchDetail.homeRoster}" var="player">
-                                                <tr>
-                                                    <td>${player.firstname}</td>
-                                                    <td>${player.surname}</td>
-                                                </tr>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="table-div table-responsive">
-                                    <table class="table table-fixed table-hover table-striped table-fixed-small">
-                                        <thead>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="table-div table-responsive">
+                                <table class="table table-fixed table-hover table-striped table-fixed-small">
+                                    <thead>
                                         <tr class="tr-fixed-small">
                                             <th>Time</th>
                                             <th>Scorer</th>
                                             <th>Assist</th>
+                                            <th> </th>
                                         </tr>
-                                        </thead>
-                                        <tbody class="tbody-scrollable-small">
+                                    </thead>
+                                    <tbody class="tbody-scrollable-small">
 
-                                            <c:forEach items="${matchDetail.awayGoals}" var="awayGoal">
-                                                <tr class="tr-fixed-small">
-                                                    <td><c:out value="${awayGoal.matchTime.format(formatter)}"/></td>
-                                                    <td><c:out value="${awayGoal.scorer.firstname} ${awayGoal.scorer.surname}"/></td>
-                                                    <td><c:out value="${awayGoal.assistant.firstname} ${awayGoal.assistant.surname}"/></td>
+                                        <c:forEach items="${matchDetail.homeGoals}" var="homeGoal">
+                                            <tr class="tr-fixed-small">
+                                                <td><c:out value="${homeGoal.matchTime.format(formatter)}"/></td>
+                                                <td><c:out value="${homeGoal.scorer.firstname} ${homeGoal.scorer.surname}"/></td>
+                                                <td><c:out value="${homeGoal.assistant.firstname} ${homeGoal.assistant.surname}"/></td>
 
-                                                    <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
-                                                        <td>
-                                                            <a href="#deleteAwayGoalModal" title="Delete goal" class="btn btn-block btn-goal-delete" data-toggle="modal" role="button">
-                                                                <strong>X</strong>
-                                                            </a>
-                                                        </td>
-                                                        <div class="modal fade" id="deleteAwayGoalModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                                                            <div class="modal-dialog" role="document">
-                                                                <div class="modal-content">
+                                                <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
+                                                    <td>
+                                                        <a href="#deleteHomeGoalModal" title="Delete goal" class="btn btn-block btn-goal-delete" data-toggle="modal" role="button">
+                                                            <strong>X</strong>
+                                                        </a>
+                                                    </td>
+                                                    <div class="modal fade" id="deleteHomeGoalModal" tabindex="-1" role="dialog" style="display: none;">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
 
-                                                                    <div class="modal-body">
-                                                                        Are you sure you want to delete this goal?
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <c:url value="/match/${matchResult.match.id}/goal/${awayGoal.id}/delete" var="deleteAwayGoalActionUrl"/>
-                                                                        <form:form method="post" action="${deleteAwayGoalActionUrl}" autocomplete="off">
-                                                                            <fieldset>
-                                                                                <div class="team-form-item">
-                                                                                    <a class="btn btn-secondary" role="button" id="agcancel" data-dismiss="modal">Cancel</a>
-                                                                                    <input id="agsubmit" name="submit" type="submit" class="btn btn-success" value="Delete">
-                                                                                </div>
-                                                                            </fieldset>
-                                                                        </form:form>
-                                                                    </div>
+                                                                <div class="modal-body">
+                                                                    Are you sure you want to delete this goal?
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <c:url value="/match/${matchResult.match.id}/goal/${homeGoal.id}/delete" var="deleteHomeGoalActionUrl"/>
+                                                                    <form:form method="post" action="${deleteHomeGoalActionUrl}" autocomplete="off">
+                                                                        <fieldset>
+                                                                            <div class="team-form-item">
+                                                                                <a class="btn btn-secondary" role="button" data-dismiss="modal">Cancel</a>
+                                                                                <input name="submit" type="submit" class="btn btn-success" value="Delete">
+                                                                            </div>
+                                                                        </fieldset>
+                                                                    </form:form>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </sec:authorize>
+                                                    </div>
+                                                </sec:authorize>
 
-                                                </tr>
-                                            </c:forEach>
+                                            </tr>
+                                        </c:forEach>
 
-                                        </tbody>
-                                    </table>
+                                    </tbody>
+                                </table>
 
-                                    <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
-                                        <a href="<c:url value="/match/${matchResult.match.id}/team/${matchResult.match.awayTeam.id}/goal/create"/>" class="btn btn-outline-primary pull-right" data-dismiss="modal">Add Goal</a>
-                                    </sec:authorize>
+                                <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
+                                    <a href="<c:url value="/match/${matchResult.match.id}/team/${matchResult.match.homeTeam.id}/goal/create"/>" class="btn btn-outline-primary pull-right">Add Goal</a>
+                                </sec:authorize>
 
-                                </div>
+                            </div>
 
-                                <h4 class="m-a-0 roster-block">Roster</h4>
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-striped">
-                                        <thead>
+                            <h4 class="m-a-0 roster-block">Roster</h4>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped">
+                                    <thead>
                                         <tr>
                                             <th>Firstname</th>
                                             <th>Lastname</th>
                                         </tr>
-                                        </thead>
-                                        <tbody>
-                                        <c:forEach items="${matchDetail.awayRoster}" var="player">
-                                                <tr>
-                                                    <td>${player.firstname}</td>
-                                                    <td>${player.surname}</td>
-                                                </tr>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach items="${matchDetail.homeRoster}" var="player">
+                                            <tr>
+                                                <td>${player.firstname}</td>
+                                                <td>${player.surname}</td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="table-div table-responsive">
+                                <table class="table table-fixed table-hover table-striped table-fixed-small">
+                                    <thead>
+                                    <tr class="tr-fixed-small">
+                                        <th>Time</th>
+                                        <th>Scorer</th>
+                                        <th>Assist</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="tbody-scrollable-small">
+
+                                        <c:forEach items="${matchDetail.awayGoals}" var="awayGoal">
+                                            <tr class="tr-fixed-small">
+                                                <td><c:out value="${awayGoal.matchTime.format(formatter)}"/></td>
+                                                <td><c:out value="${awayGoal.scorer.firstname} ${awayGoal.scorer.surname}"/></td>
+                                                <td><c:out value="${awayGoal.assistant.firstname} ${awayGoal.assistant.surname}"/></td>
+
+                                                <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
+                                                    <td>
+                                                        <a href="#deleteAwayGoalModal" title="Delete goal" class="btn btn-block btn-goal-delete" data-toggle="modal" role="button">
+                                                            <strong>X</strong>
+                                                        </a>
+                                                    </td>
+                                                    <div class="modal fade" id="deleteAwayGoalModal" tabindex="-1" role="dialog" style="display: none;">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+
+                                                                <div class="modal-body">
+                                                                    Are you sure you want to delete this goal?
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <c:url value="/match/${matchResult.match.id}/goal/${awayGoal.id}/delete" var="deleteAwayGoalActionUrl"/>
+                                                                    <form:form method="post" action="${deleteAwayGoalActionUrl}" autocomplete="off">
+                                                                        <fieldset>
+                                                                            <div class="team-form-item">
+                                                                                <a class="btn btn-secondary" role="button" data-dismiss="modal">Cancel</a>
+                                                                                <input name="submit" type="submit" class="btn btn-success" value="Delete">
+                                                                            </div>
+                                                                        </fieldset>
+                                                                    </form:form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </sec:authorize>
+
+                                            </tr>
+                                        </c:forEach>
+
+                                    </tbody>
+                                </table>
+
+                                <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
+                                    <a href="<c:url value="/match/${matchResult.match.id}/team/${matchResult.match.awayTeam.id}/goal/create"/>" class="btn btn-outline-primary pull-right">Add Goal</a>
+                                </sec:authorize>
+
+                            </div>
+
+                            <h4 class="m-a-0 roster-block">Roster</h4>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Firstname</th>
+                                        <th>Lastname</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach items="${matchDetail.awayRoster}" var="player">
+                                            <tr>
+                                                <td>${player.firstname}</td>
+                                                <td>${player.surname}</td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
 
-                    <div class="modal fade" id="deleteMatchModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                    <div class="modal fade" id="deleteMatchModal" tabindex="-1" role="dialog" style="display: none;">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
 
@@ -204,9 +203,9 @@
                                     <c:url value="/match/${matchResult.match.id}/delete" var="deleteMatchActionUrl"/>
                                     <form:form method="post" action="${deleteMatchActionUrl}" autocomplete="off">
                                         <fieldset>
-                                            <div id="form-buttons" class="team-form-item">
-                                                <a class="btn btn-secondary" role="button" id="pcancel" data-dismiss="modal">Cancel</a>
-                                                <input id="psubmit" name="submit" type="submit" class="btn btn-success" value="Delete">
+                                            <div class="team-form-item">
+                                                <a class="btn btn-secondary" role="button" data-dismiss="modal">Cancel</a>
+                                                <input name="submit" type="submit" class="btn btn-success" value="Delete">
                                             </div>
                                         </fieldset>
                                      </form:form>

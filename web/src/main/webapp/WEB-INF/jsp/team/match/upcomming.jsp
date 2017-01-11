@@ -8,17 +8,18 @@
 
 <my:pagetemplate title="UpcommingMatchesOverview">
     <jsp:attribute name="body">
-         <div class="container">
+
+        <div class="container">
              <div class="row">
                  <div class="col-md-8 offset-md-2">
 
                      <h1>Matches overview</h1>
                      <ul class="nav nav-tabs">
                          <li class="nav-item">
-                             <a href="<c:url value="/matches"/>" class="nav-link">Played</a>
+                             <a href="<c:url value="/"/>" class="nav-link">Played</a>
                          </li>
                          <li class="nav-item">
-                             <a href="<c:url value="/matches/upcomming"/>" class="active nav-link">Upcomming</a>
+                             <a href="<c:url value="/upcomming"/>" class="active nav-link">Upcomming</a>
                          </li>
                      </ul>
 
@@ -56,7 +57,6 @@
 
                          <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
                              <div class="form-group">
-                                 <label class="col-sm-5 control-label" for="newmatchbutton"></label>
                                  <div class="col-sm-3 center-block">
                                      <a href="<c:url value="/match/create"/>" name="newmatchbutton" class="btn btn-success center-block">New match</a>
                                  </div>
@@ -65,6 +65,7 @@
                      </div>
                  </div>
              </div>
+        </div>
 
     </jsp:attribute>
 </my:pagetemplate>
