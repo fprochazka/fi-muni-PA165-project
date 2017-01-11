@@ -13,7 +13,7 @@
             <div class="row">
 
                 <div class="col-md-8 offset-md-2">
-                    <form:form class="form-horizontal match-form" id="goal-form" method="post" modelAttribute="goalRequest" action="${requestScope['javax.servlet.forward.request_uri']}" autocomplete="off">
+                    <form:form class="form-horizontal match-form" method="post" modelAttribute="goalRequest" action="${requestScope['javax.servlet.forward.request_uri']}" autocomplete="off">
                         <fieldset>
                             <legend>Create goal</legend>
 
