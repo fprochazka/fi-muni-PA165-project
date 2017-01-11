@@ -15,7 +15,7 @@
                 <div class="col-md-8 offset-md-2">
                     <form:form class="form-horizontal match-form" id="goal-form" method="post" modelAttribute="goalRequest" action="${requestScope['javax.servlet.forward.request_uri']}" autocomplete="off">
                         <fieldset>
-                            <legend id="match-form-legend">New goal creation form</legend>
+                            <legend>New goal creation form</legend>
 
                             <s:bind path="scorerId">
                                 <div class="form-group row match-form-item ${status.error ? 'has-danger' : ''}">
@@ -77,11 +77,9 @@
                                  </div>
                              </s:bind>
 
-                            <div id="form-buttons" class="match-form-item text-md-right">
-                                <a href="<c:url value="/match/${match.id}"/>" class="btn btn-secondary mbuttons" role="button" id="gcancel">Cancel</a>
-                                <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
-                                    <input id="gsubmit" name="submit" type="submit" class="btn btn-success mbuttons" value="Save">
-                                </sec:authorize>
+                            <div class="match-form-item text-md-right">
+                                <a href="<c:url value="/match/${match.id}"/>" class="btn btn-secondary mbuttons" role="button">Cancel</a>
+                                <input name="submit" type="submit" class="btn btn-success mbuttons" value="Save">
                             </div>
                         </fieldset>
                     </form:form>

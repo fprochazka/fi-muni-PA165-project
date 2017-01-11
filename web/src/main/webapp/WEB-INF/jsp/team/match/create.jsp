@@ -7,13 +7,14 @@
 
 <my:pagetemplate title="NewMatchForm">
     <jsp:attribute name="body">
-         <div class="container">
+
+        <div class="container">
              <div class="row">
                  <div class="col-md-8 offset-md-2">
 
                      <form:form class="form-horizontal match-form" id="match-form" method="post" modelAttribute="matchRequest" action="${requestScope['javax.servlet.forward.request_uri']}" autocomplete="off">
                          <fieldset>
-                            <legend id="match-form-legend">New match creation form</legend>
+                            <legend>New match creation form</legend>
 
                              <s:bind path="homeTeamId">
                                  <div class="form-group row match-form-item ${status.error ? 'has-danger' : ''}">
@@ -82,17 +83,15 @@
                              </s:bind>
 
                              <div class="match-form-item text-md-right">
-                                 <a href="<c:url value="/matches"/>" class="btn btn-secondary mbuttons" role="button" id="mcancel">Cancel</a>
-                                 <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
-                                    <input id="msubmit" name="submit" type="submit" class="btn btn-success mbuttons" value="Save">
-                                 </sec:authorize>
+                                 <a href="<c:url value="/"/>" class="btn btn-secondary mbuttons" role="button">Cancel</a>
+                                 <input name="submit" type="submit" class="btn btn-success mbuttons" value="Save">
                              </div>
                          </fieldset>
                      </form:form>
 
                  </div>
              </div>
-         </div>
+        </div>
 
     </jsp:attribute>
 </my:pagetemplate>
