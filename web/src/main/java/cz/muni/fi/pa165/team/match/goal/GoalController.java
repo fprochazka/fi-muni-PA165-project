@@ -81,6 +81,7 @@ public class GoalController
             goalRequest.getScorerId(),
             goalRequest.getAssistantId(),
             matchId,
+            teamId,
             goalRequest.getMatchTime()
         );
 

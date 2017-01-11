@@ -72,17 +72,17 @@ public class SampleDataFixture
         TeamMatch match5 = teamMatchFacade.createMatch(team1.getId(), team3.getId(), tomorrow.plusMinutes(62), tomorrow.plusMinutes(62).plusHours(1));
         TeamMatch match6 = teamMatchFacade.createMatch(team2.getId(), team3.getId(), tomorrow.plusMinutes(200), tomorrow.plusMinutes(200).plusHours(1));
 
-        TeamMatchGoal goal1 = teamMatchFacade.addNewScoredGoal(player1.getId(), player3.getId(), match1.getId(), match1.getStartTime().plusMinutes(5));
-        TeamMatchGoal goal2 = teamMatchFacade.addNewScoredGoal(player2.getId(), player1.getId(), match1.getId(), match1.getStartTime().plusMinutes(11));
-        TeamMatchGoal goal3 = teamMatchFacade.addNewScoredGoal(player5.getId(), player6.getId(), match1.getId(), match1.getStartTime().plusMinutes(32));
+        TeamMatchGoal goal1 = teamMatchFacade.addNewScoredGoal(player1.getId(), player3.getId(), match1.getId(), team1.getId(), match1.getStartTime().plusMinutes(5));
+        TeamMatchGoal goal2 = teamMatchFacade.addNewScoredGoal(player2.getId(), player1.getId(), match1.getId(), team1.getId(), match1.getStartTime().plusMinutes(11));
+        TeamMatchGoal goal3 = teamMatchFacade.addNewScoredGoal(player5.getId(), player6.getId(), match1.getId(), team2.getId(), match1.getStartTime().plusMinutes(32));
 
-        TeamMatchGoal goal4 = teamMatchFacade.addNewScoredGoal(player3.getId(), player2.getId(), match2.getId(), match2.getStartTime().plusMinutes(6));
-        TeamMatchGoal goal5 = teamMatchFacade.addNewScoredGoal(player7.getId(), player9.getId(), match2.getId(), match2.getStartTime().plusMinutes(18));
+        TeamMatchGoal goal4 = teamMatchFacade.addNewScoredGoal(player3.getId(), player2.getId(), match2.getId(), team1.getId(), match2.getStartTime().plusMinutes(6));
+        TeamMatchGoal goal5 = teamMatchFacade.addNewScoredGoal(player7.getId(), player9.getId(), match2.getId(), team3.getId(), match2.getStartTime().plusMinutes(18));
 
-        TeamMatchGoal goal6 = teamMatchFacade.addNewScoredGoal(player5.getId(), player6.getId(), match3.getId(), match3.getStartTime().plusMinutes(1));
-        TeamMatchGoal goal7 = teamMatchFacade.addNewScoredGoal(player8.getId(), player9.getId(), match3.getId(), match3.getStartTime().plusMinutes(2));
-        TeamMatchGoal goal8 = teamMatchFacade.addNewScoredGoal(player7.getId(), player9.getId(), match3.getId(), match3.getStartTime().plusMinutes(3));
-        TeamMatchGoal goal9 = teamMatchFacade.addNewScoredGoal(player8.getId(), player7.getId(), match3.getId(), match3.getStartTime().plusMinutes(5));
+        TeamMatchGoal goal6 = teamMatchFacade.addNewScoredGoal(player5.getId(), player6.getId(), match3.getId(), team2.getId(), match3.getStartTime().plusMinutes(1));
+        TeamMatchGoal goal7 = teamMatchFacade.addNewScoredGoal(player8.getId(), player9.getId(), match3.getId(), team3.getId(), match3.getStartTime().plusMinutes(2));
+        TeamMatchGoal goal8 = teamMatchFacade.addNewScoredGoal(player7.getId(), player9.getId(), match3.getId(), team3.getId(), match3.getStartTime().plusMinutes(3));
+        TeamMatchGoal goal9 = teamMatchFacade.addNewScoredGoal(player8.getId(), player7.getId(), match3.getId(), team3.getId(), match3.getStartTime().plusMinutes(5));
 
         User admin = userFacade.createUser("admin@soccer.com", "admin");
         User moderator1 = userFacade.createUser("boruvka@boruvka.com", "heslo1");
