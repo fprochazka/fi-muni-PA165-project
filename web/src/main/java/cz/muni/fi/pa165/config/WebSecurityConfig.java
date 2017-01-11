@@ -33,6 +33,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/register").permitAll()
                 .antMatchers("/resources/**").permitAll()
+                .antMatchers("/match/create", "/match/{id}/delete", "/match/{id}/edit").hasAnyRole("ADMIN", "MODERATOR")
+                .antMatchers("/match/{mid}/team/{tid}/goal/create", "/match/{mid}/goal/{gid}/delete").hasAnyRole("ADMIN", "MODERATOR")
                 .antMatchers("/team/create").access("hasRole('ADMIN') or hasRole('MODERATOR')")
                 .antMatchers("/team/*/edit").access("hasRole('ADMIN') or hasRole('MODERATOR')")
                 .antMatchers("/team/*/delete").access("hasRole('ADMIN') or hasRole('MODERATOR')")
