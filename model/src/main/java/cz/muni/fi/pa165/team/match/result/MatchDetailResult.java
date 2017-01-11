@@ -1,4 +1,4 @@
-package cz.muni.fi.pa165.team.match.auxobjects;
+package cz.muni.fi.pa165.team.match.result;
 
 import cz.muni.fi.pa165.team.TeamPlayer;
 import cz.muni.fi.pa165.team.match.TeamMatchGoal;
@@ -8,7 +8,7 @@ import java.util.Collection;
 /**
  * @author Tomas Smid <smid.thomas@gmail.com>
  */
-public class MatchDetailView
+public class MatchDetailResult
 {
     private final Collection<TeamMatchGoal> homeGoals;
 
@@ -18,7 +18,7 @@ public class MatchDetailView
 
     private final Collection<TeamPlayer> awayRoster;
 
-    public MatchDetailView(
+    public MatchDetailResult(
         Collection<TeamMatchGoal> homeGoals,
         Collection<TeamMatchGoal> awayGoals,
         Collection<TeamPlayer> homeRoster,
