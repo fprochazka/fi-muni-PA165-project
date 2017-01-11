@@ -150,7 +150,14 @@ public class TeamPlayerFacade
         entityManager.flush();
     }
 
-    public TeamPlayerStatistics getPlayerStatistics(UUID teamPlayerID) {
+    /**
+     * This method changes player's weight.
+     *
+     * @param teamPlayerID id of the player
+     * @return  {@link TeamPlayerStatistics} with player stats
+     */
+    public TeamPlayerStatistics getPlayerStatistics(UUID teamPlayerID)
+    {
         TeamPlayer player = teamPlayerRepository.getTeamPlayerById(teamPlayerID);
 
         Collection<TeamMatchGoal> scorredGoals = teamMatchGoalRepository.findGoalByScorer(teamPlayerID);

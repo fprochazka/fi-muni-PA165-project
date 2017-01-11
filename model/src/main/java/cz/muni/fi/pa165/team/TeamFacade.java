@@ -111,6 +111,9 @@ public class TeamFacade
         entityManager.flush();
     }
 
+    /**
+     * Get team statistics.
+     */
     public TeamStatistics getTeamStatistics(UUID teamID)
     {
         int matchesPlayedCnt = 0;
@@ -134,12 +137,15 @@ public class TeamFacade
                 long matchGoalsConceded = teamMatchGoalRepository.getGoalsCountByTeamInMatch(match.getId(), opponent.getId());
                 goalsConcededCnt += matchGoalsConceded;
 
-                if (matchGoalsScored == matchGoalsConceded)
+                if (matchGoalsScored == matchGoalsConceded) {
                     drawsCnt++;
-                if (matchGoalsScored > matchGoalsConceded)
+                }
+                if (matchGoalsScored > matchGoalsConceded) {
                     winsCnt++;
-                if (matchGoalsScored < matchGoalsConceded)
+                }
+                if (matchGoalsScored < matchGoalsConceded){
                     lossesCnt++;
+                }
             }
         }
 
