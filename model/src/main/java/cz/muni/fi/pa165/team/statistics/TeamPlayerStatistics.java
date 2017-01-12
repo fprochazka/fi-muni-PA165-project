@@ -1,4 +1,4 @@
-package cz.muni.fi.pa165.team.player.auxobjects;
+package cz.muni.fi.pa165.team.statistics;
 
 import cz.muni.fi.pa165.team.TeamPlayer;
 

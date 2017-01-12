@@ -1,10 +1,10 @@
 package cz.muni.fi.pa165.team;
 
 import cz.muni.fi.pa165.response.RedirectResponse;
-import cz.muni.fi.pa165.team.auxobjects.TeamStatistics;
+import cz.muni.fi.pa165.team.statistics.TeamStatistics;
 import cz.muni.fi.pa165.team.exceptions.TeamWithSameNameAlreadyExistsException;
 import cz.muni.fi.pa165.team.match.TeamMatchRepository;
-import cz.muni.fi.pa165.team.player.auxobjects.TeamPlayerStatistics;
+import cz.muni.fi.pa165.team.statistics.TeamPlayerStatistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -57,7 +57,7 @@ public class TeamController
     }
 
     @RequestMapping(value = "/teams", method = RequestMethod.GET)
-    public ModelAndView viewList() throws Exception
+    public ModelAndView viewTeamsList() throws Exception
     {
         Collection<TeamStatistics> teamsStatistics = new ArrayList<>();
         Collection<Team> teamsList = teamRepository.findAll();
@@ -103,7 +103,7 @@ public class TeamController
     }
 
     @RequestMapping(value = "/team/{id}/edit", method = RequestMethod.POST)
-    public ModelAndView editTeamPost(
+    public ModelAndView submitEditTeam(
         @PathVariable("id") UUID id,
         @ModelAttribute("teamDetailsRequest") @Validated TeamDetailsRequest teamDetailsRequest,
         BindingResult result
@@ -125,7 +125,7 @@ public class TeamController
     }
 
     @RequestMapping(value = "/team/{id}/edit", method = RequestMethod.GET)
-    public ModelAndView editTeamLoad(
+    public ModelAndView viewEditTeam(
         @PathVariable("id") UUID id
     ) throws Exception
     {
@@ -137,7 +137,7 @@ public class TeamController
     }
 
     @RequestMapping(value = "/team/{id}", method = RequestMethod.GET)
-    public ModelAndView showTeamOverview(
+    public ModelAndView viewTeamOverview(
         @PathVariable("id") UUID id
     )
     {
@@ -150,7 +150,7 @@ public class TeamController
     }
 
     @RequestMapping(value = "/team/{id}/results", method = RequestMethod.GET)
-    public ModelAndView showTeamResults(
+    public ModelAndView viewTeamResults(
         @PathVariable("id") UUID id
     )
     {
@@ -161,7 +161,7 @@ public class TeamController
     }
 
     @RequestMapping(value = "/team/{id}/schedule", method = RequestMethod.GET)
-    public ModelAndView showTeamProgram(
+    public ModelAndView viewTeamProgram(
         @PathVariable("id") UUID id
     )
     {

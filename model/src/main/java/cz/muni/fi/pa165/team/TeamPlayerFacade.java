@@ -2,7 +2,7 @@ package cz.muni.fi.pa165.team;
 
 import cz.muni.fi.pa165.team.match.TeamMatchGoal;
 import cz.muni.fi.pa165.team.match.TeamMatchGoalRepositoryImpl;
-import cz.muni.fi.pa165.team.player.auxobjects.TeamPlayerStatistics;
+import cz.muni.fi.pa165.team.statistics.TeamPlayerStatistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
