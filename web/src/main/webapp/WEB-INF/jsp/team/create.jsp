@@ -12,7 +12,6 @@
         <div class="row">
             <div class="col-md-2"></div>
             <div class="col-md-8">
-                <%--<c:url value="/team/create" var="registerActionUrl"/>--%>
                 <form:form class="team-form" id="team-form" modelAttribute="teamDetailsRequest" autocomplete="off">
                     <fieldset>
                         <legend id="team-form-legend">Create team</legend>
