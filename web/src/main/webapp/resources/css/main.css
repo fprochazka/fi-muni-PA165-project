@@ -36,3 +36,60 @@
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
+
+.match-form {
+    padding: 10px;
+    margin: 50px;
+    border-style: solid;
+    border-color: lightgrey;
+    border-width: 1px;
+    border-right: 0px;
+    border-left: 0px;
+}
+
+#match-form-legend {
+    margin-bottom: 40px;
+}
+
+.match-form-item {
+    margin: 5px;
+    margin-left: 0px;
+    padding: 5px;
+}
+
+.match-dropdown-items {
+    margin-left: -10px;
+    margin-top: 15px;
+    padding: 2px;
+    border-color: lightgrey;
+}
+
+.match-form-team {
+    width: 100%;
+}
+
+.match-time-picker {
+    margin-top: 15px;
+    padding-left: 0px;
+}
+
+.mbuttons {
+    margin: 5px;
+    margin-top: 30px;
+}
+
+.btn-goal-delete {
+    color:darkred;
+    padding: 0px;
+    padding-top: 60%;
+    text-align: center;
+}
+
+.roster-block {
+    margin-top: 30px;
+}
+
+.btn-match-detail {
+    margin-top: 40px;
+    margin-bottom: 30px;
+}

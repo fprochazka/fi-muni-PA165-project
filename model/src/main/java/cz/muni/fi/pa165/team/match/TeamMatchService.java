@@ -43,10 +43,10 @@ public class TeamMatchService
         Assert.notNull(awayTeam, "Match cannot be created with a null away team");
         Assert.isTrue(!homeTeam.equals(awayTeam), "Match cannot be created for home and away teams which are same");
 
-        if (isMatchReallyConflicting(conflictingMatchForHomeTeam, homeTeam, startTime)) {
+        if (isMatchReallyConflicting(conflictingMatchForHomeTeam, null, homeTeam, startTime)) {
             throw new MatchWithSameParametersAlreadyExistsException(homeTeam.getId(), startTime);
         }
-        if (isMatchReallyConflicting(conflictingMatchForAwayTeam, awayTeam, startTime)) {
+        if (isMatchReallyConflicting(conflictingMatchForAwayTeam, null, awayTeam, startTime)) {
             throw new MatchWithSameParametersAlreadyExistsException(awayTeam.getId(), startTime);
         }
 
@@ -76,7 +76,7 @@ public class TeamMatchService
     {
         Assert.notNull(match, "Cannot change match times of null match");
 
-        if (isMatchReallyConflicting(conflictingMatchForHomeTeam, match.getHomeTeam(), startTime)) {
+        if (isMatchReallyConflicting(conflictingMatchForHomeTeam, match, match.getHomeTeam(), startTime)) {
             throw new MatchTimeCollisionException(
                 match.getId(),
                 conflictingMatchForHomeTeam.getId(),
@@ -85,7 +85,7 @@ public class TeamMatchService
             );
         }
 
-        if (isMatchReallyConflicting(conflictingMatchForAwayTeam, match.getAwayTeam(), startTime)) {
+        if (isMatchReallyConflicting(conflictingMatchForAwayTeam, match, match.getAwayTeam(), startTime)) {
             throw new MatchTimeCollisionException(
                 match.getId(),
                 conflictingMatchForAwayTeam.getId(),
@@ -126,6 +126,7 @@ public class TeamMatchService
         TeamPlayer scorer,
         TeamPlayer assistant,
         TeamMatch match,
+        Team team,
         LocalDateTime matchTime,
         TeamMatchGoal sameGoal
     )
@@ -133,6 +134,10 @@ public class TeamMatchService
         Assert.notNull(scorer, "Cannot create new goal with a null scorer");
         Assert.notNull(assistant, "Cannot create new goal with a null assistant");
         Assert.isTrue(!scorer.equals(assistant), "Cannot create new goal with scorer and assistant who are the same player");
+        Assert.notNull(match, "Cannot create new goal with a null match");
+        Assert.notNull(team, "Cannot create new goal with a null scoring team");
+        Assert.isTrue(scorer.getTeam().equals(team), "Cannot create new goal with scorer who is not from scoring team");
+        Assert.isTrue(assistant.getTeam().equals(team), "Cannot create new goal with assistant who is not from scoring team");
 
         if (
             sameGoal != null
@@ -152,10 +157,12 @@ public class TeamMatchService
         return new TeamMatchGoal(scorer, assistant, match, matchTime);
     }
 
-    private boolean isMatchReallyConflicting(TeamMatch conflictingMatch, Team team, LocalDateTime startTime)
+    private boolean isMatchReallyConflicting(TeamMatch conflictingMatch, TeamMatch match, Team team, LocalDateTime startTime)
     {
-        return (conflictingMatch != null
+        boolean result = (conflictingMatch != null
             && conflictingMatch.getStartTime().equals(startTime)
             && (conflictingMatch.getHomeTeam().equals(team) || conflictingMatch.getAwayTeam().equals(team)));
+
+        return ((!result || match == null) ? result : !conflictingMatch.getId().equals(match.getId()));
     }
 }

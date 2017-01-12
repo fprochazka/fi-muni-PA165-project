@@ -4,6 +4,8 @@ import cz.muni.fi.pa165.team.Team;
 import cz.muni.fi.pa165.team.TeamPlayer;
 import cz.muni.fi.pa165.team.TeamPlayerRepository;
 import cz.muni.fi.pa165.team.TeamRepository;
+import cz.muni.fi.pa165.team.match.result.MatchDetailResult;
+import cz.muni.fi.pa165.team.match.result.MatchResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author Tomas Smid <smid.thomas@gmail.com>
@@ -156,11 +158,12 @@ public class TeamMatchFacade
      * @param matchTime   time in which the goal is scored
      * @return newly created goal
      */
-    public TeamMatchGoal addNewScoredGoal(UUID scorerId, UUID assistantId, UUID matchId, LocalDateTime matchTime)
+    public TeamMatchGoal addNewScoredGoal(UUID scorerId, UUID assistantId, UUID matchId, UUID teamId, LocalDateTime matchTime)
     {
         TeamPlayer scorer = teamPlayerRepository.getTeamPlayerById(scorerId);
         TeamPlayer assistant = teamPlayerRepository.getTeamPlayerById(assistantId);
         TeamMatch match = teamMatchRepository.getMatchById(matchId);
+        Team team = teamRepository.getTeamById(teamId);
         TeamMatchGoal sameGoal = teamMatchGoalRepository.findConflictingGoal(
             match.getId(),
             scorer.getId(),
@@ -172,6 +175,7 @@ public class TeamMatchFacade
             scorer,
             assistant,
             match,
+            team,
             matchTime,
             sameGoal
         );
@@ -185,7 +189,7 @@ public class TeamMatchFacade
     /**
      * This method deletes the goal from DB.
      *
-     * @param goalId if of the goal which should be deleted
+     * @param goalId id of the goal which should be deleted
      */
     public void deleteMatchGoal(UUID goalId)
     {
@@ -193,6 +197,66 @@ public class TeamMatchFacade
 
         entityManager.remove(teamMatchGoal);
         entityManager.flush();
+    }
+
+    /**
+     * Retrieves result for each played match.
+     *
+     * @return collection of all played matches results
+     */
+    public List<MatchResult> getPlayedMatchesList()
+    {
+        Collection<TeamMatch> playedMatches = teamMatchRepository.findAllPlayedMatches();
+        List<MatchResult> matchResults = new ArrayList<>();
+
+        for (TeamMatch pm : playedMatches)
+        {
+            MatchResult mr = new MatchResult(
+                pm,
+                teamMatchGoalRepository.getGoalsCountByTeamInMatch(pm.getId(), pm.getHomeTeam().getId()),
+                teamMatchGoalRepository.getGoalsCountByTeamInMatch(pm.getId(), pm.getAwayTeam().getId())
+            );
+
+            matchResults.add(mr);
+        }
+
+        return matchResults;
+    }
+
+    /**
+     * Retrieves result of a particular match.
+     *
+     * @param matchId match whose result should be retrieved
+     * @return result of the given match
+     */
+    public MatchResult getMatchResult(UUID matchId)
+    {
+        TeamMatch teamMatch = teamMatchRepository.getMatchById(matchId);
+
+        return new MatchResult(
+            teamMatch,
+            teamMatchGoalRepository.getGoalsCountByTeamInMatch(teamMatch.getId(), teamMatch.getHomeTeam().getId()),
+            teamMatchGoalRepository.getGoalsCountByTeamInMatch(teamMatch.getId(), teamMatch.getAwayTeam().getId())
+        );
+    }
+
+    /**
+     * Retrieves information such as all scored goals and home and away rosters
+     * of a particular match.
+     *
+     * @param matchId match whose information should be retrieved
+     * @return detail of the given match
+     */
+    public MatchDetailResult getMatchDetail(UUID matchId)
+    {
+        TeamMatch teamMatch = teamMatchRepository.getMatchById(matchId);
+
+        return new MatchDetailResult(
+            teamMatchGoalRepository.findAllGoalsByTeamInMatch(teamMatch.getId(), teamMatch.getHomeTeam().getId()),
+            teamMatchGoalRepository.findAllGoalsByTeamInMatch(teamMatch.getId(), teamMatch.getAwayTeam().getId()),
+            teamPlayerRepository.findTeamPlayerByTeam(teamMatch.getHomeTeam()),
+            teamPlayerRepository.findTeamPlayerByTeam(teamMatch.getAwayTeam())
+        );
     }
 
 }

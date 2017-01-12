@@ -3,6 +3,8 @@ package cz.muni.fi.pa165.team.match;
 import cz.muni.fi.pa165.config.ModelConfig;
 import cz.muni.fi.pa165.team.Team;
 import cz.muni.fi.pa165.team.TeamPlayer;
+import cz.muni.fi.pa165.team.match.result.MatchDetailResult;
+import cz.muni.fi.pa165.team.match.result.MatchResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
@@ -11,6 +13,7 @@ import org.testng.annotations.Test;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.testng.Assert.*;
 
@@ -117,6 +120,7 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
             scorer.getId(),
             assistant.getId(),
             match.getId(),
+            homeTeam.getId(),
             now
         );
         em.clear();
@@ -212,6 +216,147 @@ public class TeamMatchFacadeTest extends AbstractTransactionalTestNGSpringContex
 
         dbMatch = em.find(TeamMatch.class, teamMatch.getId());
         assertNotNull(dbMatch);
-        assertEquals(newEndTime, dbMatch.getEndTime());
+
+        assertEquals(dbMatch.getEndTime(), newEndTime);
     }
+
+    @Test
+    public void testPreparePlayedMatchesForList()
+    {
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Bruno", "Fartis", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Emil", "Hunter", 179, 74, homeTeam);
+        TeamPlayer scorer3 = new TeamPlayer("Levin", "Korn", 187, 95, awayTeam);
+        TeamPlayer assistant3 = new TeamPlayer("Dumbo", "Hlavka", 179, 74, awayTeam);
+        em.persist(scorer);
+        em.persist(assistant);
+        em.persist(scorer2);
+        em.persist(assistant2);
+        em.persist(scorer3);
+        em.persist(assistant3);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now, now.plusMinutes(94));
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now.plusMinutes(5));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(16));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer3, assistant3, match, now.plusMinutes(89));
+
+        em.persist(goal1);
+        em.persist(goal2);
+        em.persist(goal3);
+        em.flush();
+
+        List<MatchResult> matchResults = teamMatchFacade.getPlayedMatchesList();
+
+        assertEquals(matchResults.size(), 1);
+        assertEquals(matchResults.get(0).getMatch().getId(), match.getId());
+        assertEquals(matchResults.get(0).getHomeGoals().longValue(), 2);
+        assertEquals(matchResults.get(0).getAwayGoals().longValue(), 1);
+    }
+
+    @Test
+    public void testGetMatchResult()
+    {
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Bruno", "Fartis", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Emil", "Hunter", 179, 74, homeTeam);
+        TeamPlayer scorer3 = new TeamPlayer("Levin", "Korn", 187, 95, awayTeam);
+        TeamPlayer assistant3 = new TeamPlayer("Dumbo", "Hlavka", 179, 74, awayTeam);
+        em.persist(scorer);
+        em.persist(assistant);
+        em.persist(scorer2);
+        em.persist(assistant2);
+        em.persist(scorer3);
+        em.persist(assistant3);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now, now.plusMinutes(94));
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now.plusMinutes(5));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(16));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer3, assistant3, match, now.plusMinutes(89));
+
+        em.persist(goal1);
+        em.persist(goal2);
+        em.persist(goal3);
+        em.flush();
+
+        MatchResult mr = teamMatchFacade.getMatchResult(match.getId());
+
+        assertEquals(mr.getMatch().getId(), match.getId());
+        assertEquals(mr.getHomeGoals().longValue(), 2);
+        assertEquals(mr.getAwayGoals().longValue(), 1);
+    }
+
+    @Test
+    public void testGetMatchDetail()
+    {
+        Team homeTeam = new Team("homeTeam");
+        Team awayTeam = new Team("awayTeam");
+        em.persist(homeTeam);
+        em.persist(awayTeam);
+
+        TeamPlayer scorer = new TeamPlayer("John", "Doe", 187, 95, homeTeam);
+        TeamPlayer assistant = new TeamPlayer("Jack", "Reacher", 179, 74, homeTeam);
+        TeamPlayer scorer2 = new TeamPlayer("Bruno", "Fartis", 187, 95, homeTeam);
+        TeamPlayer assistant2 = new TeamPlayer("Emil", "Hunter", 179, 74, homeTeam);
+        TeamPlayer scorer3 = new TeamPlayer("Levin", "Korn", 187, 95, awayTeam);
+        TeamPlayer assistant3 = new TeamPlayer("Dumbo", "Hlavka", 179, 74, awayTeam);
+        em.persist(scorer);
+        em.persist(assistant);
+        em.persist(scorer2);
+        em.persist(assistant2);
+        em.persist(scorer3);
+        em.persist(assistant3);
+
+        TeamMatch match = new TeamMatch(homeTeam, awayTeam, now, now.plusMinutes(94));
+        em.persist(match);
+
+        TeamMatchGoal goal1 = new TeamMatchGoal(scorer, assistant, match, now.plusMinutes(5));
+        TeamMatchGoal goal2 = new TeamMatchGoal(scorer2, assistant2, match, now.plusMinutes(16));
+        TeamMatchGoal goal3 = new TeamMatchGoal(scorer3, assistant3, match, now.plusMinutes(89));
+
+        em.persist(goal1);
+        em.persist(goal2);
+        em.persist(goal3);
+        em.flush();
+
+        MatchDetailResult mdv = teamMatchFacade.getMatchDetail(match.getId());
+
+        assertTrue(mdv.getHomeGoals().contains(goal1));
+        assertTrue(mdv.getHomeGoals().contains(goal2));
+        assertFalse(mdv.getHomeGoals().contains(goal3));
+
+        assertTrue(mdv.getAwayGoals().contains(goal3));
+        assertFalse(mdv.getAwayGoals().contains(goal1));
+        assertFalse(mdv.getAwayGoals().contains(goal2));
+
+        assertTrue(mdv.getHomeRoster().contains(scorer));
+        assertTrue(mdv.getHomeRoster().contains(scorer2));
+        assertTrue(mdv.getHomeRoster().contains(assistant));
+        assertTrue(mdv.getHomeRoster().contains(assistant2));
+        assertFalse(mdv.getHomeRoster().contains(scorer3));
+        assertFalse(mdv.getHomeRoster().contains(assistant3));
+
+        assertTrue(mdv.getAwayRoster().contains(scorer3));
+        assertTrue(mdv.getAwayRoster().contains(assistant3));
+        assertFalse(mdv.getAwayRoster().contains(scorer));
+        assertFalse(mdv.getAwayRoster().contains(assistant));
+        assertFalse(mdv.getAwayRoster().contains(scorer2));
+        assertFalse(mdv.getAwayRoster().contains(assistant2));
+    }
+
 }

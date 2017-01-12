@@ -69,4 +69,33 @@ interface TeamMatchGoalRepository
      * @return found conflicting goal, null otherwise
      */
     TeamMatchGoal findConflictingGoal(final UUID matchId, final UUID scorerId, final UUID assistantId, final LocalDateTime matchTime);
+
+    /**
+     * Retrieves the last scored goal in the given match.
+     *
+     * @param matchId match in which thou found goal is scored as last one
+     * @return the last scored goal in the required match if such goal exists,
+     * otherwise null
+     */
+    TeamMatchGoal findLastGoalByMatch(final UUID matchId);
+
+    /**
+     * Retrieves all goal scored by the required team in the required match.
+     *
+     * @param matchId match in which the team should scored its goals
+     * @param teamId  team which goals in the match should be retrieved
+     * @return all scored goals by the team in the match
+     */
+    Collection<TeamMatchGoal> findAllGoalsByTeamInMatch(final UUID matchId, final UUID teamId);
+
+    /**
+     * Finds out the number scored goals by particular team in particular match.
+     *
+     * @param matchId match in which the particular team played and number of its
+     *                scored goals should be retrieved
+     * @param teamId team which number of scored goals are required
+     * @return number of scored goals by the given team in the given match
+     */
+    Long getGoalsCountByTeamInMatch(final UUID matchId, final UUID teamId);
+
 }
