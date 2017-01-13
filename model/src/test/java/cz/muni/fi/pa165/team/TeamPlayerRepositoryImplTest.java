@@ -195,7 +195,7 @@ public class TeamPlayerRepositoryImplTest extends AbstractTransactionalTestNGSpr
         em.persist(player4);
         em.flush();
 
-        Collection<TeamPlayer> dbPlayers = teamPlayerRepository.findTeamPlayerByTeam(team3);
+        Collection<TeamPlayer> dbPlayers = teamPlayerRepository.findTeamPlayerByTeam(team3.getId());
 
         assertEquals(dbPlayers.size(), 2);
         assertTrue(dbPlayers.contains(player1));
@@ -226,37 +226,8 @@ public class TeamPlayerRepositoryImplTest extends AbstractTransactionalTestNGSpr
         em.persist(player4);
         em.flush();
 
-        Collection<TeamPlayer> dbPlayers = teamPlayerRepository.findTeamPlayerByTeam(new Team("Chelsea"));
+        Collection<TeamPlayer> dbPlayers = teamPlayerRepository.findTeamPlayerByTeam(new Team("Chelsea").getId());
         assertTrue(dbPlayers.isEmpty());
-    }
-
-    @Test
-    public void testFindAllTeamPlayers()
-    {
-        Team team1 = new Team("Liverpool");
-        Team team2 = new Team("Arsenal");
-        Team team3 = new Team("Manchester");
-        em.persist(team1);
-        em.persist(team2);
-        em.persist(team3);
-
-        TeamPlayer player1 = new TeamPlayer("Filip", "Procházka", 185, 80, team3);
-        TeamPlayer player2 = new TeamPlayer("Libor", "Mühlpachr", 175, 85, team1);
-        TeamPlayer player3 = new TeamPlayer("Libor", "Galajda", 175, 80, team2);
-        TeamPlayer player4 = new TeamPlayer("Tomáš", "Šmíd", 180, 75, team3);
-        em.persist(player1);
-        em.persist(player2);
-        em.persist(player3);
-        em.persist(player4);
-        em.flush();
-
-        Collection<TeamPlayer> dbPlayers = teamPlayerRepository.findAllTeamPlayers();
-
-        assertEquals(dbPlayers.size(), 4);
-        assertTrue(dbPlayers.contains(player1));
-        assertTrue(dbPlayers.contains(player2));
-        assertTrue(dbPlayers.contains(player3));
-        assertTrue(dbPlayers.contains(player4));
     }
 
 }

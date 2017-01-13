@@ -57,7 +57,7 @@ public class GoalController
     )
     {
         return new ModelAndView("team/match/goal/create")
-            .addObject("players", teamPlayerRepository.findTeamPlayerByTeam(teamRepository.getTeamById(teamId)))
+            .addObject("players", teamPlayerRepository.findTeamPlayerByTeam(teamRepository.getTeamById(teamId).getId()))
             .addObject("match", teamMatchRepository.getMatchById(matchId))
             .addObject("goalRequest", new GoalRequest());
     }
@@ -72,7 +72,7 @@ public class GoalController
     {
         if (result.hasErrors()) {
             return new ModelAndView("team/match/goal/create")
-                .addObject("players", teamPlayerRepository.findTeamPlayerByTeam(teamRepository.getTeamById(teamId)))
+                .addObject("players", teamPlayerRepository.findTeamPlayerByTeam(teamRepository.getTeamById(teamId).getId()))
                 .addObject("match", teamMatchRepository.getMatchById(matchId))
                 .addObject("goalRequest", goalRequest);
         }

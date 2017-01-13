@@ -137,7 +137,7 @@ public class TeamController
         @PathVariable("id") UUID id
     )
     {
-        Collection<TeamPlayer> teamPlayers = teamPlayerRepository.findTeamPlayerByTeam(teamRepository.getTeamById(id));
+        Collection<TeamPlayer> teamPlayers = teamPlayerRepository.findTeamPlayerByTeam(teamRepository.getTeamById(id).getId());
         Collection<TeamPlayerResult> playersStatistics = teamPlayers.stream().map(player ->
             teamPlayerFacade.getPlayerStatistics(player.getId())).collect(Collectors.toCollection(ArrayList::new));
         return new ModelAndView("team/detail/overview")

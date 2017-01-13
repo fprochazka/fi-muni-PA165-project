@@ -1,8 +1,10 @@
-package cz.muni.fi.pa165.team.teamPlayer;
+package cz.muni.fi.pa165.team.player;
 
 import cz.muni.fi.pa165.team.Team;
 import cz.muni.fi.pa165.team.TeamPlayer;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import java.util.UUID;
 
 /**
  * @author Libor Muhlpachr <libor.muhl@seznam.cz>
@@ -23,9 +25,6 @@ public class TeamPlayerRequest
     @NotEmpty
     public int weight;
 
-    @NotEmpty
-    public Team team;
-
     public static TeamPlayerRequest fromTeamPlayer(TeamPlayer teamPlayer)
     {
         TeamPlayerRequest request = new TeamPlayerRequest();
@@ -34,7 +33,6 @@ public class TeamPlayerRequest
         request.setSurname(teamPlayer.getSurname());
         request.setHeight(teamPlayer.getHeight());
         request.setWeight(teamPlayer.getWeight());
-        request.setTeam(teamPlayer.getTeam());
 
         return request;
     }
@@ -44,7 +42,7 @@ public class TeamPlayerRequest
         return firstname;
     }
 
-    public void setFirstname()
+    public void setFirstname(String firstname)
     {
         this.firstname = firstname;
     }
@@ -54,7 +52,7 @@ public class TeamPlayerRequest
         return surname;
     }
 
-    public void setSurname()
+    public void setSurname(String surname)
     {
         this.surname = surname;
     }
@@ -64,7 +62,7 @@ public class TeamPlayerRequest
         return height;
     }
 
-    public void setHeight()
+    public void setHeight(int height)
     {
         this.height = height;
     }
@@ -74,18 +72,8 @@ public class TeamPlayerRequest
         return weight;
     }
 
-    public void setWeight()
+    public void setWeight(int weight)
     {
         this.weight = weight;
-    }
-
-    public Team getTeam()
-    {
-        return team;
-    }
-
-    public void setTeam()
-    {
-        this.team = team;
     }
 }

@@ -12,35 +12,36 @@ public interface TeamPlayerRepository
 {
 
     /**
-     * This method finds player by his ID.
+     * Finds player by his ID.
      *
      * @param id player's ID
      */
     TeamPlayer getTeamPlayerById(final UUID id);
 
     /**
-     * This method finds players by their firstname.
+     * Finds player by his ID.
+     */
+    TeamPlayer getTeamPlayerByTeamAndId(final UUID teamId, final UUID playerId);
+
+    /**
+     * Finds players by their firstname.
      *
      * @param firstname player's firstname
      */
     Collection<TeamPlayer> findTeamPlayerByFirstname(final String firstname);
 
     /**
-     * This method finds players by their surname.
+     * Finds players by their surname.
      *
      * @param surname player's surname
      */
     Collection<TeamPlayer> findTeamPlayerBySurname(final String surname);
 
     /**
-     * This method finds players by their team.
+     * Finds players by their team.
      *
-     * @param team player's team
+     * @param teamId player's team
      */
-    Collection<TeamPlayer> findTeamPlayerByTeam(final Team team);
+    Collection<TeamPlayer> findTeamPlayerByTeam(final UUID teamId);
 
-    /**
-     * This method finds all players.
-     */
-    Collection<TeamPlayer> findAllTeamPlayers();
 }

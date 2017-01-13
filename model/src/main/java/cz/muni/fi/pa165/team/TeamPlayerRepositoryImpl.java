@@ -52,14 +52,14 @@ public class TeamPlayerRepositoryImpl implements TeamPlayerRepository
     }
 
     @Override
-    public Collection<TeamPlayer> findTeamPlayerByTeam(final Team team)
+    public Collection<TeamPlayer> findTeamPlayerByTeam(final UUID teamId)
     {
-        if (team == null) {
+        if (teamId == null) {
             throw new IllegalArgumentException("Cannot search for null team");
         }
 
-        TypedQuery<TeamPlayer> query = entityManager.createQuery("SELECT tp FROM TeamPlayer tp WHERE tp.team = :tid", TeamPlayer.class)
-            .setParameter("tid", team);
+        TypedQuery<TeamPlayer> query = entityManager.createQuery("SELECT tp FROM TeamPlayer tp WHERE tp.team.id = :teamId", TeamPlayer.class)
+            .setParameter("teamId", teamId);
         return query.getResultList();
     }
 
@@ -80,9 +80,20 @@ public class TeamPlayerRepositoryImpl implements TeamPlayerRepository
     }
 
     @Override
-    public Collection<TeamPlayer> findAllTeamPlayers()
+    public TeamPlayer getTeamPlayerByTeamAndId(UUID teamId, UUID playerId)
     {
-        TypedQuery<TeamPlayer> query = entityManager.createQuery("SELECT tp FROM TeamPlayer tp", TeamPlayer.class);
-        return query.getResultList();
+        Assert.notNull(teamId, "Cannot search for null teamId");
+        Assert.notNull(playerId, "Cannot search for null playerId");
+
+        try {
+            return entityManager
+                .createQuery("SELECT tp FROM TeamPlayer tp WHERE tp.id = :playerId AND tp.team.id = :teamId", TeamPlayer.class)
+                .setParameter("teamId", teamId)
+                .setParameter("playerId", playerId)
+                .getSingleResult();
+
+        } catch (NoResultException e) {
+            throw new TeamPlayerNotFoundException(playerId, e);
+        }
     }
 }
