@@ -63,6 +63,19 @@ public class TeamRepositoryImpl implements TeamRepository
     }
 
     @Override
+    public Team findTeamById(final UUID teamId)
+    {
+        Assert.notNull(teamId, "Cannot search for a null teamId");
+
+        try {
+            return getTeamById(teamId);
+
+        } catch (TeamNotFoundException e) {
+            return null;
+        }
+    }
+
+    @Override
     public Team findTeamByPlayer(final TeamPlayer tp)
     {
         if (tp == null) {

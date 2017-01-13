@@ -93,7 +93,7 @@ interface TeamMatchGoalRepository
      *
      * @param matchId match in which the particular team played and number of its
      *                scored goals should be retrieved
-     * @param teamId team which number of scored goals are required
+     * @param teamId  team which number of scored goals are required
      * @return number of scored goals by the given team in the given match
      */
     Long getGoalsCountByTeamInMatch(final UUID matchId, final UUID teamId);

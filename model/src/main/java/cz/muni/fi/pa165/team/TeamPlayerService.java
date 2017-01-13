@@ -38,7 +38,7 @@ public class TeamPlayerService
     /**
      * This method changes player's surname.
      *
-     * @param tp - player whose surname is to be changed
+     * @param tp      - player whose surname is to be changed
      * @param surname - new surname of the player
      */
     public void changeTeamPlayerSurname(TeamPlayer tp, String surname)
@@ -49,7 +49,7 @@ public class TeamPlayerService
     /**
      * This method changes player's height.
      *
-     * @param tp - player whose height is to be changed
+     * @param tp     - player whose height is to be changed
      * @param height - new height of the player
      */
     public void changeTeamPlayerHeight(TeamPlayer tp, int height)
@@ -60,7 +60,7 @@ public class TeamPlayerService
     /**
      * This method changes player's weight.
      *
-     * @param tp - player whose weight is to be changed
+     * @param tp     - player whose weight is to be changed
      * @param weight - new weight of the player
      */
     public void changeTeamPlayerWeight(TeamPlayer tp, int weight)

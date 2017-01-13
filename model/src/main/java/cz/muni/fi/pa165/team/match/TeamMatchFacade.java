@@ -13,7 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Tomas Smid <smid.thomas@gmail.com>
@@ -209,8 +212,7 @@ public class TeamMatchFacade
         Collection<TeamMatch> playedMatches = teamMatchRepository.findAllPlayedMatches();
         List<MatchResult> matchResults = new ArrayList<>();
 
-        for (TeamMatch pm : playedMatches)
-        {
+        for (TeamMatch pm : playedMatches) {
             MatchResult mr = new MatchResult(
                 pm,
                 teamMatchGoalRepository.getGoalsCountByTeamInMatch(pm.getId(), pm.getHomeTeam().getId()),

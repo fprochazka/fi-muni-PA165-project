@@ -1,11 +1,15 @@
 package cz.muni.fi.pa165.team;
 
+import cz.muni.fi.pa165.team.match.TeamMatchGoal;
+import cz.muni.fi.pa165.team.match.TeamMatchGoalRepositoryImpl;
+import cz.muni.fi.pa165.team.result.TeamPlayerResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -20,16 +24,19 @@ public class TeamPlayerFacade
 
     private TeamPlayerRepository teamPlayerRepository;
 
+    private TeamMatchGoalRepositoryImpl teamMatchGoalRepository;
+
     private EntityManager entityManager;
 
     @Autowired
     public TeamPlayerFacade(
         TeamPlayerService teamPlayerService,
-        TeamPlayerRepository teamPlayerRepository
-    )
+        TeamPlayerRepository teamPlayerRepository,
+        TeamMatchGoalRepositoryImpl teamMatchGoalRepository)
     {
         this.teamPlayerService = teamPlayerService;
         this.teamPlayerRepository = teamPlayerRepository;
+        this.teamMatchGoalRepository = teamMatchGoalRepository;
         this.entityManager = entityManager;
     }
 
@@ -43,10 +50,10 @@ public class TeamPlayerFacade
      * This method takes 5 parameters and creates a player.
      *
      * @param teamPlayerFirstname firstname of the player
-     * @param teamPlayerSurname surname of the player
-     * @param teamPlayerHeight height of the player
-     * @param teamPlayerWeight weight of the player
-     * @param teamPlayerTeam team of the player
+     * @param teamPlayerSurname   surname of the player
+     * @param teamPlayerHeight    height of the player
+     * @param teamPlayerWeight    weight of the player
+     * @param teamPlayerTeam      team of the player
      * @return created player
      */
     public TeamPlayer createTeamPlayer(String teamPlayerFirstname, String teamPlayerSurname, int teamPlayerHeight, int teamPlayerWeight, Team teamPlayerTeam)
@@ -86,7 +93,7 @@ public class TeamPlayerFacade
     /**
      * This method changes player's firstname.
      *
-     * @param teamPlayerId id of the player whose firstname is to be changed
+     * @param teamPlayerId           id of the player whose firstname is to be changed
      * @param newTeamPlayerFirstname new firstname of the player
      */
     public void changeTeamPlayerFirstname(UUID teamPlayerId, String newTeamPlayerFirstname)
@@ -101,7 +108,7 @@ public class TeamPlayerFacade
     /**
      * This method changes player's surname.
      *
-     * @param teamPlayerId id of the player whose surname is to be changed
+     * @param teamPlayerId         id of the player whose surname is to be changed
      * @param newTeamPlayerSurname new surname of the player
      */
     public void changeTeamPlayerSurname(UUID teamPlayerId, String newTeamPlayerSurname)
@@ -116,7 +123,7 @@ public class TeamPlayerFacade
     /**
      * This method changes player's height.
      *
-     * @param teamPlayerId id of the player whose height is to be changed
+     * @param teamPlayerId        id of the player whose height is to be changed
      * @param newTeamPlayerHeight new height of the player
      */
     public void changeTeamPlayerHeight(UUID teamPlayerId, int newTeamPlayerHeight)
@@ -131,7 +138,7 @@ public class TeamPlayerFacade
     /**
      * This method changes player's weight.
      *
-     * @param teamPlayerId id of the player whose weight is to be changed
+     * @param teamPlayerId        id of the player whose weight is to be changed
      * @param newTeamPlayerWeight new weight of the player
      */
     public void changeTeamPlayerWeight(UUID teamPlayerId, int newTeamPlayerWeight)
@@ -141,5 +148,24 @@ public class TeamPlayerFacade
         teamPlayerService.changeTeamPlayerWeight(teamPlayer, newTeamPlayerWeight);
 
         entityManager.flush();
+    }
+
+    /**
+     * This method changes player's weight.
+     *
+     * @param teamPlayerID id of the player
+     * @return {@link TeamPlayerResult} with player stats
+     */
+    public TeamPlayerResult getPlayerStatistics(UUID teamPlayerID)
+    {
+        TeamPlayer player = teamPlayerRepository.getTeamPlayerById(teamPlayerID);
+
+        Collection<TeamMatchGoal> scorredGoals = teamMatchGoalRepository.findGoalByScorer(teamPlayerID);
+        int goals = (scorredGoals != null) ? scorredGoals.size() : 0;
+
+        Collection<TeamMatchGoal> assistedGoals = teamMatchGoalRepository.findGoalByAssistant(teamPlayerID);
+        int assists = (assistedGoals != null) ? assistedGoals.size() : 0;
+
+        return new TeamPlayerResult(player, goals, assists);
     }
 }
