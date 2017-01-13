@@ -15,10 +15,19 @@ public interface TeamRepository
      * Find Team by it's id.
      *
      * @param id id of the team which should be found in the database
+     * @return the team with the given id,
+     * or throws {@link cz.muni.fi.pa165.team.exceptions.TeamNotFoundException}
+     */
+    Team getTeamById(final UUID id);
+
+    /**
+     * Find Team by it's id.
+     *
+     * @param id id of the team which should be found in the database
      * @return the team with the given id, or null if such team
      * does not exist
      */
-    Team getTeamById(final UUID id);
+    Team findTeamById(final UUID id);
 
     /**
      * Find team by it's name.

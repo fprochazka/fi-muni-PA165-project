@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <my:pagetemplate>
     <jsp:attribute name="body">
@@ -33,13 +34,13 @@
                                      <tbody>
                                      <c:forEach items="${teams}" var="team">
                                          <tr class="tr-fixed-team clickable-row">
-                                             <td><a href="<c:url value="/team/${team.id}"/>"><c:out value="${team.name}" /></a></td>
-                                             <td>0</td>
-                                             <td>12</td>
-                                             <td>1</td>
-                                             <td>2</td>
-                                             <td>33</td>
-                                             <td>11</td>
+                                             <td><a href="<c:url value="/team/${team.team.id}"/>"><c:out value="${team.team.name}" /></a></td>
+                                             <td><c:out value="${team.matchesPlayedCnt}"/></td>
+                                             <td><c:out value="${team.winsCnt}"/></td>
+                                             <td><c:out value="${team.drawsCnt}"/></td>
+                                             <td><c:out value="${team.lossesCnt}"/></td>
+                                             <td><c:out value="${team.goalsScoredCnt}"/></td>
+                                             <td><c:out value="${team.goalsConcededCnt}"/></td>
                                          </tr>
                                      </c:forEach>
                                      </tbody>
@@ -47,12 +48,14 @@
                              </div>
                          </div>
                          <!-- END teams_overview -->
-                         <div class="form-group">
-                             <label class="col-md-4 control-label" for="newteambutton"></label>
-                             <div class="col-md-4 center-block">
-                                 <a href="<c:url value="/team/create"/>" name="newteambutton" class="btn btn-success center-block team-button-area">New Team</a>
+                         <sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')">
+                             <div class="form-group">
+                                 <label class="col-md-4 control-label" for="newteambutton"></label>
+                                 <div class="col-md-4 center-block">
+                                     <a href="<c:url value="/team/create"/>" name="newteambutton" class="btn btn-success center-block team-button-area">New Team</a>
+                                 </div>
                              </div>
-                         </div>
+                         </sec:authorize>
                      </div>
                  </div>
              </div>
