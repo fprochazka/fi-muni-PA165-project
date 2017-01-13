@@ -1,11 +1,11 @@
-package cz.muni.fi.pa165.team.statistics;
+package cz.muni.fi.pa165.team.result;
 
 import cz.muni.fi.pa165.team.Team;
 
 /**
  * @author Denis Galajda <galajda.denis@gmail.com>
  */
-public class TeamStatistics
+public class TeamResult
 {
     private Team team;
     private int matchesPlayedCnt;
@@ -15,7 +15,7 @@ public class TeamStatistics
     private int goalsScoredCnt;
     private int goalsConcededCnt;
 
-    public TeamStatistics(Team team, int matchesPlayedCnt, int winsCnt, int lossesCnt, int drawsCnt, int goalsScoredCnt, int goalsConcededCnt)
+    public TeamResult(Team team, int matchesPlayedCnt, int winsCnt, int lossesCnt, int drawsCnt, int goalsScoredCnt, int goalsConcededCnt)
     {
         this.team = team;
         this.matchesPlayedCnt = matchesPlayedCnt;

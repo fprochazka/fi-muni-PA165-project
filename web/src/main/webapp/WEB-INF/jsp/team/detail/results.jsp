@@ -5,6 +5,8 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%--@elvariable id="team" type="cz.muni.fi.pa165.team.Team"--%>
+<%--@elvariable id="matchResults" type="cz.muni.fi.pa165.team.match.result.MatchResult"--%>
 
 <my:pagetemplate>
     <jsp:attribute name="body">
@@ -58,7 +60,7 @@
                     </div>
                 </div>
                 <!-- Tabs content -->
-                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" style="display: none;">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
 

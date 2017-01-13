@@ -68,12 +68,9 @@ public class TeamRepositoryImpl implements TeamRepository
         Assert.notNull(teamId, "Cannot search for a null teamId");
 
         try {
-            return entityManager
-                .createQuery("SELECT t FROM Team t WHERE t.id = :teamId", Team.class)
-                .setParameter("teamId", teamId)
-                .getSingleResult();
+            return getTeamById(teamId);
 
-        } catch (NoResultException e) {
+        } catch (TeamNotFoundException e) {
             return null;
         }
     }

@@ -1,10 +1,9 @@
 package cz.muni.fi.pa165.team;
 
 import cz.muni.fi.pa165.response.RedirectResponse;
-import cz.muni.fi.pa165.team.statistics.TeamStatistics;
 import cz.muni.fi.pa165.team.exceptions.TeamWithSameNameAlreadyExistsException;
 import cz.muni.fi.pa165.team.match.TeamMatchRepository;
-import cz.muni.fi.pa165.team.statistics.TeamPlayerStatistics;
+import cz.muni.fi.pa165.team.result.TeamPlayerResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -59,11 +58,8 @@ public class TeamController
     @RequestMapping(value = "/teams", method = RequestMethod.GET)
     public ModelAndView viewTeamsList() throws Exception
     {
-        Collection<TeamStatistics> teamsStatistics = new ArrayList<>();
-        Collection<Team> teamsList = teamRepository.findAll();
-        teamsStatistics.addAll(teamsList.stream().map(team -> teamFacade.getTeamStatistics(team.getId())).collect(Collectors.toList()));
         return new ModelAndView("team/list")
-            .addObject("teams", teamsStatistics);
+            .addObject("teams", teamFacade.getAllTeamStatistics());
     }
 
     @RequestMapping(value = "/team/create", method = RequestMethod.POST)
@@ -79,12 +75,12 @@ public class TeamController
 
         try {
             teamFacade.createTeam(teamDetailsRequest.getName());
+            return new RedirectResponse("/teams");
         } catch (TeamWithSameNameAlreadyExistsException e) {
             result.rejectValue("name", "teamform.namealreadyused");
             return new ModelAndView("team/create")
                 .addObject("teamDetailsRequest", teamDetailsRequest);
         }
-        return new RedirectResponse("/teams");
     }
 
     @RequestMapping(value = "/team/create", method = RequestMethod.GET)
@@ -116,12 +112,12 @@ public class TeamController
 
         try {
             teamFacade.changeTeamName(id, teamDetailsRequest.getName());
+            return new RedirectResponse("/team/" + id.toString());
         } catch (TeamWithSameNameAlreadyExistsException e) {
             result.rejectValue("name", "teamform.namealreadyused");
             return new ModelAndView("team/edit")
                 .addObject("teamDetailsRequest", teamDetailsRequest);
         }
-        return new RedirectResponse("/team/" + id.toString());
     }
 
     @RequestMapping(value = "/team/{id}/edit", method = RequestMethod.GET)
@@ -142,7 +138,7 @@ public class TeamController
     )
     {
         Collection<TeamPlayer> teamPlayers = teamPlayerRepository.findTeamPlayerByTeam(teamRepository.getTeamById(id));
-        Collection<TeamPlayerStatistics> playersStatistics = teamPlayers.stream().map(player ->
+        Collection<TeamPlayerResult> playersStatistics = teamPlayers.stream().map(player ->
             teamPlayerFacade.getPlayerStatistics(player.getId())).collect(Collectors.toCollection(ArrayList::new));
         return new ModelAndView("team/detail/overview")
             .addObject("teamStats", teamFacade.getTeamStatistics(id))

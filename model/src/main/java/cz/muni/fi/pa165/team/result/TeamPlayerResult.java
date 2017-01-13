@@ -1,17 +1,17 @@
-package cz.muni.fi.pa165.team.statistics;
+package cz.muni.fi.pa165.team.result;
 
 import cz.muni.fi.pa165.team.TeamPlayer;
 
 /**
  * @author Denis Galajda <galajda.denis@gmail.com>
  */
-public class TeamPlayerStatistics
+public class TeamPlayerResult
 {
     private TeamPlayer player;
     private int goals;
     private int assists;
 
-    public TeamPlayerStatistics(TeamPlayer player, int goals, int assists)
+    public TeamPlayerResult(TeamPlayer player, int goals, int assists)
     {
         this.player = player;
         this.goals = goals;

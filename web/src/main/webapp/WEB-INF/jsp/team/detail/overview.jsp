@@ -5,6 +5,8 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%--@elvariable id="teamStats" type="cz.muni.fi.pa165.team.result.TeamResult"--%>
+<%--@elvariable id="playersStats" type="cz.muni.fi.pa165.team.result.TeamPlayerResult"--%>
 
 <my:pagetemplate>
     <jsp:attribute name="body">

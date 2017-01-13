@@ -2,7 +2,7 @@ package cz.muni.fi.pa165.team;
 
 import cz.muni.fi.pa165.team.match.TeamMatchGoal;
 import cz.muni.fi.pa165.team.match.TeamMatchGoalRepositoryImpl;
-import cz.muni.fi.pa165.team.statistics.TeamPlayerStatistics;
+import cz.muni.fi.pa165.team.result.TeamPlayerResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -154,9 +154,9 @@ public class TeamPlayerFacade
      * This method changes player's weight.
      *
      * @param teamPlayerID id of the player
-     * @return  {@link TeamPlayerStatistics} with player stats
+     * @return  {@link TeamPlayerResult} with player stats
      */
-    public TeamPlayerStatistics getPlayerStatistics(UUID teamPlayerID)
+    public TeamPlayerResult getPlayerStatistics(UUID teamPlayerID)
     {
         TeamPlayer player = teamPlayerRepository.getTeamPlayerById(teamPlayerID);
 
@@ -166,6 +166,6 @@ public class TeamPlayerFacade
         Collection<TeamMatchGoal> assistedGoals = teamMatchGoalRepository.findGoalByAssistant(teamPlayerID);
         int assists = (assistedGoals != null) ? assistedGoals.size() : 0;
 
-        return new TeamPlayerStatistics(player, goals, assists);
+        return new TeamPlayerResult(player, goals, assists);
     }
 }

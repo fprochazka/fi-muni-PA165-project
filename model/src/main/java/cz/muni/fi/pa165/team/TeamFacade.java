@@ -1,6 +1,6 @@
 package cz.muni.fi.pa165.team;
 
-import cz.muni.fi.pa165.team.statistics.TeamStatistics;
+import cz.muni.fi.pa165.team.result.TeamResult;
 import cz.muni.fi.pa165.team.match.TeamMatch;
 import cz.muni.fi.pa165.team.match.TeamMatchGoalRepositoryImpl;
 import cz.muni.fi.pa165.team.match.TeamMatchRepository;
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author Denis Galajda <galajda.denis@gmail.com>
@@ -114,7 +115,7 @@ public class TeamFacade
     /**
      * Get team statistics.
      */
-    public TeamStatistics getTeamStatistics(UUID teamID)
+    public TeamResult getTeamStatistics(UUID teamID)
     {
         int matchesPlayedCnt = 0;
         int winsCnt = 0;
@@ -149,7 +150,7 @@ public class TeamFacade
             }
         }
 
-        return new TeamStatistics(team,
+        return new TeamResult(team,
             matchesPlayedCnt,
             winsCnt,
             lossesCnt,
@@ -157,6 +158,18 @@ public class TeamFacade
             goalsScoredCnt,
             goalsConcededCnt
         );
+    }
+
+    /**
+     * Get team statistics of all teams.
+     */
+    public Collection<TeamResult> getAllTeamStatistics()
+    {
+        Collection<TeamResult> teamsStatistics = new ArrayList<>();
+        Collection<Team> teamsList = teamRepository.findAll();
+        teamsStatistics.addAll(teamsList.stream().map(team -> getTeamStatistics(team.getId())).collect(Collectors.toList()));
+
+        return teamsStatistics;
     }
 
     /**
