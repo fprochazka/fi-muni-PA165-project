@@ -1,10 +1,10 @@
 package cz.muni.fi.pa165.team;
 
-import cz.muni.fi.pa165.team.result.TeamResult;
 import cz.muni.fi.pa165.team.match.TeamMatch;
 import cz.muni.fi.pa165.team.match.TeamMatchGoalRepositoryImpl;
 import cz.muni.fi.pa165.team.match.TeamMatchRepository;
 import cz.muni.fi.pa165.team.match.result.MatchResult;
+import cz.muni.fi.pa165.team.result.TeamResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -126,11 +126,9 @@ public class TeamFacade
 
         Team team = teamRepository.getTeamById(teamID);
         Collection<TeamMatch> playedMatches = teamMatchRepository.findAllPlayedMatchesOfTeam(teamID);
-        if (playedMatches != null)
-        {
+        if (playedMatches != null) {
             matchesPlayedCnt = playedMatches.size();
-            for (TeamMatch match : playedMatches)
-            {
+            for (TeamMatch match : playedMatches) {
                 long matchGoalsScored = teamMatchGoalRepository.getGoalsCountByTeamInMatch(match.getId(), teamID);
                 goalsScoredCnt += matchGoalsScored;
 
@@ -144,7 +142,7 @@ public class TeamFacade
                 if (matchGoalsScored > matchGoalsConceded) {
                     winsCnt++;
                 }
-                if (matchGoalsScored < matchGoalsConceded){
+                if (matchGoalsScored < matchGoalsConceded) {
                     lossesCnt++;
                 }
             }
@@ -182,8 +180,7 @@ public class TeamFacade
         Collection<TeamMatch> playedMatches = teamMatchRepository.findAllPlayedMatchesOfTeam(teamID);
         List<MatchResult> matchResults = new ArrayList<>();
 
-        for (TeamMatch pm : playedMatches)
-        {
+        for (TeamMatch pm : playedMatches) {
             MatchResult mr = new MatchResult(
                 pm,
                 teamMatchGoalRepository.getGoalsCountByTeamInMatch(pm.getId(), pm.getHomeTeam().getId()),

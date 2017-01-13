@@ -7,6 +7,7 @@ import cz.muni.fi.pa165.team.TeamPlayer;
  */
 public class TeamPlayerResult
 {
+
     private TeamPlayer player;
     private int goals;
     private int assists;
