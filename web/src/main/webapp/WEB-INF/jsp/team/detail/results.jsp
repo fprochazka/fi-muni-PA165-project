@@ -26,6 +26,9 @@
                     <li class="nav-item">
                         <a href="<c:url value="/team/${team.id}/schedule"/>" class="nav-link">Program</a>
                     </li>
+                    <li class="nav-item">
+                        <a href="<c:url value="/team/${team.id}/players"/>" class="nav-link">Players</a>
+                    </li>
                 </ul>
                 <!-- Content centered -->
                 <div class="tab-content">
@@ -59,39 +62,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- Tabs content -->
-                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" style="display: none;">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
 
-                            <div class="modal-body">
-                                Are you sure you want to delete this item?
-                            </div>
-                            <div class="modal-footer">
-                                <c:url value="/team/${team.id}/delete" var="deleteTeamActionUrl"/>
-                                <form:form method="post" action="${deleteTeamActionUrl}" autocomplete="off">
-                                    <fieldset>
-                                        <div id="form-buttons" class="team-form-item">
-                                            <a class="btn btn-success" role="button" id="pcancel" data-dismiss="modal">Cancel</a>
-                                            <input id="psubmit" name="submit" type="submit" class="btn btn-success" value="Delete">
-                                        </div>
-                                    </fieldset>
-                                 </form:form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <sec:authorize access="hasAnyRole('MODERATOR', 'ADMIN')">
-                    <div class="row">
-                        <div class="col-md-10 offset-md-1 delete-team-button-area text-md-right">
-                            <a href="<c:url value="/team/${team.id}/edit"/>" class="btn btn-success edit-team-button-area" role="button">Edit Team</a>
-                            <a href="#myModal" class="btn btn-outline-danger" data-toggle="modal" role="button">Delete Team</a>
-                            <!-- Button trigger modal -->
-                        </div>
-                    </div>
-                </sec:authorize>
             </div>
         </div>
     </div>

@@ -47,8 +47,8 @@ public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
     {
         Assert.notNull(scorerId, "Cannot search for null scorer");
 
-        return entityManager.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.scorer.id = :scorerid", TeamMatchGoal.class)
-            .setParameter("scorerid", scorerId)
+        return entityManager.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.scorer.id = :scorerId", TeamMatchGoal.class)
+            .setParameter("scorerId", scorerId)
             .getResultList();
     }
 
@@ -57,8 +57,8 @@ public class TeamMatchGoalRepositoryImpl implements TeamMatchGoalRepository
     {
         Assert.notNull(assistantId, "Cannot search for null assistant");
 
-        return entityManager.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.assistant.id = :assistantid", TeamMatchGoal.class)
-            .setParameter("assistantid", assistantId)
+        return entityManager.createQuery("SELECT g FROM TeamMatchGoal g WHERE g.assistant.id = :assistantId", TeamMatchGoal.class)
+            .setParameter("assistantId", assistantId)
             .getResultList();
     }
 

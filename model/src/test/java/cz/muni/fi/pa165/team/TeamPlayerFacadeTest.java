@@ -36,7 +36,7 @@ public class TeamPlayerFacadeTest extends AbstractTransactionalTestNGSpringConte
         Team team = teamService.createTeam("Liverpool", null);
         em.persist(team);
 
-        TeamPlayer teamPlayer = teamPlayerFacade.createTeamPlayer("Filip", "Procházka", 185, 80, team);
+        TeamPlayer teamPlayer = teamPlayerFacade.createTeamPlayer(team.getId(), "Filip", "Procházka", 185, 80);
         em.clear();
 
         TeamPlayer foundPlayer = em.find(TeamPlayer.class, teamPlayer.getId());
@@ -60,7 +60,7 @@ public class TeamPlayerFacadeTest extends AbstractTransactionalTestNGSpringConte
         em.flush();
         em.clear();
 
-        teamPlayerFacade.deleteTeamPlayer(teamPlayer.getId());
+        teamPlayerFacade.deleteTeamPlayer(team.getId(), teamPlayer.getId());
         em.clear();
 
         TeamPlayer dbPlayer = em.find(TeamPlayer.class, teamPlayer.getId());
@@ -68,7 +68,7 @@ public class TeamPlayerFacadeTest extends AbstractTransactionalTestNGSpringConte
     }
 
     @Test
-    public void testChangeTeamPlayerFirstname() throws Exception
+    public void testChangeTeamPlayerDetails() throws Exception
     {
         Team team = teamService.createTeam("Liverpool", null);
         em.persist(team);
@@ -78,64 +78,21 @@ public class TeamPlayerFacadeTest extends AbstractTransactionalTestNGSpringConte
         em.flush();
         em.clear();
 
-        teamPlayerFacade.changeTeamPlayerFirstname(teamPlayer.getId(), "Tomáš");
+        teamPlayerFacade.changeTeamPlayerDetails(
+            team.getId(),
+            teamPlayer.getId(),
+            "Tomáš",
+            "Novák",
+            190,
+            70
+        );
         em.clear();
 
         TeamPlayer foundTeamPlayer = em.find(TeamPlayer.class, teamPlayer.getId());
         assertEquals(foundTeamPlayer.getFirstname(), "Tomáš");
-    }
-
-    @Test
-    public void testChangeTeamPlayerSurname() throws Exception
-    {
-        Team team = teamService.createTeam("Liverpool", null);
-        em.persist(team);
-
-        TeamPlayer teamPlayer = teamPlayerService.createTeamPlayer("Filip", "Procházka", 185, 80, team);
-        em.persist(teamPlayer);
-        em.flush();
-        em.clear();
-
-        teamPlayerFacade.changeTeamPlayerSurname(teamPlayer.getId(), "Novák");
-        em.clear();
-
-        TeamPlayer foundTeamPlayer = em.find(TeamPlayer.class, teamPlayer.getId());
         assertEquals(foundTeamPlayer.getSurname(), "Novák");
-    }
-
-    @Test
-    public void testChangeTeamPlayerHeight() throws Exception
-    {
-        Team team = teamService.createTeam("Liverpool", null);
-        em.persist(team);
-
-        TeamPlayer teamPlayer = teamPlayerService.createTeamPlayer("Filip", "Procházka", 185, 80, team);
-        em.persist(teamPlayer);
-        em.flush();
-        em.clear();
-
-        teamPlayerFacade.changeTeamPlayerHeight(teamPlayer.getId(), 190);
-        em.clear();
-
-        TeamPlayer foundTeamPlayer = em.find(TeamPlayer.class, teamPlayer.getId());
         assertEquals(foundTeamPlayer.getHeight(), 190);
-    }
-
-    @Test
-    public void testChangeTeamPlayerWeight() throws Exception
-    {
-        Team team = teamService.createTeam("Liverpool", null);
-        em.persist(team);
-
-        TeamPlayer teamPlayer = teamPlayerService.createTeamPlayer("Filip", "Procházka", 185, 80, team);
-        em.persist(teamPlayer);
-        em.flush();
-        em.clear();
-
-        teamPlayerFacade.changeTeamPlayerWeight(teamPlayer.getId(), 70);
-        em.clear();
-
-        TeamPlayer foundTeamPlayer = em.find(TeamPlayer.class, teamPlayer.getId());
         assertEquals(foundTeamPlayer.getWeight(), 70);
     }
+
 }

@@ -40,8 +40,10 @@
                                      <c:forEach items="${matchResults}" var="matchResult">
                                          <tr>
                                              <td><c:out value="${matchResult.match.startTime.format(formatter)}" /></td>
-                                             <td><c:out value="${matchResult.match.homeTeam.name}" /></td>
-                                             <td><c:out value="${matchResult.match.awayTeam.name}" /></td>
+                                             <c:url value="/team/${matchResult.match.homeTeam.id}" var="homeTeamUrl"/>
+                                             <td><a href="<c:out value="${homeTeamUrl}" />"><c:out value="${matchResult.match.homeTeam.name}" /></a></td>
+                                             <c:url value="/team/${matchResult.match.homeTeam.id}" var="awayTeamUrl"/>
+                                             <td><a href="<c:out value="${awayTeamUrl}" />"><c:out value="${matchResult.match.awayTeam.name}" /></a></td>
                                              <td><c:out value="${matchResult.homeGoals} - ${matchResult.awayGoals}" /></td>
                                              <td>
                                                  <a href="<c:url value="/match/${matchResult.match.id}"/>" title="View detail" name="matchdetailbutton" class="btn btn-success center-block btn-outline-info">

@@ -9,7 +9,7 @@ import java.util.UUID;
  *
  * @author Tomas Smid <smid.thomas@gmail.com>
  */
-interface TeamMatchGoalRepository
+public interface TeamMatchGoalRepository
 {
 
     /**

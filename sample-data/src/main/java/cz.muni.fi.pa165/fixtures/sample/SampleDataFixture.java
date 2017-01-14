@@ -50,17 +50,17 @@ public class SampleDataFixture
         Team team2 = teamFacade.createTeam("Opava FC");
         Team team3 = teamFacade.createTeam("Praha FK");
 
-        TeamPlayer player1 = teamPlayerFacade.createTeamPlayer("Lojza", "Mravenec", 180, 84, team1);
-        TeamPlayer player2 = teamPlayerFacade.createTeamPlayer("Alex", "Boruvka", 181, 85, team1);
-        TeamPlayer player3 = teamPlayerFacade.createTeamPlayer("John", "Doe", 185, 86, team1);
+        TeamPlayer player1 = teamPlayerFacade.createTeamPlayer(team1.getId(), "Lojza", "Mravenec", 180, 84);
+        TeamPlayer player2 = teamPlayerFacade.createTeamPlayer(team1.getId(), "Alex", "Boruvka", 181, 85);
+        TeamPlayer player3 = teamPlayerFacade.createTeamPlayer(team1.getId(), "John", "Doe", 185, 86);
 
-        TeamPlayer player4 = teamPlayerFacade.createTeamPlayer("Jarda", "Mravenec", 180, 84, team2);
-        TeamPlayer player5 = teamPlayerFacade.createTeamPlayer("Bohumil", "Klika", 185, 87, team2);
-        TeamPlayer player6 = teamPlayerFacade.createTeamPlayer("Marek", "Mord", 165, 95, team2);
+        TeamPlayer player4 = teamPlayerFacade.createTeamPlayer(team2.getId(), "Jarda", "Mravenec", 180, 84);
+        TeamPlayer player5 = teamPlayerFacade.createTeamPlayer(team2.getId(), "Bohumil", "Klika", 185, 87);
+        TeamPlayer player6 = teamPlayerFacade.createTeamPlayer(team2.getId(), "Marek", "Mord", 165, 95);
 
-        TeamPlayer player7 = teamPlayerFacade.createTeamPlayer("Pepa", "Lelek", 180, 84, team3);
-        TeamPlayer player8 = teamPlayerFacade.createTeamPlayer("Pepa", "Prskavec", 189, 89, team3);
-        TeamPlayer player9 = teamPlayerFacade.createTeamPlayer("Kamil", "Kordoba", 180, 84, team3);
+        TeamPlayer player7 = teamPlayerFacade.createTeamPlayer(team3.getId(), "Pepa", "Lelek", 180, 84);
+        TeamPlayer player8 = teamPlayerFacade.createTeamPlayer(team3.getId(), "Pepa", "Prskavec", 189, 89);
+        TeamPlayer player9 = teamPlayerFacade.createTeamPlayer(team3.getId(), "Kamil", "Kordoba", 180, 84);
 
         long time = System.currentTimeMillis();
 

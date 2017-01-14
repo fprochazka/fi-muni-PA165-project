@@ -256,8 +256,8 @@ public class TeamMatchFacade
         return new MatchDetailResult(
             teamMatchGoalRepository.findAllGoalsByTeamInMatch(teamMatch.getId(), teamMatch.getHomeTeam().getId()),
             teamMatchGoalRepository.findAllGoalsByTeamInMatch(teamMatch.getId(), teamMatch.getAwayTeam().getId()),
-            teamPlayerRepository.findTeamPlayerByTeam(teamMatch.getHomeTeam()),
-            teamPlayerRepository.findTeamPlayerByTeam(teamMatch.getAwayTeam())
+            teamPlayerRepository.findTeamPlayerByTeam(teamMatch.getHomeTeam().getId()),
+            teamPlayerRepository.findTeamPlayerByTeam(teamMatch.getAwayTeam().getId())
         );
     }
 
