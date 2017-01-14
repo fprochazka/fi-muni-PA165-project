@@ -2,9 +2,11 @@ package cz.muni.fi.pa165.team.player;
 
 import cz.muni.fi.pa165.response.RedirectResponse;
 import cz.muni.fi.pa165.team.*;
+import cz.muni.fi.pa165.team.match.TeamMatchGoalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,21 +26,26 @@ public class TeamPlayerController
     private final TeamPlayerFacade teamPlayerFacade;
     private final TeamPlayerRepository teamPlayerRepository;
     private final TeamRepository teamRepository;
+    private final TeamMatchGoalRepository teamMatchGoalRepository;
 
     @Autowired
     public TeamPlayerController(
         TeamPlayerFacade teamPlayerFacade,
         TeamPlayerRepository teamPlayerRepository,
-        TeamRepository teamRepository
+        TeamRepository teamRepository,
+        TeamMatchGoalRepository teamMatchGoalRepository
     )
     {
         this.teamPlayerFacade = teamPlayerFacade;
         this.teamPlayerRepository = teamPlayerRepository;
         this.teamRepository = teamRepository;
+        this.teamMatchGoalRepository = teamMatchGoalRepository;
     }
 
     @RequestMapping(value = "/team/{teamId}/players", method = RequestMethod.GET)
-    public ModelAndView viewList(@PathVariable("teamId") UUID teamId) throws Exception
+    public ModelAndView viewList(
+        @PathVariable("teamId") UUID teamId
+    ) throws Exception
     {
         Team team = teamRepository.getTeamById(teamId);
         Collection<TeamPlayer> teamPlayers = teamPlayerRepository.findTeamPlayerByTeam(teamId);
@@ -49,7 +56,9 @@ public class TeamPlayerController
     }
 
     @RequestMapping(value = "/team/{teamId}/player/create", method = RequestMethod.GET)
-    public ModelAndView viewNewTeamPlayer(@PathVariable("teamId") UUID teamId) throws Exception
+    public ModelAndView viewNewTeamPlayer(
+        @PathVariable("teamId") UUID teamId
+    ) throws Exception
     {
         Team team = teamRepository.getTeamById(teamId);
 
@@ -61,7 +70,7 @@ public class TeamPlayerController
     @RequestMapping(value = "/team/{teamId}/player/create", method = RequestMethod.POST)
     public ModelAndView submitNewTeamPlayer(
         @PathVariable("teamId") UUID teamId,
-        @ModelAttribute("teamPlayerRequest") TeamPlayerRequest teamPlayerRequest,
+        @ModelAttribute("teamPlayerRequest") @Validated TeamPlayerRequest teamPlayerRequest,
         BindingResult result
     ) throws Exception
     {
@@ -73,7 +82,7 @@ public class TeamPlayerController
                 .addObject("teamPlayerRequest", teamPlayerRequest);
         }
 
-        teamPlayerFacade.createTeamPlayer(
+        TeamPlayer teamPlayer = teamPlayerFacade.createTeamPlayer(
             team.getId(),
             teamPlayerRequest.getFirstname(),
             teamPlayerRequest.getSurname(),
@@ -81,7 +90,21 @@ public class TeamPlayerController
             teamPlayerRequest.getWeight()
         );
 
-        return new RedirectResponse("/team/" + teamId.toString() + "/players");
+        return new RedirectResponse("/team/" + teamId.toString() + "/player/" + teamPlayer.getId());
+    }
+
+    @RequestMapping(value = "/team/{teamId}/player/{playerId}", method = RequestMethod.GET)
+    public ModelAndView viewTeamPlayer(
+        @PathVariable("teamId") UUID teamId,
+        @PathVariable("playerId") UUID playerId
+    )
+    {
+        TeamPlayer teamPlayer = teamPlayerRepository.getTeamPlayerByTeamAndId(teamId, playerId);
+
+        return new ModelAndView("/team/player/detail")
+            .addObject("teamPlayer", teamPlayer)
+            .addObject("playerAssistGoals", teamMatchGoalRepository.findGoalByAssistant(playerId))
+            .addObject("playerScorerGoals", teamMatchGoalRepository.findGoalByScorer(playerId));
     }
 
     @RequestMapping(value = "/team/{teamId}/player/{playerId}/edit", method = RequestMethod.GET)
@@ -93,7 +116,7 @@ public class TeamPlayerController
         TeamPlayer teamPlayer = teamPlayerRepository.getTeamPlayerByTeamAndId(teamId, playerId);
 
         return new ModelAndView("team/player/edit")
-            .addObject("team", teamPlayer.getTeam())
+            .addObject("teamPlayer", teamPlayer)
             .addObject("teamPlayerRequest", TeamPlayerRequest.fromTeamPlayer(teamPlayer));
     }
 
@@ -101,7 +124,7 @@ public class TeamPlayerController
     public ModelAndView submitEditTeamPlayer(
         @PathVariable("teamId") UUID teamId,
         @PathVariable("playerId") UUID playerId,
-        @ModelAttribute("teamPlayerRequest") TeamPlayerRequest teamPlayerRequest,
+        @ModelAttribute("teamPlayerRequest") @Validated TeamPlayerRequest teamPlayerRequest,
         BindingResult result
     ) throws Exception
     {
@@ -122,7 +145,7 @@ public class TeamPlayerController
             teamPlayerRequest.getWeight()
         );
 
-        return new RedirectResponse("/team/" + teamId.toString() + "/players");
+        return new RedirectResponse("/team/" + teamId.toString() + "/player/" + playerId.toString());
     }
 
     @RequestMapping(value = "/team/{teamId}/player/{playerId}/delete", method = RequestMethod.POST)
@@ -136,16 +159,4 @@ public class TeamPlayerController
         return new RedirectResponse("/team/" + teamId.toString() + "/players");
     }
 
-    @RequestMapping(value = "/team/{teamId}/player/{playerId}", method = RequestMethod.GET)
-    public ModelAndView viewTeamPlayer(
-        @PathVariable("teamId") UUID teamId,
-        @PathVariable("playerId") UUID playerId
-    )
-    {
-        TeamPlayer teamPlayer = teamPlayerRepository.getTeamPlayerByTeamAndId(teamId, playerId);
-
-        return new ModelAndView("/team/player/detail")
-            .addObject("team", teamPlayer.getTeam())
-            .addObject("teamPlayer", teamPlayer);
-    }
 }

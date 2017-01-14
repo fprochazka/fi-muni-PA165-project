@@ -35,9 +35,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="<c:url value="/teams"/>">Teams</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Players</a>
-                </li>
+                <%--<li class="nav-item">--%>
+                    <%--<a class="nav-link" href="#">Players</a>--%>
+                <%--</li>--%>
                 <sec:authorize access="hasRole('ROLE_ADMIN')">
                     <li class="nav-item">
                         <a class="nav-link" href="<c:url value="/admin/users"/>">Users</a>

@@ -26,6 +26,9 @@
                     <li class="nav-item">
                         <a href="<c:url value="/team/${teamStats.team.id}/schedule"/>" class="nav-link">Program</a>
                     </li>
+                    <li class="nav-item">
+                        <a href="<c:url value="/team/${teamStats.team.id}/players"/>" class="nav-link">Players</a>
+                    </li>
                 </ul>
                 <!-- Content centered -->
                 <div class="tab-content">
@@ -108,8 +111,8 @@
 
                 <sec:authorize access="hasAnyRole('MODERATOR', 'ADMIN')">
                     <div class="row">
-                        <div class="col-md-10 offset-md-1 delete-team-button-area text-md-right">
-                            <a href="<c:url value="/team/${teamStats.team.id}/edit"/>" class="btn btn-success edit-team-button-area" role="button">Edit Team</a>
+                        <div class="col-md-10 offset-md-1 text-md-right">
+                            <a href="<c:url value="/team/${teamStats.team.id}/edit"/>" class="btn btn-success" role="button">Edit Team</a>
                             <a href="#myModal" class="btn btn-outline-danger" data-toggle="modal" role="button">Delete Team</a>
                             <!-- Button trigger modal -->
                         </div>

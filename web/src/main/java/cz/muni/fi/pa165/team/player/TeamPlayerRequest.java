@@ -1,30 +1,37 @@
 package cz.muni.fi.pa165.team.player;
 
-import cz.muni.fi.pa165.team.Team;
 import cz.muni.fi.pa165.team.TeamPlayer;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 
-import java.util.UUID;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * @author Libor Muhlpachr <libor.muhl@seznam.cz>
  */
-
 public class TeamPlayerRequest
 {
 
-    @NotEmpty
+    @NotBlank
+    @Size(max = 255)
     public String firstname;
 
-    @NotEmpty
+    @NotBlank
+    @Size(max = 255)
     public String surname;
 
-    @NotEmpty
-    public int height;
+    @NotNull
+    @Min(1)
+    public Integer height;
 
-    @NotEmpty
-    public int weight;
+    @NotNull
+    @Min(1)
+    public Integer weight;
 
+    /**
+     * Creates the request object from TeamPlayer entity
+     */
     public static TeamPlayerRequest fromTeamPlayer(TeamPlayer teamPlayer)
     {
         TeamPlayerRequest request = new TeamPlayerRequest();
@@ -57,22 +64,22 @@ public class TeamPlayerRequest
         this.surname = surname;
     }
 
-    public int getHeight()
+    public Integer getHeight()
     {
         return height;
     }
 
-    public void setHeight(int height)
+    public void setHeight(Integer height)
     {
         this.height = height;
     }
 
-    public int getWeight()
+    public Integer getWeight()
     {
         return weight;
     }
 
-    public void setWeight(int weight)
+    public void setWeight(Integer weight)
     {
         this.weight = weight;
     }
