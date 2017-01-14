@@ -67,8 +67,8 @@
                                                                     <form:form method="post" action="${deleteHomeGoalActionUrl}" autocomplete="off">
                                                                         <fieldset>
                                                                             <div class="team-form-item">
-                                                                                <a class="btn btn-secondary" role="button" data-dismiss="modal">Cancel</a>
-                                                                                <input name="submit" type="submit" class="btn btn-success" value="Delete">
+                                                                                <a class="btn btn-outline-warning" role="button" data-dismiss="modal">Cancel</a>
+                                                                                <input name="submit" type="submit" class="btn btn-danger" value="Delete">
                                                                             </div>
                                                                         </fieldset>
                                                                     </form:form>
@@ -147,8 +147,8 @@
                                                                     <form:form method="post" action="${deleteAwayGoalActionUrl}" autocomplete="off">
                                                                         <fieldset>
                                                                             <div class="team-form-item">
-                                                                                <a class="btn btn-secondary" role="button" data-dismiss="modal">Cancel</a>
-                                                                                <input name="submit" type="submit" class="btn btn-success" value="Delete">
+                                                                                <a class="btn btn-outline-warning" role="button" data-dismiss="modal">Cancel</a>
+                                                                                <input name="submit" type="submit" class="btn btn-danger" value="Delete">
                                                                             </div>
                                                                         </fieldset>
                                                                     </form:form>
@@ -204,8 +204,8 @@
                                     <form:form method="post" action="${deleteMatchActionUrl}" autocomplete="off">
                                         <fieldset>
                                             <div class="team-form-item">
-                                                <a class="btn btn-secondary" role="button" data-dismiss="modal">Cancel</a>
-                                                <input name="submit" type="submit" class="btn btn-success" value="Delete">
+                                                <a class="btn btn-outline-warning" role="button" data-dismiss="modal">Cancel</a>
+                                                <input name="submit" type="submit" class="btn btn-danger" value="Delete">
                                             </div>
                                         </fieldset>
                                      </form:form>

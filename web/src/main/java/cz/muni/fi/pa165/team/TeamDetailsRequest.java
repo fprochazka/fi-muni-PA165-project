@@ -1,8 +1,8 @@
 package cz.muni.fi.pa165.team;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 
-import java.util.UUID;
+import javax.validation.constraints.Size;
 
 /**
  * @author Denis Galajda <galajda.denis@gmail.com>
@@ -10,19 +10,13 @@ import java.util.UUID;
 public class TeamDetailsRequest
 {
 
-    @NotEmpty
+    @NotBlank
+    @Size(max = 255)
     private String name;
-
-    private UUID id;
 
     public String getName()
     {
         return name;
-    }
-
-    public UUID getId()
-    {
-        return id;
     }
 
     public void setName(String name)
@@ -37,7 +31,6 @@ public class TeamDetailsRequest
     {
         TeamDetailsRequest request = new TeamDetailsRequest();
         request.setName(team.getName());
-        request.id = team.getId();
         return request;
     }
 

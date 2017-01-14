@@ -99,8 +99,8 @@
                                 <form:form method="post" action="${deleteTeamActionUrl}" autocomplete="off">
                                     <fieldset>
                                         <div id="form-buttons" class="team-form-item">
-                                            <a class="btn btn-success" role="button" id="pcancel" data-dismiss="modal">Cancel</a>
-                                            <input id="psubmit" name="submit" type="submit" class="btn btn-success" value="Delete">
+                                            <a class="btn btn-outline-warning" role="button" data-dismiss="modal">Cancel</a>
+                                            <input name="submit" type="submit" class="btn btn-danger" value="Delete">
                                         </div>
                                     </fieldset>
                                  </form:form>

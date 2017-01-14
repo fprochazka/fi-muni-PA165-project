@@ -40,8 +40,10 @@
                                      <c:forEach items="${plannedMatches}" var="plannedMatch">
                                          <tr>
                                              <td><c:out value="${plannedMatch.startTime.format(formatter)}"/></td>
-                                             <td><c:out value="${plannedMatch.homeTeam.name}"/></td>
-                                             <td><c:out value="${plannedMatch.awayTeam.name}"/></td>
+                                             <c:url value="/team/${plannedMatch.homeTeam.id}" var="homeTeamUrl"/>
+                                             <td><a href="<c:out value="${homeTeamUrl}" />"><c:out value="${plannedMatch.homeTeam.name}" /></a></td>
+                                             <c:url value="/team/${plannedMatch.homeTeam.id}" var="awayTeamUrl"/>
+                                             <td><a href="<c:out value="${awayTeamUrl}" />"><c:out value="${plannedMatch.awayTeam.name}" /></a></td>
                                              <td> - </td>
                                              <td>
                                                  <a href="<c:url value="/match/${plannedMatch.id}"/>" title="View detail" name="matchdetailbutton" class="btn btn-success center-block btn-outline-info">

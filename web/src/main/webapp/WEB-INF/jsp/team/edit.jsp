@@ -23,8 +23,8 @@
                             </p>
                         </s:bind>
                         <div id="form-buttons" class="team-form-item">
-                            <input id="psubmit" name="submit" type="submit" class="btn btn-primary" value="Save">
-                            <a href="<c:url value="/team/${teamId}"/>" class="btn btn-outline-warning pull-right" role="button" id="pcancel">Cancel</a>
+                            <input name="submit" type="submit" class="btn btn-primary" value="Save">
+                            <a href="<c:url value="/team/${teamId}"/>" class="btn btn-outline-warning pull-right" role="button">Cancel</a>
                         </div>
                     </fieldset>
                 </form:form>

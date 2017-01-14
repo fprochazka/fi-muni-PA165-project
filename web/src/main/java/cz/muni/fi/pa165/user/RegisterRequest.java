@@ -1,6 +1,8 @@
 package cz.muni.fi.pa165.user;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.Size;
 
 /**
  * @author Filip Prochazka <filip@prochazka.su>
@@ -8,13 +10,16 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class RegisterRequest
 {
 
-    @NotEmpty
+    @NotBlank
+    @Size(max = 255)
     public String email;
 
-    @NotEmpty
+    @NotBlank
+    @Size(min = 8, max = 62)
     public String password;
 
-    @NotEmpty
+    @NotBlank
+    @Size(min = 8, max = 62)
     public String passwordRepeat;
 
     public String getEmail()

@@ -7,11 +7,11 @@ import cz.muni.fi.pa165.team.result.TeamPlayerResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.format.DateTimeFormatter;
@@ -35,11 +35,12 @@ public class TeamController
     private final TeamPlayerRepository teamPlayerRepository;
 
     @Autowired
-    public TeamController(TeamFacade teamFacade,
-                          TeamPlayerFacade teamPlayerFacade,
-                          TeamRepository teamRepository,
-                          TeamMatchRepository teamMatchRepository,
-                          TeamPlayerRepository teamPlayerRepository
+    public TeamController(
+        TeamFacade teamFacade,
+        TeamPlayerFacade teamPlayerFacade,
+        TeamRepository teamRepository,
+        TeamMatchRepository teamMatchRepository,
+        TeamPlayerRepository teamPlayerRepository
     )
     {
         this.teamFacade = teamFacade;
@@ -47,12 +48,6 @@ public class TeamController
         this.teamRepository = teamRepository;
         this.teamMatchRepository = teamMatchRepository;
         this.teamPlayerRepository = teamPlayerRepository;
-    }
-
-    @InitBinder("teamDetailsRequest")
-    private void initBinder(WebDataBinder binder)
-    {
-        binder.setValidator(new TeamCreationValidator());
     }
 
     @RequestMapping(value = "/teams", method = RequestMethod.GET)
@@ -74,8 +69,8 @@ public class TeamController
         }
 
         try {
-            teamFacade.createTeam(teamDetailsRequest.getName());
-            return new RedirectResponse("/teams");
+            Team team = teamFacade.createTeam(teamDetailsRequest.getName());
+            return new RedirectResponse("/team/" + team.getId().toString());
         } catch (TeamWithSameNameAlreadyExistsException e) {
             result.rejectValue("name", "teamform.namealreadyused");
             return new ModelAndView("team/create")
@@ -90,17 +85,17 @@ public class TeamController
             .addObject("teamDetailsRequest", new TeamDetailsRequest());
     }
 
-    @RequestMapping(value = "/team/{id}/delete", method = RequestMethod.POST)
-    public ModelAndView deleteTeam(@PathVariable("id") UUID id) throws Exception
+    @RequestMapping(value = "/team/{teamId}/delete", method = RequestMethod.POST)
+    public ModelAndView deleteTeam(@PathVariable("teamId") UUID teamId) throws Exception
     {
-        teamFacade.deleteTeam(id);
+        teamFacade.deleteTeam(teamId);
 
         return new RedirectResponse("/teams");
     }
 
-    @RequestMapping(value = "/team/{id}/edit", method = RequestMethod.POST)
+    @RequestMapping(value = "/team/{teamId}/edit", method = RequestMethod.POST)
     public ModelAndView submitEditTeam(
-        @PathVariable("id") UUID id,
+        @PathVariable("teamId") UUID teamId,
         @ModelAttribute("teamDetailsRequest") @Validated TeamDetailsRequest teamDetailsRequest,
         BindingResult result
     ) throws Exception
@@ -111,8 +106,8 @@ public class TeamController
         }
 
         try {
-            teamFacade.changeTeamName(id, teamDetailsRequest.getName());
-            return new RedirectResponse("/team/" + id.toString());
+            teamFacade.changeTeamName(teamId, teamDetailsRequest.getName());
+            return new RedirectResponse("/team/" + teamId.toString());
         } catch (TeamWithSameNameAlreadyExistsException e) {
             result.rejectValue("name", "teamform.namealreadyused");
             return new ModelAndView("team/edit")
@@ -120,76 +115,51 @@ public class TeamController
         }
     }
 
-    @RequestMapping(value = "/team/{id}/edit", method = RequestMethod.GET)
+    @RequestMapping(value = "/team/{teamId}/edit", method = RequestMethod.GET)
     public ModelAndView viewEditTeam(
-        @PathVariable("id") UUID id
+        @PathVariable("teamId") UUID teamId
     ) throws Exception
     {
-        TeamDetailsRequest teamDetailsRequest = TeamDetailsRequest.fromTeam(teamRepository.getTeamById(id));
+        TeamDetailsRequest teamDetailsRequest = TeamDetailsRequest.fromTeam(teamRepository.getTeamById(teamId));
 
         return new ModelAndView("team/edit")
             .addObject("teamDetailsRequest", teamDetailsRequest)
-            .addObject("teamId", id.toString());
+            .addObject("teamId", teamId.toString());
     }
 
-    @RequestMapping(value = "/team/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/team/{teamId}", method = RequestMethod.GET)
     public ModelAndView viewTeamOverview(
-        @PathVariable("id") UUID id
+        @PathVariable("teamId") UUID teamId
     )
     {
-        Collection<TeamPlayer> teamPlayers = teamPlayerRepository.findTeamPlayerByTeam(teamRepository.getTeamById(id).getId());
+        Collection<TeamPlayer> teamPlayers = teamPlayerRepository.findTeamPlayerByTeam(teamRepository.getTeamById(teamId).getId());
         Collection<TeamPlayerResult> playersStatistics = teamPlayers.stream().map(player ->
             teamPlayerFacade.getPlayerStatistics(player.getId())).collect(Collectors.toCollection(ArrayList::new));
         return new ModelAndView("team/detail/overview")
-            .addObject("teamStats", teamFacade.getTeamStatistics(id))
+            .addObject("teamStats", teamFacade.getTeamStatistics(teamId))
             .addObject("playersStats", playersStatistics);
     }
 
-    @RequestMapping(value = "/team/{id}/results", method = RequestMethod.GET)
+    @RequestMapping(value = "/team/{teamId}/results", method = RequestMethod.GET)
     public ModelAndView viewTeamResults(
-        @PathVariable("id") UUID id
+        @PathVariable("teamId") UUID teamId
     )
     {
         return new ModelAndView("team/detail/results")
-            .addObject("team", teamRepository.getTeamById(id))
-            .addObject("matchResults", teamFacade.getPlayedTeamMatchesList(id))
+            .addObject("team", teamRepository.getTeamById(teamId))
+            .addObject("matchResults", teamFacade.getPlayedTeamMatchesList(teamId))
             .addObject("formatter", DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
     }
 
-    @RequestMapping(value = "/team/{id}/schedule", method = RequestMethod.GET)
+    @RequestMapping(value = "/team/{teamId}/schedule", method = RequestMethod.GET)
     public ModelAndView viewTeamProgram(
-        @PathVariable("id") UUID id
+        @PathVariable("teamId") UUID teamId
     )
     {
         return new ModelAndView("team/detail/schedule")
-            .addObject("team", teamRepository.getTeamById(id))
+            .addObject("team", teamRepository.getTeamById(teamId))
             .addObject("plannedMatches", teamMatchRepository.findAllPlannedMatches())
             .addObject("formatter", DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-    }
-
-
-    /**
-     * Validates team form data.
-     */
-    private class TeamCreationValidator implements Validator
-    {
-
-        @Override
-        public boolean supports(Class type)
-        {
-            return TeamDetailsRequest.class.isAssignableFrom(type);
-        }
-
-        @Override
-        public void validate(Object target, Errors errors)
-        {
-            TeamDetailsRequest request = (TeamDetailsRequest) target;
-
-            if (request.getName().equals("")) {
-                errors.rejectValue("name", "teamform.emptyname");
-            }
-        }
-
     }
 
 }
