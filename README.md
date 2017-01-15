@@ -11,6 +11,7 @@
 ## Important links
 
 * [Project wiki](https://fprochazka.github.io/fi-muni-PA165-project/)
+* [Project defense presentation](https://docs.google.com/presentation/d/10HiNSI08DhvkSyyFzZJgU9u3D7ogqriURPp1AKupfN4/edit?usp=sharing)
 
 ## Assignment
 
