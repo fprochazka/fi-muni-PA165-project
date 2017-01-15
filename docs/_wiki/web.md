@@ -25,4 +25,4 @@ It will start to listen on `http://localhost:8080/pa165`.
 * user `jahoda@seznam.cz` with password `heslo5`
 * user `jezek@yahoo.com` with password `heslo6`
 
-More users can be created with admin rights.
+More users can be created via registration and promoted with admin rights.
