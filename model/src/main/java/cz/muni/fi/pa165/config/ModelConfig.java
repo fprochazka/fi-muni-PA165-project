@@ -1,6 +1,8 @@
 package cz.muni.fi.pa165.config;
 
-import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.hsqldb.jdbc.JDBCDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -12,6 +14,8 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.Database;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -19,6 +23,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.util.Properties;
 
 /**
  * The main application context config.
@@ -31,6 +36,8 @@ import javax.sql.DataSource;
 @ComponentScan(basePackages = "cz.muni.fi.pa165.*")
 public class ModelConfig
 {
+
+    private static final Logger log = LoggerFactory.getLogger(ModelConfig.class);
 
     /**
      * This is the central class for javax.validation (JSR-303) setup in a Spring application context:
@@ -75,7 +82,25 @@ public class ModelConfig
         LocalContainerEntityManagerFactoryBean jpaFactoryBean = new LocalContainerEntityManagerFactoryBean();
         jpaFactoryBean.setDataSource(dataSource);
         jpaFactoryBean.setLoadTimeWeaver(loadTimeWeaver);
-        jpaFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
+        jpaFactoryBean.setPackagesToScan("cz.muni.fi.pa165");
+
+        HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
+        jpaVendorAdapter.setDatabase(Database.HSQL);
+        jpaVendorAdapter.setShowSql(true);
+        jpaFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
+
+        Properties hibernateProperties = new Properties();
+        String schemaCreateDisabled = System.getenv("PA165_SCHEMA_CREATE_DISABLED");
+        if (schemaCreateDisabled == null || !schemaCreateDisabled.equals("1")) {
+            log.info("Creating database schema from entities");
+            hibernateProperties.put("hibernate.hbm2ddl.auto", "create");
+        } else {
+            log.info("Skipping database schema creation");
+            hibernateProperties.put("hibernate.hbm2ddl.auto", "validate");
+        }
+        jpaFactoryBean.setJpaProperties(hibernateProperties);
+        jpaFactoryBean.afterPropertiesSet();
+
         return jpaFactoryBean;
     }
 
@@ -94,9 +119,22 @@ public class ModelConfig
     @Bean
     public DataSource dataSource()
     {
-        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-        return builder.setType(EmbeddedDatabaseType.HSQL).build();
-    }
+        String externalDatabase = System.getenv("PA165_EXTERNAL_HSQL");
+        if (externalDatabase != null && externalDatabase.equals("1")) {
+            log.info("Using external HSQL database");
 
+            JDBCDataSource remoteDatasource = new JDBCDataSource();
+            remoteDatasource.setUrl("jdbc:hsqldb:hsql://database:9001/pa165");
+            remoteDatasource.setUser("sa");
+            remoteDatasource.setPassword("");
+            return remoteDatasource;
+
+        } else {
+            log.info("Using embeded HSQL database");
+
+            EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+            return builder.setType(EmbeddedDatabaseType.HSQL).build();
+        }
+    }
 
 }

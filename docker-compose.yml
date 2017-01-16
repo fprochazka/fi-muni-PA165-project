@@ -1,0 +1,57 @@
+version: "2.1"
+
+services:
+  database:
+    build:
+      context: ./.docker/db
+    environment:
+      - HSQLDB_DATABASE_ALIAS=pa165
+      - HSQLDB_DATABASE_NAME=pa165
+      - HSQLDB_PASSWORD=
+      - HSQLDB_USER=sa
+
+  nginx:
+    build: ./.docker/nginx
+    ports:
+      - "127.0.0.1:8080:80"
+    depends_on:
+      - web
+      - rest-api
+    volumes_from:
+      - web
+
+  web:
+    build:
+      context: ./
+      dockerfile: Dockerfile.web
+      args:
+        - USER_UID
+        - USER_GID
+        - USER_NAME
+    env_file: .env
+    environment:
+      - USER_UID
+      - USER_GID
+      - USER_NAME
+      - PA165_EXTERNAL_HSQL=1
+    volumes:
+      - /home/${USER_NAME}/.m2/repository:/home/${USER_NAME}/.m2/repository
+
+  rest-api:
+    build:
+      context: ./
+      dockerfile: Dockerfile.rest-api
+      args:
+        - USER_UID
+        - USER_GID
+        - USER_NAME
+    env_file: .env
+    environment:
+      - USER_UID
+      - USER_GID
+      - USER_NAME
+      - PA165_DATA_FIXTURES_DISABLED=1
+      - PA165_SCHEMA_CREATE_DISABLED=1
+      - PA165_EXTERNAL_HSQL=1
+    volumes:
+      - /home/${USER_NAME}/.m2/repository:/home/${USER_NAME}/.m2/repository
