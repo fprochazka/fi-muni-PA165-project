@@ -1,6 +1,8 @@
 package cz.muni.fi.pa165.fixtures.sample;
 
 import cz.muni.fi.pa165.config.ModelConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +19,8 @@ import javax.annotation.PostConstruct;
 public class SampleDataConfig
 {
 
+    private static final Logger log = LoggerFactory.getLogger(SampleDataConfig.class);
+
     @Autowired
     private SampleDataFixture sampleDataFixture;
 
@@ -26,7 +30,14 @@ public class SampleDataConfig
     @PostConstruct
     public void dataLoading()
     {
-        sampleDataFixture.loadData();
+        String fixturesDisabled = System.getenv("PA165_DATA_FIXTURES_DISABLED");
+
+        if (fixturesDisabled == null || !fixturesDisabled.equals("1")) {
+            log.info("Loading data fixtures");
+            sampleDataFixture.loadData();
+        } else {
+            log.info("No data fixtures will be loaded");
+        }
     }
 
 }
