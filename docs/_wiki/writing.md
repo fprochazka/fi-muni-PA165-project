@@ -14,6 +14,6 @@ cd docs && docker run --rm --label=jekyll --volume=$(pwd):/srv/jekyll \
     -it -p 127.0.0.1:4000:4000 jekyll/jekyll
 ```
 
-* Open [http://127.0.0.1:4000](http://127.0.0.1:4000/fi-muni-PA165-project) in your browser
+* Open [http://127.0.0.1:4000](http://127.0.0.1:4000/fi-muni-PA165-project/) in your browser
 * Modify, create or remove the files in `docs/_wiki` and refresh the browser
 * Make sure you did not commit the changes in `docs/Gemfile`, otherwise Github Pages will break
